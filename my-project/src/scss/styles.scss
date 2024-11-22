@@ -1,0 +1,59 @@
+// Import all of Bootstrap's CSS
+@import "bootstrap/scss/bootstrap";
+
+.navbar-brand {
+   margin-left: .25rem;
+   margin-right: .25rem;
+
+   img {
+    width: 11.5rem;
+
+    @include media-breakpoint-down(sm) {
+        width: 8.5rem;
+    }  
+   }
+}
+
+.cta {
+    text-align: center;
+
+}
+
+.btn {
+    border-radius: 1.5rem ;
+}
+
+a {
+    color: #C4C4C4;
+}
+
+.welcome {
+    padding-top: 3rem;
+    padding-bottom: 7rem;
+        @include media-breakpoint-down(sm) {
+            padding-top: 2rem;
+            padding-bottom: 5.5rem;
+        }  
+}
+
+.editable_content {
+    text-align: -webkit-center;
+}
+
+// .layout_form {
+//     text-align: webkit-center;
+//     justify-content: center;
+//     text-align: center;
+// }
+
+.footer {
+    background-color: #1F1F1F;
+}
+
+.newsletter {
+    margin-top: 1rem;
+}
+
+.footer-logo {
+        width: 9.5rem;
+}
