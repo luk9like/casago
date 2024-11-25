@@ -19,46 +19,46 @@ function main() {
     var old_src;
     $cr(document).ready(function() {
         $cr(".cr_form").submit(function() {
-            $cr(this).find(".clever_form_error").removeClass("clever_form_error");
-            $cr(this).find(".clever_form_note").remove();
-            $cr(this).find(".musthave").find("input, textarea").each(function() {
-                if (jQuery.trim($cr(this).val()) == "" || $cr(this).is(":checkbox") || $cr(this).is(":radio")) {
-                    if ($cr(this).is(":checkbox") || $cr(this).is(":radio")) {
-                        if (!$cr(this).parents(".cr_ipe_item").find(":checked").is(":checked")) $cr(this).parents(".cr_ipe_item").addClass("clever_form_error");
-                    } else $cr(this).addClass("clever_form_error");
+            $cr(this).find('.clever_form_error').removeClass('clever_form_error');
+            $cr(this).find('.clever_form_note').remove();
+            $cr(this).find(".musthave").find('input, textarea').each(function() {
+                if (jQuery.trim($cr(this).val()) == "" || $cr(this).is(':checkbox') || $cr(this).is(':radio')) {
+                    if ($cr(this).is(':checkbox') || $cr(this).is(':radio')) {
+                        if (!$cr(this).parents(".cr_ipe_item").find(":checked").is(":checked")) $cr(this).parents(".cr_ipe_item").addClass('clever_form_error');
+                    } else $cr(this).addClass('clever_form_error');
                 }
             });
             if ($cr(this).attr("action").search(document.domain) > 0 && $cr(".cr_form").attr("action").search("wcs") > 0) {
-                var cr_email = $cr(this).find("input[name=email]");
+                var cr_email = $cr(this).find('input[name=email]');
                 var unsub = false;
                 if ($cr("input['name=cr_subunsubscribe'][value='false']").length) {
                     if ($cr("input['name=cr_subunsubscribe'][value='false']").is(":checked")) unsub = true;
                 }
                 if (cr_email.val() && !unsub) $cr.ajax({
                     type: "GET",
-                    url: $cr(".cr_form").attr("action").replace("wcs", "check_email") + window.btoa($cr(this).find("input[name=email]").val()),
+                    url: $cr(".cr_form").attr("action").replace("wcs", "check_email") + window.btoa($cr(this).find('input[name=email]').val()),
                     success: function(data) {
                         if (data) {
-                            cr_email.addClass("clever_form_error").before("<div class='clever_form_note cr_font'>" + data + "</div>");
+                            cr_email.addClass('clever_form_error').before("<div class='clever_form_note cr_font'>" + data + "</div>");
                             return false;
                         }
                     },
                     async: false
                 });
-                var cr_captcha = $cr(this).find("input[name=captcha]");
+                var cr_captcha = $cr(this).find('input[name=captcha]');
                 if (cr_captcha.val()) $cr.ajax({
                     type: "GET",
-                    url: $cr(".cr_form").attr("action").replace("wcs", "check_captcha") + $cr(this).find("input[name=captcha]").val(),
+                    url: $cr(".cr_form").attr("action").replace("wcs", "check_captcha") + $cr(this).find('input[name=captcha]').val(),
                     success: function(data) {
                         if (data) {
-                            cr_captcha.addClass("clever_form_error").after("<div  class='clever_form_note cr_font'>" + data + "</div>");
+                            cr_captcha.addClass('clever_form_error').after("<div  class='clever_form_note cr_font'>" + data + "</div>");
                             return false;
                         }
                     },
                     async: false
                 });
             }
-            if ($cr(this).find(".clever_form_error").length) return false;
+            if ($cr(this).find('.clever_form_error').length) return false;
             return true;
         });
         $cr('input[class*="cr_number"]').change(function() {
@@ -87,26 +87,43 @@ else main();
   </head>
   <body>
     <nav class="navbar bg-body-dark">
-      <div class="container">
+      <div class="container-fluid">
         <a class="navbar-brand" href="/index.html">
-          <img src="/2024_CAS_Logo_Wort-Bildmarke.7fd43651.svg" alt="CASAGO Wortbildmarke" width="45%">
+          <img class="navbar-logomark" src="/cas_wordmark-white.6a856829.svg" alt="CASAGO Wortbildmarke">
         </a>
-        <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Toggle top offcanvas</button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewbox="0 0 28 14"><g transform="translate(-1836.087 -42.5)" style="isolation: isolate"><line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3"></line><line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3"></line></g></svg>
+
+        <button class="btn menu-open d-flex align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">        
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewbox="0 0 28 14"><g transform="translate(-1836.087 -42.5)" style="isolation: isolate"><line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3"></line><line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3"></line></g></svg>
+        </button>
         <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
           <div class="offcanvas-header">
-            <h5 id="offcanvasTopLabel">Offcanvas top</h5>
-            <a href="#">Impressum</a>
-            <a href="#">Datenschutz</a>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h5 class="offcanvas-title" id="offcanvasTopLabel">Offcanvas top</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            ...
+            <div class="container-fluid">
+              <div class="row text-left bg-primary">
+                <div class="class col-12 col-xl-3 my-0 mb-0 mb-md-4 mb-xl-0">
+                  <h3 class="text-white d-none d-xl-inline">Home</h3>
+                  <ul>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/impressum/" title="Impressum">Impressum</a>
+                    </li>
+                  </ul> 
+                </div>
+              </div>
+              <div class="row text-left bg-primary">
+                <div class="col-12 col-xl-3 my-0 mb-0 mb-md-4 mb-xl-0"></div>
+              </div>
+            </div>
           </div>
-        </div> -->
+        </div>
+      
       </div>
     </nav>
     <div class="container">
-      <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
+      <!-- <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -114,15 +131,16 @@ else main();
         </div>
         <div class="carousel-inner">
           <div class="carousel-item active" data-bs-interval="4200">
-            <img src="/rott-luftbild-perspektive.940ae896.png" class="d-block w-100" alt="...">
+            <img src="/src/assets/rott-luftbild-perspektive.png" class="d-block w-100" alt="...">
           </div>
           <div class="carousel-item" data-bs-interval="4200">
-            <img src="/rott-luftbild-perspektive-detail.45596f1a.png" class="d-block w-100" alt="...">
+            <img src="/src/assets/rott-luftbild-perspektive-detail.png" class="d-block w-100" alt="...">
           </div>
           <div class="carousel-item" data-bs-interval="4200">
-            <img src="/rott-luftbild-dachaufnahme.0664381a.png" class="d-block w-100" alt="...">
+            <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="d-block w-100" alt="...">
           </div>
-        </div>
+        </div> -->
+
         <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
@@ -132,7 +150,7 @@ else main();
           <span class="visually-hidden">Next</span>
         </button> -->
       </div>
-    </div>
+    
    
 
     <!-- <div class="container pt-2">

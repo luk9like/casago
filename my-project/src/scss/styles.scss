@@ -5,8 +5,8 @@
    margin-left: .25rem;
    margin-right: .25rem;
 
-   img {
-    width: 11.5rem;
+   .navbar-logomark {
+    width: 8.4rem;
 
     @include media-breakpoint-down(sm) {
         width: 8.5rem;

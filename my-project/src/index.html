@@ -17,26 +17,43 @@
   </head>
   <body>
     <nav class="navbar bg-body-dark">
-      <div class="container">
+      <div class="container-fluid">
         <a class="navbar-brand" href="index.html">
-          <img src="/src/assets/2024_CAS_Logo_Wort-Bildmarke.svg" alt="CASAGO Wortbildmarke" width="45%">
+          <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortbildmarke">
         </a>
-        <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Toggle top offcanvas</button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14"><g transform="translate(-1836.087 -42.5)" style="isolation:isolate"><line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3"/><line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3"/></g></svg>
+
+        <button class="btn menu-open d-flex align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">        
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14"><g transform="translate(-1836.087 -42.5)" style="isolation:isolate"><line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3"/><line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3"/></g></svg>
+        </button>
         <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
           <div class="offcanvas-header">
-            <h5 id="offcanvasTopLabel">Offcanvas top</h5>
-            <a href="#">Impressum</a>
-            <a href="#">Datenschutz</a>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h5 class="offcanvas-title" id="offcanvasTopLabel">Offcanvas top</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            ...
+            <div class="container-fluid">
+              <div class="row text-left bg-primary">
+                <div class="class col-12 col-xl-3 my-0 mb-0 mb-md-4 mb-xl-0">
+                  <h3 class="text-white d-none d-xl-inline">Home</h3>
+                  <ul>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/impressum/" title="Impressum">Impressum</a>
+                    </li>
+                  </ul> 
+                </div>
+              </div>
+              <div class="row text-left bg-primary">
+                <div class="col-12 col-xl-3 my-0 mb-0 mb-md-4 mb-xl-0"></div>
+              </div>
+            </div>
           </div>
-        </div> -->
+        </div>
+      
       </div>
     </nav>
     <div class="container">
-      <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
+      <!-- <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -52,7 +69,8 @@
           <div class="carousel-item" data-bs-interval="4200">
             <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="d-block w-100" alt="...">
           </div>
-        </div>
+        </div> -->
+
         <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>

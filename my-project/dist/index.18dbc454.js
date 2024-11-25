@@ -73,7 +73,7 @@
         localRequire,
         module,
         module.exports,
-        this
+        globalObject
       );
     }
 
@@ -142,7 +142,7 @@
       this[globalName] = mainExports;
     }
   }
-})({"j2YDk":[function(require,module,exports) {
+})({"80cCk":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
@@ -197,7 +197,7 @@ declare var __parcel__import__: (string) => Promise<void>;
 declare var __parcel__importScripts__: (string) => Promise<void>;
 declare var globalThis: typeof self;
 declare var ServiceWorkerGlobalScope: Object;
-*/ var OVERLAY_ID = "__parcel__error__overlay__";
+*/ var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
 function Module(moduleName) {
     OldModule.call(this, moduleName);
@@ -216,71 +216,65 @@ function Module(moduleName) {
 }
 module.bundle.Module = Module;
 module.bundle.hotData = {};
-var checkedAssets /*: {|[string]: boolean|} */ , assetsToDispose /*: Array<[ParcelRequire, string]> */ , assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
+var checkedAssets /*: {|[string]: boolean|} */ , disposedAssets /*: {|[string]: boolean|} */ , assetsToDispose /*: Array<[ParcelRequire, string]> */ , assetsToAccept /*: Array<[ParcelRequire, string]> */ ;
 function getHostname() {
-    return HMR_HOST || (location.protocol.indexOf("http") === 0 ? location.hostname : "localhost");
+    return HMR_HOST || (location.protocol.indexOf('http') === 0 ? location.hostname : 'localhost');
 }
 function getPort() {
     return HMR_PORT || location.port;
 }
 // eslint-disable-next-line no-redeclare
 var parent = module.bundle.parent;
-if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
+if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
     var hostname = getHostname();
     var port = getPort();
-    var protocol = HMR_SECURE || location.protocol == "https:" && ![
-        "localhost",
-        "127.0.0.1",
-        "0.0.0.0"
-    ].includes(hostname) ? "wss" : "ws";
+    var protocol = HMR_SECURE || location.protocol == 'https:' && ![
+        'localhost',
+        '127.0.0.1',
+        '0.0.0.0'
+    ].includes(hostname) ? 'wss' : 'ws';
     var ws;
-    if (HMR_USE_SSE) ws = new EventSource("/__parcel_hmr");
+    if (HMR_USE_SSE) ws = new EventSource('/__parcel_hmr');
     else try {
-        ws = new WebSocket(protocol + "://" + hostname + (port ? ":" + port : "") + "/");
+        ws = new WebSocket(protocol + '://' + hostname + (port ? ':' + port : '') + '/');
     } catch (err) {
         if (err.message) console.error(err.message);
         ws = {};
     }
     // Web extension context
-    var extCtx = typeof browser === "undefined" ? typeof chrome === "undefined" ? null : chrome : browser;
+    var extCtx = typeof browser === 'undefined' ? typeof chrome === 'undefined' ? null : chrome : browser;
     // Safari doesn't support sourceURL in error stacks.
     // eval may also be disabled via CSP, so do a quick check.
     var supportsSourceURL = false;
     try {
         (0, eval)('throw new Error("test"); //# sourceURL=test.js');
     } catch (err) {
-        supportsSourceURL = err.stack.includes("test.js");
+        supportsSourceURL = err.stack.includes('test.js');
     }
     // $FlowFixMe
     ws.onmessage = async function(event /*: {data: string, ...} */ ) {
         checkedAssets = {} /*: {|[string]: boolean|} */ ;
+        disposedAssets = {} /*: {|[string]: boolean|} */ ;
         assetsToAccept = [];
         assetsToDispose = [];
         var data /*: HMRMessage */  = JSON.parse(event.data);
-        if (data.type === "update") {
+        if (data.type === 'reload') fullReload();
+        else if (data.type === 'update') {
             // Remove error overlay if there is one
-            if (typeof document !== "undefined") removeErrorOverlay();
+            if (typeof document !== 'undefined') removeErrorOverlay();
             let assets = data.assets.filter((asset)=>asset.envHash === HMR_ENV_HASH);
             // Handle HMR Update
             let handled = assets.every((asset)=>{
-                return asset.type === "css" || asset.type === "js" && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
+                return asset.type === 'css' || asset.type === 'js' && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
             });
             if (handled) {
                 console.clear();
                 // Dispatch custom event so other runtimes (e.g React Refresh) are aware.
-                if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") window.dispatchEvent(new CustomEvent("parcelhmraccept"));
+                if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') window.dispatchEvent(new CustomEvent('parcelhmraccept'));
                 await hmrApplyUpdates(assets);
-                // Dispose all old assets.
-                let processedAssets = {} /*: {|[string]: boolean|} */ ;
-                for(let i = 0; i < assetsToDispose.length; i++){
-                    let id = assetsToDispose[i][1];
-                    if (!processedAssets[id]) {
-                        hmrDispose(assetsToDispose[i][0], id);
-                        processedAssets[id] = true;
-                    }
-                }
+                hmrDisposeQueue();
                 // Run accept callbacks. This will also re-execute other disposed assets in topological order.
-                processedAssets = {};
+                let processedAssets = {};
                 for(let i = 0; i < assetsToAccept.length; i++){
                     let id = assetsToAccept[i][1];
                     if (!processedAssets[id]) {
@@ -290,13 +284,13 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== "undefined") {
                 }
             } else fullReload();
         }
-        if (data.type === "error") {
+        if (data.type === 'error') {
             // Log parcel errors to console
             for (let ansiDiagnostic of data.diagnostics.ansi){
                 let stack = ansiDiagnostic.codeframe ? ansiDiagnostic.codeframe : ansiDiagnostic.stack;
-                console.error("\uD83D\uDEA8 [parcel]: " + ansiDiagnostic.message + "\n" + stack + "\n\n" + ansiDiagnostic.hints.join("\n"));
+                console.error("\uD83D\uDEA8 [parcel]: " + ansiDiagnostic.message + '\n' + stack + '\n\n' + ansiDiagnostic.hints.join('\n'));
             }
-            if (typeof document !== "undefined") {
+            if (typeof document !== 'undefined') {
                 // Render the fancy html overlay
                 removeErrorOverlay();
                 var overlay = createErrorOverlay(data.diagnostics.html);
@@ -322,7 +316,7 @@ function removeErrorOverlay() {
     }
 }
 function createErrorOverlay(diagnostics) {
-    var overlay = document.createElement("div");
+    var overlay = document.createElement('div');
     overlay.id = OVERLAY_ID;
     let errorHTML = '<div style="background: black; opacity: 0.85; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; font-family: Menlo, Consolas, monospace; z-index: 9999;">';
     for (let diagnostic of diagnostics){
@@ -330,7 +324,7 @@ function createErrorOverlay(diagnostics) {
             return `${p}
 <a href="/__parcel_launch_editor?file=${encodeURIComponent(frame.location)}" style="text-decoration: underline; color: #888" onclick="fetch(this.href); return false">${frame.location}</a>
 ${frame.code}`;
-        }, "") : diagnostic.stack;
+        }, '') : diagnostic.stack;
         errorHTML += `
       <div>
         <div style="font-size: 18px; font-weight: bold; margin-top: 20px;">
@@ -338,18 +332,18 @@ ${frame.code}`;
         </div>
         <pre>${stack}</pre>
         <div>
-          ${diagnostic.hints.map((hint)=>"<div>\uD83D\uDCA1 " + hint + "</div>").join("")}
+          ${diagnostic.hints.map((hint)=>"<div>\uD83D\uDCA1 " + hint + '</div>').join('')}
         </div>
-        ${diagnostic.documentation ? `<div>\u{1F4DD} <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ""}
+        ${diagnostic.documentation ? `<div>\u{1F4DD} <a style="color: violet" href="${diagnostic.documentation}" target="_blank">Learn more</a></div>` : ''}
       </div>
     `;
     }
-    errorHTML += "</div>";
+    errorHTML += '</div>';
     overlay.innerHTML = errorHTML;
     return overlay;
 }
 function fullReload() {
-    if ("reload" in location) location.reload();
+    if ('reload' in location) location.reload();
     else if (extCtx && extCtx.runtime && extCtx.runtime.reload) extCtx.runtime.reload();
 }
 function getParents(bundle, id) /*: Array<[ParcelRequire, string]> */ {
@@ -368,15 +362,15 @@ function getParents(bundle, id) /*: Array<[ParcelRequire, string]> */ {
     return parents;
 }
 function updateLink(link) {
-    var href = link.getAttribute("href");
+    var href = link.getAttribute('href');
     if (!href) return;
     var newLink = link.cloneNode();
     newLink.onload = function() {
         if (link.parentNode !== null) // $FlowFixMe
         link.parentNode.removeChild(link);
     };
-    newLink.setAttribute("href", // $FlowFixMe
-    href.split("?")[0] + "?" + Date.now());
+    newLink.setAttribute('href', // $FlowFixMe
+    href.split('?')[0] + '?' + Date.now());
     // $FlowFixMe
     link.parentNode.insertBefore(newLink, link.nextSibling);
 }
@@ -387,9 +381,9 @@ function reloadCSS() {
         var links = document.querySelectorAll('link[rel="stylesheet"]');
         for(var i = 0; i < links.length; i++){
             // $FlowFixMe[incompatible-type]
-            var href /*: string */  = links[i].getAttribute("href");
+            var href /*: string */  = links[i].getAttribute('href');
             var hostname = getHostname();
-            var servedFromHMRServer = hostname === "localhost" ? new RegExp("^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):" + getPort()).test(href) : href.indexOf(hostname + ":" + getPort());
+            var servedFromHMRServer = hostname === 'localhost' ? new RegExp('^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):' + getPort()).test(href) : href.indexOf(hostname + ':' + getPort());
             var absolute = /^https?:\/\//i.test(href) && href.indexOf(location.origin) !== 0 && !servedFromHMRServer;
             if (!absolute) updateLink(links[i]);
         }
@@ -397,23 +391,23 @@ function reloadCSS() {
     }, 50);
 }
 function hmrDownload(asset) {
-    if (asset.type === "js") {
-        if (typeof document !== "undefined") {
-            let script = document.createElement("script");
-            script.src = asset.url + "?t=" + Date.now();
-            if (asset.outputFormat === "esmodule") script.type = "module";
+    if (asset.type === 'js') {
+        if (typeof document !== 'undefined') {
+            let script = document.createElement('script');
+            script.src = asset.url + '?t=' + Date.now();
+            if (asset.outputFormat === 'esmodule') script.type = 'module';
             return new Promise((resolve, reject)=>{
                 var _document$head;
                 script.onload = ()=>resolve(script);
                 script.onerror = reject;
                 (_document$head = document.head) === null || _document$head === void 0 || _document$head.appendChild(script);
             });
-        } else if (typeof importScripts === "function") {
+        } else if (typeof importScripts === 'function') {
             // Worker scripts
-            if (asset.outputFormat === "esmodule") return import(asset.url + "?t=" + Date.now());
+            if (asset.outputFormat === 'esmodule') return import(asset.url + '?t=' + Date.now());
             else return new Promise((resolve, reject)=>{
                 try {
-                    importScripts(asset.url + "?t=" + Date.now());
+                    importScripts(asset.url + '?t=' + Date.now());
                     resolve();
                 } catch (err) {
                     reject(err);
@@ -437,7 +431,7 @@ async function hmrApplyUpdates(assets) {
                 var _hmrDownload;
                 return (_hmrDownload = hmrDownload(asset)) === null || _hmrDownload === void 0 ? void 0 : _hmrDownload.catch((err)=>{
                     // Web extension fix
-                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3 && typeof ServiceWorkerGlobalScope != "undefined" && global instanceof ServiceWorkerGlobalScope) {
+                    if (extCtx && extCtx.runtime && extCtx.runtime.getManifest().manifest_version == 3 && typeof ServiceWorkerGlobalScope != 'undefined' && global instanceof ServiceWorkerGlobalScope) {
                         extCtx.runtime.reload();
                         return;
                     }
@@ -462,8 +456,8 @@ async function hmrApplyUpdates(assets) {
 function hmrApply(bundle /*: ParcelRequire */ , asset /*:  HMRAsset */ ) {
     var modules = bundle.modules;
     if (!modules) return;
-    if (asset.type === "css") reloadCSS();
-    else if (asset.type === "js") {
+    if (asset.type === 'css') reloadCSS();
+    else if (asset.type === 'js') {
         let deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
         if (deps) {
             if (modules[asset.id]) {
@@ -485,7 +479,10 @@ function hmrApply(bundle /*: ParcelRequire */ , asset /*:  HMRAsset */ ) {
                 fn,
                 deps
             ];
-        } else if (bundle.parent) hmrApply(bundle.parent, asset);
+        }
+        // Always traverse to the parent bundle, even if we already replaced the asset in this bundle.
+        // This is required in case modules are duplicated. We need to ensure all instances have the updated code.
+        if (bundle.parent) hmrApply(bundle.parent, asset);
     }
 }
 function hmrDelete(bundle, id) {
@@ -555,6 +552,17 @@ function hmrAcceptCheckOne(bundle /*: ParcelRequire */ , id /*: string */ , deps
         return true;
     }
 }
+function hmrDisposeQueue() {
+    // Dispose all old assets.
+    for(let i = 0; i < assetsToDispose.length; i++){
+        let id = assetsToDispose[i][1];
+        if (!disposedAssets[id]) {
+            hmrDispose(assetsToDispose[i][0], id);
+            disposedAssets[id] = true;
+        }
+    }
+    assetsToDispose = [];
+}
 function hmrDispose(bundle /*: ParcelRequire */ , id /*: string */ ) {
     var cached = bundle.cache[id];
     bundle.hotData[id] = {};
@@ -569,28 +577,32 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     bundle(id);
     // Run the accept callbacks in the new version of the module.
     var cached = bundle.cache[id];
-    if (cached && cached.hot && cached.hot._acceptCallbacks.length) cached.hot._acceptCallbacks.forEach(function(cb) {
-        var assetsToAlsoAccept = cb(function() {
-            return getParents(module.bundle.root, id);
-        });
-        if (assetsToAlsoAccept && assetsToAccept.length) {
-            assetsToAlsoAccept.forEach(function(a) {
-                hmrDispose(a[0], a[1]);
+    if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
+        let assetsToAlsoAccept = [];
+        cached.hot._acceptCallbacks.forEach(function(cb) {
+            let additionalAssets = cb(function() {
+                return getParents(module.bundle.root, id);
             });
-            // $FlowFixMe[method-unbinding]
-            assetsToAccept.push.apply(assetsToAccept, assetsToAlsoAccept);
+            if (Array.isArray(additionalAssets) && additionalAssets.length) assetsToAlsoAccept.push(...additionalAssets);
+        });
+        if (assetsToAlsoAccept.length) {
+            let handled = assetsToAlsoAccept.every(function(a) {
+                return hmrAcceptCheck(a[0], a[1]);
+            });
+            if (!handled) return fullReload();
+            hmrDisposeQueue();
         }
-    });
+    }
 }
 
-},{}],"1SICI":[function(require,module,exports) {
+},{}],"1SICI":[function(require,module,exports,__globalThis) {
 // Import all of Bootstrap's JS
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _bootstrap = require("bootstrap");
 var _alert = require("bootstrap/js/dist/alert");
 var _alertDefault = parcelHelpers.interopDefault(_alert);
 
-},{"bootstrap":"h36JB","bootstrap/js/dist/alert":"c8YxN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports) {
+},{"bootstrap":"h36JB","bootstrap/js/dist/alert":"c8YxN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h36JB":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -650,7 +662,7 @@ const Data = {
  * --------------------------------------------------------------------------
  */ const MAX_UID = 1000000;
 const MILLISECONDS_MULTIPLIER = 1000;
-const TRANSITION_END = "transitionend";
+const TRANSITION_END = 'transitionend';
 /**
  * Properly escape IDs selectors to handle weird IDs
  * @param {string} selector
@@ -681,32 +693,32 @@ const getTransitionDurationFromElement = (element)=>{
     // Return 0 if element or transition duration is not found
     if (!floatTransitionDuration && !floatTransitionDelay) return 0;
     // If multiple durations are defined, take the first
-    transitionDuration = transitionDuration.split(",")[0];
-    transitionDelay = transitionDelay.split(",")[0];
+    transitionDuration = transitionDuration.split(',')[0];
+    transitionDelay = transitionDelay.split(',')[0];
     return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
 };
 const triggerTransitionEnd = (element)=>{
     element.dispatchEvent(new Event(TRANSITION_END));
 };
 const isElement = (object)=>{
-    if (!object || typeof object !== "object") return false;
-    if (typeof object.jquery !== "undefined") object = object[0];
-    return typeof object.nodeType !== "undefined";
+    if (!object || typeof object !== 'object') return false;
+    if (typeof object.jquery !== 'undefined') object = object[0];
+    return typeof object.nodeType !== 'undefined';
 };
 const getElement = (object)=>{
     // it's a jQuery object or a node element
     if (isElement(object)) return object.jquery ? object[0] : object;
-    if (typeof object === "string" && object.length > 0) return document.querySelector(parseSelector(object));
+    if (typeof object === 'string' && object.length > 0) return document.querySelector(parseSelector(object));
     return null;
 };
 const isVisible = (element)=>{
     if (!isElement(element) || element.getClientRects().length === 0) return false;
-    const elementIsVisible = getComputedStyle(element).getPropertyValue("visibility") === "visible";
+    const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible';
     // Handle `details` element as its content may falsie appear visible when it is closed
-    const closedDetails = element.closest("details:not([open])");
+    const closedDetails = element.closest('details:not([open])');
     if (!closedDetails) return elementIsVisible;
     if (closedDetails !== element) {
-        const summary = element.closest("summary");
+        const summary = element.closest('summary');
         if (summary && summary.parentNode !== closedDetails) return false;
         if (summary === null) return false;
     }
@@ -714,14 +726,14 @@ const isVisible = (element)=>{
 };
 const isDisabled = (element)=>{
     if (!element || element.nodeType !== Node.ELEMENT_NODE) return true;
-    if (element.classList.contains("disabled")) return true;
-    if (typeof element.disabled !== "undefined") return element.disabled;
-    return element.hasAttribute("disabled") && element.getAttribute("disabled") !== "false";
+    if (element.classList.contains('disabled')) return true;
+    if (typeof element.disabled !== 'undefined') return element.disabled;
+    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
 };
 const findShadowRoot = (element)=>{
     if (!document.documentElement.attachShadow) return null;
     // Can find the shadow root otherwise it'll return the document
-    if (typeof element.getRootNode === "function") {
+    if (typeof element.getRootNode === 'function') {
         const root = element.getRootNode();
         return root instanceof ShadowRoot ? root : null;
     }
@@ -742,20 +754,20 @@ const noop = ()=>{};
     element.offsetHeight; // eslint-disable-line no-unused-expressions
 };
 const getjQuery = ()=>{
-    if (window.jQuery && !document.body.hasAttribute("data-bs-no-jquery")) return window.jQuery;
+    if (window.jQuery && !document.body.hasAttribute('data-bs-no-jquery')) return window.jQuery;
     return null;
 };
 const DOMContentLoadedCallbacks = [];
 const onDOMContentLoaded = (callback)=>{
-    if (document.readyState === "loading") {
+    if (document.readyState === 'loading') {
         // add listener on the first call when the document is in loading state
-        if (!DOMContentLoadedCallbacks.length) document.addEventListener("DOMContentLoaded", ()=>{
+        if (!DOMContentLoadedCallbacks.length) document.addEventListener('DOMContentLoaded', ()=>{
             for (const callback of DOMContentLoadedCallbacks)callback();
         });
         DOMContentLoadedCallbacks.push(callback);
     } else callback();
 };
-const isRTL = ()=>document.documentElement.dir === "rtl";
+const isRTL = ()=>document.documentElement.dir === 'rtl';
 const defineJQueryPlugin = (plugin)=>{
     onDOMContentLoaded(()=>{
         const $ = getjQuery();
@@ -772,7 +784,7 @@ const defineJQueryPlugin = (plugin)=>{
     });
 };
 const execute = (possibleCallback, args = [], defaultValue = possibleCallback)=>{
-    return typeof possibleCallback === "function" ? possibleCallback(...args) : defaultValue;
+    return typeof possibleCallback === 'function' ? possibleCallback(...args) : defaultValue;
 };
 const executeAfterTransition = (callback, transitionElement, waitForTransition = true)=>{
     if (!waitForTransition) {
@@ -824,56 +836,56 @@ const stripUidRegex = /::\d+$/;
 const eventRegistry = {}; // Events storage
 let uidEvent = 1;
 const customEvents = {
-    mouseenter: "mouseover",
-    mouseleave: "mouseout"
+    mouseenter: 'mouseover',
+    mouseleave: 'mouseout'
 };
 const nativeEvents = new Set([
-    "click",
-    "dblclick",
-    "mouseup",
-    "mousedown",
-    "contextmenu",
-    "mousewheel",
-    "DOMMouseScroll",
-    "mouseover",
-    "mouseout",
-    "mousemove",
-    "selectstart",
-    "selectend",
-    "keydown",
-    "keypress",
-    "keyup",
-    "orientationchange",
-    "touchstart",
-    "touchmove",
-    "touchend",
-    "touchcancel",
-    "pointerdown",
-    "pointermove",
-    "pointerup",
-    "pointerleave",
-    "pointercancel",
-    "gesturestart",
-    "gesturechange",
-    "gestureend",
-    "focus",
-    "blur",
-    "change",
-    "reset",
-    "select",
-    "submit",
-    "focusin",
-    "focusout",
-    "load",
-    "unload",
-    "beforeunload",
-    "resize",
-    "move",
-    "DOMContentLoaded",
-    "readystatechange",
-    "error",
-    "abort",
-    "scroll"
+    'click',
+    'dblclick',
+    'mouseup',
+    'mousedown',
+    'contextmenu',
+    'mousewheel',
+    'DOMMouseScroll',
+    'mouseover',
+    'mouseout',
+    'mousemove',
+    'selectstart',
+    'selectend',
+    'keydown',
+    'keypress',
+    'keyup',
+    'orientationchange',
+    'touchstart',
+    'touchmove',
+    'touchend',
+    'touchcancel',
+    'pointerdown',
+    'pointermove',
+    'pointerup',
+    'pointerleave',
+    'pointercancel',
+    'gesturestart',
+    'gesturechange',
+    'gestureend',
+    'focus',
+    'blur',
+    'change',
+    'reset',
+    'select',
+    'submit',
+    'focusin',
+    'focusout',
+    'load',
+    'unload',
+    'beforeunload',
+    'resize',
+    'move',
+    'DOMContentLoaded',
+    'readystatechange',
+    'error',
+    'abort',
+    'scroll'
 ]);
 /**
  * Private methods
@@ -916,7 +928,7 @@ function findHandler(events, callable, delegationSelector = null) {
     return Object.values(events).find((event)=>event.callable === callable && event.delegationSelector === delegationSelector);
 }
 function normalizeParameters(originalTypeEvent, handler, delegationFunction) {
-    const isDelegated = typeof handler === "string";
+    const isDelegated = typeof handler === 'string';
     // TODO: tooltip passes `false` instead of selector, so we need to check
     const callable = isDelegated ? delegationFunction : handler || delegationFunction;
     let typeEvent = getTypeEvent(originalTypeEvent);
@@ -928,7 +940,7 @@ function normalizeParameters(originalTypeEvent, handler, delegationFunction) {
     ];
 }
 function addHandler(element, originalTypeEvent, handler, delegationFunction, oneOff) {
-    if (typeof originalTypeEvent !== "string" || !element) return;
+    if (typeof originalTypeEvent !== 'string' || !element) return;
     let [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
     // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
     // this prevents the handler from being dispatched the same way as mouseover or mouseout does
@@ -947,7 +959,7 @@ function addHandler(element, originalTypeEvent, handler, delegationFunction, one
         previousFunction.oneOff = previousFunction.oneOff && oneOff;
         return;
     }
-    const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ""));
+    const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ''));
     const fn = isDelegated ? bootstrapDelegationHandler(element, handler, callable) : bootstrapHandler(element, callable);
     fn.delegationSelector = isDelegated ? handler : null;
     fn.callable = callable;
@@ -968,7 +980,7 @@ function removeNamespacedHandlers(element, events, typeEvent, namespace) {
 }
 function getTypeEvent(event) {
     // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
-    event = event.replace(stripNameRegex, "");
+    event = event.replace(stripNameRegex, '');
     return customEvents[event] || event;
 }
 const EventHandler = {
@@ -979,13 +991,13 @@ const EventHandler = {
         addHandler(element, event, handler, delegationFunction, true);
     },
     off (element, originalTypeEvent, handler, delegationFunction) {
-        if (typeof originalTypeEvent !== "string" || !element) return;
+        if (typeof originalTypeEvent !== 'string' || !element) return;
         const [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
         const inNamespace = typeEvent !== originalTypeEvent;
         const events = getElementEvents(element);
         const storeElementEvent = events[typeEvent] || {};
-        const isNamespace = originalTypeEvent.startsWith(".");
-        if (typeof callable !== "undefined") {
+        const isNamespace = originalTypeEvent.startsWith('.');
+        if (typeof callable !== 'undefined') {
             // Simplest case: handler is passed, remove that listener ONLY.
             if (!Object.keys(storeElementEvent).length) return;
             removeHandler(element, events, typeEvent, callable, isDelegated ? handler : null);
@@ -993,12 +1005,12 @@ const EventHandler = {
         }
         if (isNamespace) for (const elementEvent of Object.keys(events))removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
         for (const [keyHandlers, event] of Object.entries(storeElementEvent)){
-            const handlerKey = keyHandlers.replace(stripUidRegex, "");
+            const handlerKey = keyHandlers.replace(stripUidRegex, '');
             if (!inNamespace || originalTypeEvent.includes(handlerKey)) removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
         }
     },
     trigger (element, event, args) {
-        if (typeof event !== "string" || !element) return null;
+        if (typeof event !== 'string' || !element) return null;
         const $ = getjQuery();
         const typeEvent = getTypeEvent(event);
         const inNamespace = event !== typeEvent;
@@ -1042,11 +1054,11 @@ function hydrateObj(obj, meta = {}) {
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */ function normalizeData(value) {
-    if (value === "true") return true;
-    if (value === "false") return false;
+    if (value === 'true') return true;
+    if (value === 'false') return false;
     if (value === Number(value).toString()) return Number(value);
-    if (value === "" || value === "null") return null;
-    if (typeof value !== "string") return value;
+    if (value === '' || value === 'null') return null;
+    if (typeof value !== 'string') return value;
     try {
         return JSON.parse(decodeURIComponent(value));
     } catch (_unused) {
@@ -1066,9 +1078,9 @@ const Manipulator = {
     getDataAttributes (element) {
         if (!element) return {};
         const attributes = {};
-        const bsKeys = Object.keys(element.dataset).filter((key)=>key.startsWith("bs") && !key.startsWith("bsConfig"));
+        const bsKeys = Object.keys(element.dataset).filter((key)=>key.startsWith('bs') && !key.startsWith('bsConfig'));
         for (const key of bsKeys){
-            let pureKey = key.replace(/^bs/, "");
+            let pureKey = key.replace(/^bs/, '');
             pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
             attributes[pureKey] = normalizeData(element.dataset[key]);
         }
@@ -1106,18 +1118,18 @@ const Manipulator = {
         return config;
     }
     _mergeConfigObj(config, element) {
-        const jsonConfig = isElement(element) ? Manipulator.getDataAttribute(element, "config") : {}; // try to parse
+        const jsonConfig = isElement(element) ? Manipulator.getDataAttribute(element, 'config') : {}; // try to parse
         return {
             ...this.constructor.Default,
-            ...typeof jsonConfig === "object" ? jsonConfig : {},
+            ...typeof jsonConfig === 'object' ? jsonConfig : {},
             ...isElement(element) ? Manipulator.getDataAttributes(element) : {},
-            ...typeof config === "object" ? config : {}
+            ...typeof config === 'object' ? config : {}
         };
     }
     _typeCheckConfig(config, configTypes = this.constructor.DefaultType) {
         for (const [property, expectedTypes] of Object.entries(configTypes)){
             const value = config[property];
-            const valueType = isElement(value) ? "element" : toType(value);
+            const valueType = isElement(value) ? 'element' : toType(value);
             if (!new RegExp(expectedTypes).test(valueType)) throw new TypeError(`${this.constructor.NAME.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
         }
     }
@@ -1129,7 +1141,7 @@ const Manipulator = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const VERSION = "5.3.3";
+ */ const VERSION = '5.3.3';
 /**
  * Class definition
  */ class BaseComponent extends Config {
@@ -1161,7 +1173,7 @@ const Manipulator = {
         return Data.get(getElement(element), this.DATA_KEY);
     }
     static getOrCreateInstance(element, config = {}) {
-        return this.getInstance(element) || new this(element, typeof config === "object" ? config : null);
+        return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
     }
     static get VERSION() {
         return VERSION;
@@ -1182,19 +1194,19 @@ const Manipulator = {
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */ const getSelector = (element)=>{
-    let selector = element.getAttribute("data-bs-target");
-    if (!selector || selector === "#") {
-        let hrefAttribute = element.getAttribute("href");
+    let selector = element.getAttribute('data-bs-target');
+    if (!selector || selector === '#') {
+        let hrefAttribute = element.getAttribute('href');
         // The only valid content that could double as a selector are IDs or classes,
         // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
         // `document.querySelector` will rightfully complain it is invalid.
         // See https://github.com/twbs/bootstrap/issues/32273
-        if (!hrefAttribute || !hrefAttribute.includes("#") && !hrefAttribute.startsWith(".")) return null;
+        if (!hrefAttribute || !hrefAttribute.includes('#') && !hrefAttribute.startsWith('.')) return null;
         // Just in case some CMS puts out a full URL with the anchor appended
-        if (hrefAttribute.includes("#") && !hrefAttribute.startsWith("#")) hrefAttribute = `#${hrefAttribute.split("#")[1]}`;
-        selector = hrefAttribute && hrefAttribute !== "#" ? hrefAttribute.trim() : null;
+        if (hrefAttribute.includes('#') && !hrefAttribute.startsWith('#')) hrefAttribute = `#${hrefAttribute.split('#')[1]}`;
+        selector = hrefAttribute && hrefAttribute !== '#' ? hrefAttribute.trim() : null;
     }
-    return selector ? selector.split(",").map((sel)=>parseSelector(sel)).join(",") : null;
+    return selector ? selector.split(',').map((sel)=>parseSelector(sel)).join(',') : null;
 };
 const SelectorEngine = {
     find (selector, element = document.documentElement) {
@@ -1238,15 +1250,15 @@ const SelectorEngine = {
     },
     focusableChildren (element) {
         const focusables = [
-            "a",
-            "button",
-            "input",
-            "textarea",
-            "select",
-            "details",
-            "[tabindex]",
+            'a',
+            'button',
+            'input',
+            'textarea',
+            'select',
+            'details',
+            '[tabindex]',
             '[contenteditable="true"]'
-        ].map((selector)=>`${selector}:not([tabindex^="-"])`).join(",");
+        ].map((selector)=>`${selector}:not([tabindex^="-"])`).join(',');
         return this.find(focusables, element).filter((el)=>!isDisabled(el) && isVisible(el));
     },
     getSelectorFromElement (element) {
@@ -1268,13 +1280,13 @@ const SelectorEngine = {
  * Bootstrap util/component-functions.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
- */ const enableDismissTrigger = (component, method = "hide")=>{
+ */ const enableDismissTrigger = (component, method = 'hide')=>{
     const clickEvent = `click.dismiss${component.EVENT_KEY}`;
     const name = component.NAME;
     EventHandler.on(document, clickEvent, `[data-bs-dismiss="${name}"]`, function(event) {
         if ([
-            "A",
-            "AREA"
+            'A',
+            'AREA'
         ].includes(this.tagName)) event.preventDefault();
         if (isDisabled(this)) return;
         const target = SelectorEngine.getElementFromSelector(this) || this.closest(`.${name}`);
@@ -1290,13 +1302,13 @@ const SelectorEngine = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$f = "alert";
-const DATA_KEY$a = "bs.alert";
+ */ const NAME$f = 'alert';
+const DATA_KEY$a = 'bs.alert';
 const EVENT_KEY$b = `.${DATA_KEY$a}`;
 const EVENT_CLOSE = `close${EVENT_KEY$b}`;
 const EVENT_CLOSED = `closed${EVENT_KEY$b}`;
-const CLASS_NAME_FADE$5 = "fade";
-const CLASS_NAME_SHOW$8 = "show";
+const CLASS_NAME_FADE$5 = 'fade';
+const CLASS_NAME_SHOW$8 = 'show';
 /**
  * Class definition
  */ class Alert extends BaseComponent {
@@ -1322,15 +1334,15 @@ const CLASS_NAME_SHOW$8 = "show";
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Alert.getOrCreateInstance(this);
-            if (typeof config !== "string") return;
-            if (data[config] === undefined || config.startsWith("_") || config === "constructor") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (data[config] === undefined || config.startsWith('_') || config === 'constructor') throw new TypeError(`No method named "${config}"`);
             data[config](this);
         });
     }
 }
 /**
  * Data API implementation
- */ enableDismissTrigger(Alert, "close");
+ */ enableDismissTrigger(Alert, 'close');
 /**
  * jQuery
  */ defineJQueryPlugin(Alert);
@@ -1341,11 +1353,11 @@ const CLASS_NAME_SHOW$8 = "show";
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$e = "button";
-const DATA_KEY$9 = "bs.button";
+ */ const NAME$e = 'button';
+const DATA_KEY$9 = 'bs.button';
 const EVENT_KEY$a = `.${DATA_KEY$9}`;
-const DATA_API_KEY$6 = ".data-api";
-const CLASS_NAME_ACTIVE$3 = "active";
+const DATA_API_KEY$6 = '.data-api';
+const CLASS_NAME_ACTIVE$3 = 'active';
 const SELECTOR_DATA_TOGGLE$5 = '[data-bs-toggle="button"]';
 const EVENT_CLICK_DATA_API$6 = `click${EVENT_KEY$a}${DATA_API_KEY$6}`;
 /**
@@ -1358,13 +1370,13 @@ const EVENT_CLICK_DATA_API$6 = `click${EVENT_KEY$a}${DATA_API_KEY$6}`;
     // Public
     toggle() {
         // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
-        this._element.setAttribute("aria-pressed", this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
+        this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
     }
     // Static
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Button.getOrCreateInstance(this);
-            if (config === "toggle") data[config]();
+            if (config === 'toggle') data[config]();
         });
     }
 }
@@ -1386,16 +1398,16 @@ const EVENT_CLICK_DATA_API$6 = `click${EVENT_KEY$a}${DATA_API_KEY$6}`;
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$d = "swipe";
-const EVENT_KEY$9 = ".bs.swipe";
+ */ const NAME$d = 'swipe';
+const EVENT_KEY$9 = '.bs.swipe';
 const EVENT_TOUCHSTART = `touchstart${EVENT_KEY$9}`;
 const EVENT_TOUCHMOVE = `touchmove${EVENT_KEY$9}`;
 const EVENT_TOUCHEND = `touchend${EVENT_KEY$9}`;
 const EVENT_POINTERDOWN = `pointerdown${EVENT_KEY$9}`;
 const EVENT_POINTERUP = `pointerup${EVENT_KEY$9}`;
-const POINTER_TYPE_TOUCH = "touch";
-const POINTER_TYPE_PEN = "pen";
-const CLASS_NAME_POINTER_EVENT = "pointer-event";
+const POINTER_TYPE_TOUCH = 'touch';
+const POINTER_TYPE_PEN = 'pen';
+const CLASS_NAME_POINTER_EVENT = 'pointer-event';
 const SWIPE_THRESHOLD = 40;
 const Default$c = {
     endCallback: null,
@@ -1403,9 +1415,9 @@ const Default$c = {
     rightCallback: null
 };
 const DefaultType$c = {
-    endCallback: "(function|null)",
-    leftCallback: "(function|null)",
-    rightCallback: "(function|null)"
+    endCallback: '(function|null)',
+    leftCallback: '(function|null)',
+    rightCallback: '(function|null)'
 };
 /**
  * Class definition
@@ -1473,7 +1485,7 @@ const DefaultType$c = {
     }
     // Static
     static isSupported() {
-        return "ontouchstart" in document.documentElement || navigator.maxTouchPoints > 0;
+        return 'ontouchstart' in document.documentElement || navigator.maxTouchPoints > 0;
     }
 }
 /**
@@ -1483,17 +1495,17 @@ const DefaultType$c = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$c = "carousel";
-const DATA_KEY$8 = "bs.carousel";
+ */ const NAME$c = 'carousel';
+const DATA_KEY$8 = 'bs.carousel';
 const EVENT_KEY$8 = `.${DATA_KEY$8}`;
-const DATA_API_KEY$5 = ".data-api";
-const ARROW_LEFT_KEY$1 = "ArrowLeft";
-const ARROW_RIGHT_KEY$1 = "ArrowRight";
+const DATA_API_KEY$5 = '.data-api';
+const ARROW_LEFT_KEY$1 = 'ArrowLeft';
+const ARROW_RIGHT_KEY$1 = 'ArrowRight';
 const TOUCHEVENT_COMPAT_WAIT = 500; // Time for mouse compat events to fire after touch
-const ORDER_NEXT = "next";
-const ORDER_PREV = "prev";
-const DIRECTION_LEFT = "left";
-const DIRECTION_RIGHT = "right";
+const ORDER_NEXT = 'next';
+const ORDER_PREV = 'prev';
+const DIRECTION_LEFT = 'left';
+const DIRECTION_RIGHT = 'right';
 const EVENT_SLIDE = `slide${EVENT_KEY$8}`;
 const EVENT_SLID = `slid${EVENT_KEY$8}`;
 const EVENT_KEYDOWN$1 = `keydown${EVENT_KEY$8}`;
@@ -1502,19 +1514,19 @@ const EVENT_MOUSELEAVE$1 = `mouseleave${EVENT_KEY$8}`;
 const EVENT_DRAG_START = `dragstart${EVENT_KEY$8}`;
 const EVENT_LOAD_DATA_API$3 = `load${EVENT_KEY$8}${DATA_API_KEY$5}`;
 const EVENT_CLICK_DATA_API$5 = `click${EVENT_KEY$8}${DATA_API_KEY$5}`;
-const CLASS_NAME_CAROUSEL = "carousel";
-const CLASS_NAME_ACTIVE$2 = "active";
-const CLASS_NAME_SLIDE = "slide";
-const CLASS_NAME_END = "carousel-item-end";
-const CLASS_NAME_START = "carousel-item-start";
-const CLASS_NAME_NEXT = "carousel-item-next";
-const CLASS_NAME_PREV = "carousel-item-prev";
-const SELECTOR_ACTIVE = ".active";
-const SELECTOR_ITEM = ".carousel-item";
+const CLASS_NAME_CAROUSEL = 'carousel';
+const CLASS_NAME_ACTIVE$2 = 'active';
+const CLASS_NAME_SLIDE = 'slide';
+const CLASS_NAME_END = 'carousel-item-end';
+const CLASS_NAME_START = 'carousel-item-start';
+const CLASS_NAME_NEXT = 'carousel-item-next';
+const CLASS_NAME_PREV = 'carousel-item-prev';
+const SELECTOR_ACTIVE = '.active';
+const SELECTOR_ITEM = '.carousel-item';
 const SELECTOR_ACTIVE_ITEM = SELECTOR_ACTIVE + SELECTOR_ITEM;
-const SELECTOR_ITEM_IMG = ".carousel-item img";
-const SELECTOR_INDICATORS = ".carousel-indicators";
-const SELECTOR_DATA_SLIDE = "[data-bs-slide], [data-bs-slide-to]";
+const SELECTOR_ITEM_IMG = '.carousel-item img';
+const SELECTOR_INDICATORS = '.carousel-indicators';
+const SELECTOR_DATA_SLIDE = '[data-bs-slide], [data-bs-slide-to]';
 const SELECTOR_DATA_RIDE = '[data-bs-ride="carousel"]';
 const KEY_TO_DIRECTION = {
     [ARROW_LEFT_KEY$1]: DIRECTION_RIGHT,
@@ -1523,19 +1535,19 @@ const KEY_TO_DIRECTION = {
 const Default$b = {
     interval: 5000,
     keyboard: true,
-    pause: "hover",
+    pause: 'hover',
     ride: false,
     touch: true,
     wrap: true
 };
 const DefaultType$b = {
-    interval: "(number|boolean)",
+    interval: '(number|boolean)',
     // TODO:v6 remove boolean support
-    keyboard: "boolean",
-    pause: "(string|boolean)",
-    ride: "(boolean|string)",
-    touch: "boolean",
-    wrap: "boolean"
+    keyboard: 'boolean',
+    pause: '(string|boolean)',
+    ride: '(boolean|string)',
+    touch: 'boolean',
+    wrap: 'boolean'
 };
 /**
  * Class definition
@@ -1614,7 +1626,7 @@ const DefaultType$b = {
     }
     _addEventListeners() {
         if (this._config.keyboard) EventHandler.on(this._element, EVENT_KEYDOWN$1, (event)=>this._keydown(event));
-        if (this._config.pause === "hover") {
+        if (this._config.pause === 'hover') {
             EventHandler.on(this._element, EVENT_MOUSEENTER$1, ()=>this.pause());
             EventHandler.on(this._element, EVENT_MOUSELEAVE$1, ()=>this._maybeEnableCycle());
         }
@@ -1623,7 +1635,7 @@ const DefaultType$b = {
     _addTouchEventListeners() {
         for (const img of SelectorEngine.find(SELECTOR_ITEM_IMG, this._element))EventHandler.on(img, EVENT_DRAG_START, (event)=>event.preventDefault());
         const endCallBack = ()=>{
-            if (this._config.pause !== "hover") return;
+            if (this._config.pause !== 'hover') return;
             // If it's a touch-enabled device, mouseenter/leave are fired as
             // part of the mouse compatibility events on first tap - the carousel
             // would stop cycling until user tapped out of it;
@@ -1657,17 +1669,17 @@ const DefaultType$b = {
         if (!this._indicatorsElement) return;
         const activeIndicator = SelectorEngine.findOne(SELECTOR_ACTIVE, this._indicatorsElement);
         activeIndicator.classList.remove(CLASS_NAME_ACTIVE$2);
-        activeIndicator.removeAttribute("aria-current");
+        activeIndicator.removeAttribute('aria-current');
         const newActiveIndicator = SelectorEngine.findOne(`[data-bs-slide-to="${index}"]`, this._indicatorsElement);
         if (newActiveIndicator) {
             newActiveIndicator.classList.add(CLASS_NAME_ACTIVE$2);
-            newActiveIndicator.setAttribute("aria-current", "true");
+            newActiveIndicator.setAttribute('aria-current', 'true');
         }
     }
     _updateInterval() {
         const element = this._activeElement || this._getActive();
         if (!element) return;
-        const elementInterval = Number.parseInt(element.getAttribute("data-bs-interval"), 10);
+        const elementInterval = Number.parseInt(element.getAttribute('data-bs-interval'), 10);
         this._config.interval = elementInterval || this._config.defaultInterval;
     }
     _slide(order, element = null) {
@@ -1738,12 +1750,12 @@ const DefaultType$b = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Carousel.getOrCreateInstance(this, config);
-            if (typeof config === "number") {
+            if (typeof config === 'number') {
                 data.to(config);
                 return;
             }
-            if (typeof config === "string") {
-                if (data[config] === undefined || config.startsWith("_") || config === "constructor") throw new TypeError(`No method named "${config}"`);
+            if (typeof config === 'string') {
+                if (data[config] === undefined || config.startsWith('_') || config === 'constructor') throw new TypeError(`No method named "${config}"`);
                 data[config]();
             }
         });
@@ -1756,13 +1768,13 @@ const DefaultType$b = {
     if (!target || !target.classList.contains(CLASS_NAME_CAROUSEL)) return;
     event.preventDefault();
     const carousel = Carousel.getOrCreateInstance(target);
-    const slideIndex = this.getAttribute("data-bs-slide-to");
+    const slideIndex = this.getAttribute('data-bs-slide-to');
     if (slideIndex) {
         carousel.to(slideIndex);
         carousel._maybeEnableCycle();
         return;
     }
-    if (Manipulator.getDataAttribute(this, "slide") === "next") {
+    if (Manipulator.getDataAttribute(this, 'slide') === 'next') {
         carousel.next();
         carousel._maybeEnableCycle();
         return;
@@ -1784,32 +1796,32 @@ EventHandler.on(window, EVENT_LOAD_DATA_API$3, ()=>{
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$b = "collapse";
-const DATA_KEY$7 = "bs.collapse";
+ */ const NAME$b = 'collapse';
+const DATA_KEY$7 = 'bs.collapse';
 const EVENT_KEY$7 = `.${DATA_KEY$7}`;
-const DATA_API_KEY$4 = ".data-api";
+const DATA_API_KEY$4 = '.data-api';
 const EVENT_SHOW$6 = `show${EVENT_KEY$7}`;
 const EVENT_SHOWN$6 = `shown${EVENT_KEY$7}`;
 const EVENT_HIDE$6 = `hide${EVENT_KEY$7}`;
 const EVENT_HIDDEN$6 = `hidden${EVENT_KEY$7}`;
 const EVENT_CLICK_DATA_API$4 = `click${EVENT_KEY$7}${DATA_API_KEY$4}`;
-const CLASS_NAME_SHOW$7 = "show";
-const CLASS_NAME_COLLAPSE = "collapse";
-const CLASS_NAME_COLLAPSING = "collapsing";
-const CLASS_NAME_COLLAPSED = "collapsed";
+const CLASS_NAME_SHOW$7 = 'show';
+const CLASS_NAME_COLLAPSE = 'collapse';
+const CLASS_NAME_COLLAPSING = 'collapsing';
+const CLASS_NAME_COLLAPSED = 'collapsed';
 const CLASS_NAME_DEEPER_CHILDREN = `:scope .${CLASS_NAME_COLLAPSE} .${CLASS_NAME_COLLAPSE}`;
-const CLASS_NAME_HORIZONTAL = "collapse-horizontal";
-const WIDTH = "width";
-const HEIGHT = "height";
-const SELECTOR_ACTIVES = ".collapse.show, .collapse.collapsing";
+const CLASS_NAME_HORIZONTAL = 'collapse-horizontal';
+const WIDTH = 'width';
+const HEIGHT = 'height';
+const SELECTOR_ACTIVES = '.collapse.show, .collapse.collapsing';
 const SELECTOR_DATA_TOGGLE$4 = '[data-bs-toggle="collapse"]';
 const Default$a = {
     parent: null,
     toggle: true
 };
 const DefaultType$a = {
-    parent: "(null|element)",
-    toggle: "boolean"
+    parent: '(null|element)',
+    toggle: 'boolean'
 };
 /**
  * Class definition
@@ -1864,7 +1876,7 @@ const DefaultType$a = {
             this._isTransitioning = false;
             this._element.classList.remove(CLASS_NAME_COLLAPSING);
             this._element.classList.add(CLASS_NAME_COLLAPSE, CLASS_NAME_SHOW$7);
-            this._element.style[dimension] = "";
+            this._element.style[dimension] = '';
             EventHandler.trigger(this._element, EVENT_SHOWN$6);
         };
         const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
@@ -1894,7 +1906,7 @@ const DefaultType$a = {
             this._element.classList.add(CLASS_NAME_COLLAPSE);
             EventHandler.trigger(this._element, EVENT_HIDDEN$6);
         };
-        this._element.style[dimension] = "";
+        this._element.style[dimension] = '';
         this._queueCallback(complete, this._element, true);
     }
     _isShown(element = this._element) {
@@ -1928,17 +1940,17 @@ const DefaultType$a = {
         if (!triggerArray.length) return;
         for (const element of triggerArray){
             element.classList.toggle(CLASS_NAME_COLLAPSED, !isOpen);
-            element.setAttribute("aria-expanded", isOpen);
+            element.setAttribute('aria-expanded', isOpen);
         }
     }
     // Static
     static jQueryInterface(config) {
         const _config = {};
-        if (typeof config === "string" && /show|hide/.test(config)) _config.toggle = false;
+        if (typeof config === 'string' && /show|hide/.test(config)) _config.toggle = false;
         return this.each(function() {
             const data = Collapse.getOrCreateInstance(this, _config);
-            if (typeof config === "string") {
-                if (typeof data[config] === "undefined") throw new TypeError(`No method named "${config}"`);
+            if (typeof config === 'string') {
+                if (typeof data[config] === 'undefined') throw new TypeError(`No method named "${config}"`);
                 data[config]();
             }
         });
@@ -1948,7 +1960,7 @@ const DefaultType$a = {
  * Data API implementation
  */ EventHandler.on(document, EVENT_CLICK_DATA_API$4, SELECTOR_DATA_TOGGLE$4, function(event) {
     // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
-    if (event.target.tagName === "A" || event.delegateTarget && event.delegateTarget.tagName === "A") event.preventDefault();
+    if (event.target.tagName === 'A' || event.delegateTarget && event.delegateTarget.tagName === 'A') event.preventDefault();
     for (const element of SelectorEngine.getMultipleElementsFromSelector(this))Collapse.getOrCreateInstance(element, {
         toggle: false
     }).toggle();
@@ -1963,14 +1975,14 @@ const DefaultType$a = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$a = "dropdown";
-const DATA_KEY$6 = "bs.dropdown";
+ */ const NAME$a = 'dropdown';
+const DATA_KEY$6 = 'bs.dropdown';
 const EVENT_KEY$6 = `.${DATA_KEY$6}`;
-const DATA_API_KEY$3 = ".data-api";
-const ESCAPE_KEY$2 = "Escape";
-const TAB_KEY$1 = "Tab";
-const ARROW_UP_KEY$1 = "ArrowUp";
-const ARROW_DOWN_KEY$1 = "ArrowDown";
+const DATA_API_KEY$3 = '.data-api';
+const ESCAPE_KEY$2 = 'Escape';
+const TAB_KEY$1 = 'Tab';
+const ARROW_UP_KEY$1 = 'ArrowUp';
+const ARROW_DOWN_KEY$1 = 'ArrowDown';
 const RIGHT_MOUSE_BUTTON = 2; // MouseEvent.button value for the secondary button, usually the right button
 const EVENT_HIDE$5 = `hide${EVENT_KEY$6}`;
 const EVENT_HIDDEN$5 = `hidden${EVENT_KEY$6}`;
@@ -1979,44 +1991,44 @@ const EVENT_SHOWN$5 = `shown${EVENT_KEY$6}`;
 const EVENT_CLICK_DATA_API$3 = `click${EVENT_KEY$6}${DATA_API_KEY$3}`;
 const EVENT_KEYDOWN_DATA_API = `keydown${EVENT_KEY$6}${DATA_API_KEY$3}`;
 const EVENT_KEYUP_DATA_API = `keyup${EVENT_KEY$6}${DATA_API_KEY$3}`;
-const CLASS_NAME_SHOW$6 = "show";
-const CLASS_NAME_DROPUP = "dropup";
-const CLASS_NAME_DROPEND = "dropend";
-const CLASS_NAME_DROPSTART = "dropstart";
-const CLASS_NAME_DROPUP_CENTER = "dropup-center";
-const CLASS_NAME_DROPDOWN_CENTER = "dropdown-center";
+const CLASS_NAME_SHOW$6 = 'show';
+const CLASS_NAME_DROPUP = 'dropup';
+const CLASS_NAME_DROPEND = 'dropend';
+const CLASS_NAME_DROPSTART = 'dropstart';
+const CLASS_NAME_DROPUP_CENTER = 'dropup-center';
+const CLASS_NAME_DROPDOWN_CENTER = 'dropdown-center';
 const SELECTOR_DATA_TOGGLE$3 = '[data-bs-toggle="dropdown"]:not(.disabled):not(:disabled)';
 const SELECTOR_DATA_TOGGLE_SHOWN = `${SELECTOR_DATA_TOGGLE$3}.${CLASS_NAME_SHOW$6}`;
-const SELECTOR_MENU = ".dropdown-menu";
-const SELECTOR_NAVBAR = ".navbar";
-const SELECTOR_NAVBAR_NAV = ".navbar-nav";
-const SELECTOR_VISIBLE_ITEMS = ".dropdown-menu .dropdown-item:not(.disabled):not(:disabled)";
-const PLACEMENT_TOP = isRTL() ? "top-end" : "top-start";
-const PLACEMENT_TOPEND = isRTL() ? "top-start" : "top-end";
-const PLACEMENT_BOTTOM = isRTL() ? "bottom-end" : "bottom-start";
-const PLACEMENT_BOTTOMEND = isRTL() ? "bottom-start" : "bottom-end";
-const PLACEMENT_RIGHT = isRTL() ? "left-start" : "right-start";
-const PLACEMENT_LEFT = isRTL() ? "right-start" : "left-start";
-const PLACEMENT_TOPCENTER = "top";
-const PLACEMENT_BOTTOMCENTER = "bottom";
+const SELECTOR_MENU = '.dropdown-menu';
+const SELECTOR_NAVBAR = '.navbar';
+const SELECTOR_NAVBAR_NAV = '.navbar-nav';
+const SELECTOR_VISIBLE_ITEMS = '.dropdown-menu .dropdown-item:not(.disabled):not(:disabled)';
+const PLACEMENT_TOP = isRTL() ? 'top-end' : 'top-start';
+const PLACEMENT_TOPEND = isRTL() ? 'top-start' : 'top-end';
+const PLACEMENT_BOTTOM = isRTL() ? 'bottom-end' : 'bottom-start';
+const PLACEMENT_BOTTOMEND = isRTL() ? 'bottom-start' : 'bottom-end';
+const PLACEMENT_RIGHT = isRTL() ? 'left-start' : 'right-start';
+const PLACEMENT_LEFT = isRTL() ? 'right-start' : 'left-start';
+const PLACEMENT_TOPCENTER = 'top';
+const PLACEMENT_BOTTOMCENTER = 'bottom';
 const Default$9 = {
     autoClose: true,
-    boundary: "clippingParents",
-    display: "dynamic",
+    boundary: 'clippingParents',
+    display: 'dynamic',
     offset: [
         0,
         2
     ],
     popperConfig: null,
-    reference: "toggle"
+    reference: 'toggle'
 };
 const DefaultType$9 = {
-    autoClose: "(boolean|string)",
-    boundary: "(string|element)",
-    display: "string",
-    offset: "(array|string|function)",
-    popperConfig: "(null|object|function)",
-    reference: "(string|element|object)"
+    autoClose: '(boolean|string)',
+    boundary: '(string|element)',
+    display: 'string',
+    offset: '(array|string|function)',
+    popperConfig: '(null|object|function)',
+    reference: '(string|element|object)'
 };
 /**
  * Class definition
@@ -2055,9 +2067,9 @@ const DefaultType$9 = {
         // empty mouseover listeners to the body's immediate children;
         // only needed because of broken event delegation on iOS
         // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
-        if ("ontouchstart" in document.documentElement && !this._parent.closest(SELECTOR_NAVBAR_NAV)) for (const element of [].concat(...document.body.children))EventHandler.on(element, "mouseover", noop);
+        if ('ontouchstart' in document.documentElement && !this._parent.closest(SELECTOR_NAVBAR_NAV)) for (const element of [].concat(...document.body.children))EventHandler.on(element, 'mouseover', noop);
         this._element.focus();
-        this._element.setAttribute("aria-expanded", true);
+        this._element.setAttribute('aria-expanded', true);
         this._menu.classList.add(CLASS_NAME_SHOW$6);
         this._element.classList.add(CLASS_NAME_SHOW$6);
         EventHandler.trigger(this._element, EVENT_SHOWN$5, relatedTarget);
@@ -2083,26 +2095,26 @@ const DefaultType$9 = {
         if (hideEvent.defaultPrevented) return;
         // If this is a touch-enabled device we remove the extra
         // empty mouseover listeners we added for iOS support
-        if ("ontouchstart" in document.documentElement) for (const element of [].concat(...document.body.children))EventHandler.off(element, "mouseover", noop);
+        if ('ontouchstart' in document.documentElement) for (const element of [].concat(...document.body.children))EventHandler.off(element, 'mouseover', noop);
         if (this._popper) this._popper.destroy();
         this._menu.classList.remove(CLASS_NAME_SHOW$6);
         this._element.classList.remove(CLASS_NAME_SHOW$6);
-        this._element.setAttribute("aria-expanded", "false");
-        Manipulator.removeDataAttribute(this._menu, "popper");
+        this._element.setAttribute('aria-expanded', 'false');
+        Manipulator.removeDataAttribute(this._menu, 'popper');
         EventHandler.trigger(this._element, EVENT_HIDDEN$5, relatedTarget);
     }
     _getConfig(config) {
         config = super._getConfig(config);
-        if (typeof config.reference === "object" && !isElement(config.reference) && typeof config.reference.getBoundingClientRect !== "function") // Popper virtual elements require a getBoundingClientRect method
+        if (typeof config.reference === 'object' && !isElement(config.reference) && typeof config.reference.getBoundingClientRect !== 'function') // Popper virtual elements require a getBoundingClientRect method
         throw new TypeError(`${NAME$a.toUpperCase()}: Option "reference" provided type "object" without a required "getBoundingClientRect" method.`);
         return config;
     }
     _createPopper() {
-        if (typeof _core === "undefined") throw new TypeError("Bootstrap's dropdowns require Popper (https://popper.js.org)");
+        if (typeof _core === 'undefined') throw new TypeError('Bootstrap\'s dropdowns require Popper (https://popper.js.org)');
         let referenceElement = this._element;
-        if (this._config.reference === "parent") referenceElement = this._parent;
+        if (this._config.reference === 'parent') referenceElement = this._parent;
         else if (isElement(this._config.reference)) referenceElement = getElement(this._config.reference);
-        else if (typeof this._config.reference === "object") referenceElement = this._config.reference;
+        else if (typeof this._config.reference === 'object') referenceElement = this._config.reference;
         const popperConfig = this._getPopperConfig();
         this._popper = _core.createPopper(referenceElement, this._menu, popperConfig);
     }
@@ -2116,7 +2128,7 @@ const DefaultType$9 = {
         if (parentDropdown.classList.contains(CLASS_NAME_DROPUP_CENTER)) return PLACEMENT_TOPCENTER;
         if (parentDropdown.classList.contains(CLASS_NAME_DROPDOWN_CENTER)) return PLACEMENT_BOTTOMCENTER;
         // We need to trim the value because custom properties can also include spaces
-        const isEnd = getComputedStyle(this._menu).getPropertyValue("--bs-position").trim() === "end";
+        const isEnd = getComputedStyle(this._menu).getPropertyValue('--bs-position').trim() === 'end';
         if (parentDropdown.classList.contains(CLASS_NAME_DROPUP)) return isEnd ? PLACEMENT_TOPEND : PLACEMENT_TOP;
         return isEnd ? PLACEMENT_BOTTOMEND : PLACEMENT_BOTTOM;
     }
@@ -2125,8 +2137,8 @@ const DefaultType$9 = {
     }
     _getOffset() {
         const { offset } = this._config;
-        if (typeof offset === "string") return offset.split(",").map((value)=>Number.parseInt(value, 10));
-        if (typeof offset === "function") return (popperData)=>offset(popperData, this._element);
+        if (typeof offset === 'string') return offset.split(',').map((value)=>Number.parseInt(value, 10));
+        if (typeof offset === 'function') return (popperData)=>offset(popperData, this._element);
         return offset;
     }
     _getPopperConfig() {
@@ -2134,13 +2146,13 @@ const DefaultType$9 = {
             placement: this._getPlacement(),
             modifiers: [
                 {
-                    name: "preventOverflow",
+                    name: 'preventOverflow',
                     options: {
                         boundary: this._config.boundary
                     }
                 },
                 {
-                    name: "offset",
+                    name: 'offset',
                     options: {
                         offset: this._getOffset()
                     }
@@ -2148,11 +2160,11 @@ const DefaultType$9 = {
             ]
         };
         // Disable Popper if we have a static display or Dropdown is in Navbar
-        if (this._inNavbar || this._config.display === "static") {
-            Manipulator.setDataAttribute(this._menu, "popper", "static"); // TODO: v6 remove
+        if (this._inNavbar || this._config.display === 'static') {
+            Manipulator.setDataAttribute(this._menu, 'popper', 'static'); // TODO: v6 remove
             defaultBsPopperConfig.modifiers = [
                 {
-                    name: "applyStyles",
+                    name: 'applyStyles',
                     enabled: false
                 }
             ];
@@ -2175,26 +2187,26 @@ const DefaultType$9 = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Dropdown.getOrCreateInstance(this, config);
-            if (typeof config !== "string") return;
-            if (typeof data[config] === "undefined") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (typeof data[config] === 'undefined') throw new TypeError(`No method named "${config}"`);
             data[config]();
         });
     }
     static clearMenus(event) {
-        if (event.button === RIGHT_MOUSE_BUTTON || event.type === "keyup" && event.key !== TAB_KEY$1) return;
+        if (event.button === RIGHT_MOUSE_BUTTON || event.type === 'keyup' && event.key !== TAB_KEY$1) return;
         const openToggles = SelectorEngine.find(SELECTOR_DATA_TOGGLE_SHOWN);
         for (const toggle of openToggles){
             const context = Dropdown.getInstance(toggle);
             if (!context || context._config.autoClose === false) continue;
             const composedPath = event.composedPath();
             const isMenuTarget = composedPath.includes(context._menu);
-            if (composedPath.includes(context._element) || context._config.autoClose === "inside" && !isMenuTarget || context._config.autoClose === "outside" && isMenuTarget) continue;
+            if (composedPath.includes(context._element) || context._config.autoClose === 'inside' && !isMenuTarget || context._config.autoClose === 'outside' && isMenuTarget) continue;
             // Tab navigation through the dropdown menu or events from contained inputs shouldn't close the menu
-            if (context._menu.contains(event.target) && (event.type === "keyup" && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) continue;
+            if (context._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) continue;
             const relatedTarget = {
                 relatedTarget: context._element
             };
-            if (event.type === "click") relatedTarget.clickEvent = event;
+            if (event.type === 'click') relatedTarget.clickEvent = event;
             context._completeHide(relatedTarget);
         }
     }
@@ -2247,24 +2259,24 @@ EventHandler.on(document, EVENT_CLICK_DATA_API$3, SELECTOR_DATA_TOGGLE$3, functi
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$9 = "backdrop";
-const CLASS_NAME_FADE$4 = "fade";
-const CLASS_NAME_SHOW$5 = "show";
+ */ const NAME$9 = 'backdrop';
+const CLASS_NAME_FADE$4 = 'fade';
+const CLASS_NAME_SHOW$5 = 'show';
 const EVENT_MOUSEDOWN = `mousedown.bs.${NAME$9}`;
 const Default$8 = {
-    className: "modal-backdrop",
+    className: 'modal-backdrop',
     clickCallback: null,
     isAnimated: false,
     isVisible: true,
     // if false, we use the backdrop helper without adding any element to the dom
-    rootElement: "body" // give the choice to place backdrop under different elements
+    rootElement: 'body' // give the choice to place backdrop under different elements
 };
 const DefaultType$8 = {
-    className: "string",
-    clickCallback: "(function|null)",
-    isAnimated: "boolean",
-    isVisible: "boolean",
-    rootElement: "(element|string)"
+    className: 'string',
+    clickCallback: '(function|null)',
+    isAnimated: 'boolean',
+    isVisible: 'boolean',
+    rootElement: '(element|string)'
 };
 /**
  * Class definition
@@ -2319,7 +2331,7 @@ const DefaultType$8 = {
     // Private
     _getElement() {
         if (!this._element) {
-            const backdrop = document.createElement("div");
+            const backdrop = document.createElement('div');
             backdrop.className = this._config.className;
             if (this._config.isAnimated) backdrop.classList.add(CLASS_NAME_FADE$4);
             this._element = backdrop;
@@ -2351,21 +2363,21 @@ const DefaultType$8 = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$8 = "focustrap";
-const DATA_KEY$5 = "bs.focustrap";
+ */ const NAME$8 = 'focustrap';
+const DATA_KEY$5 = 'bs.focustrap';
 const EVENT_KEY$5 = `.${DATA_KEY$5}`;
 const EVENT_FOCUSIN$2 = `focusin${EVENT_KEY$5}`;
 const EVENT_KEYDOWN_TAB = `keydown.tab${EVENT_KEY$5}`;
-const TAB_KEY = "Tab";
-const TAB_NAV_FORWARD = "forward";
-const TAB_NAV_BACKWARD = "backward";
+const TAB_KEY = 'Tab';
+const TAB_NAV_FORWARD = 'forward';
+const TAB_NAV_BACKWARD = 'backward';
 const Default$7 = {
     autofocus: true,
     trapElement: null // The element to trap focus inside of
 };
 const DefaultType$7 = {
-    autofocus: "boolean",
-    trapElement: "element"
+    autofocus: 'boolean',
+    trapElement: 'element'
 };
 /**
  * Class definition
@@ -2421,10 +2433,10 @@ const DefaultType$7 = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const SELECTOR_FIXED_CONTENT = ".fixed-top, .fixed-bottom, .is-fixed, .sticky-top";
-const SELECTOR_STICKY_CONTENT = ".sticky-top";
-const PROPERTY_PADDING = "padding-right";
-const PROPERTY_MARGIN = "margin-right";
+ */ const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top';
+const SELECTOR_STICKY_CONTENT = '.sticky-top';
+const PROPERTY_PADDING = 'padding-right';
+const PROPERTY_MARGIN = 'margin-right';
 /**
  * Class definition
  */ class ScrollBarHelper {
@@ -2447,7 +2459,7 @@ const PROPERTY_MARGIN = "margin-right";
         this._setElementAttributes(SELECTOR_STICKY_CONTENT, PROPERTY_MARGIN, (calculatedValue)=>calculatedValue - width);
     }
     reset() {
-        this._resetElementAttributes(this._element, "overflow");
+        this._resetElementAttributes(this._element, 'overflow');
         this._resetElementAttributes(this._element, PROPERTY_PADDING);
         this._resetElementAttributes(SELECTOR_FIXED_CONTENT, PROPERTY_PADDING);
         this._resetElementAttributes(SELECTOR_STICKY_CONTENT, PROPERTY_MARGIN);
@@ -2457,8 +2469,8 @@ const PROPERTY_MARGIN = "margin-right";
     }
     // Private
     _disableOverFlow() {
-        this._saveInitialAttribute(this._element, "overflow");
-        this._element.style.overflow = "hidden";
+        this._saveInitialAttribute(this._element, 'overflow');
+        this._element.style.overflow = 'hidden';
     }
     _setElementAttributes(selector, styleProperty, callback) {
         const scrollbarWidth = this.getWidth();
@@ -2502,11 +2514,11 @@ const PROPERTY_MARGIN = "margin-right";
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$7 = "modal";
-const DATA_KEY$4 = "bs.modal";
+ */ const NAME$7 = 'modal';
+const DATA_KEY$4 = 'bs.modal';
 const EVENT_KEY$4 = `.${DATA_KEY$4}`;
-const DATA_API_KEY$2 = ".data-api";
-const ESCAPE_KEY$1 = "Escape";
+const DATA_API_KEY$2 = '.data-api';
+const ESCAPE_KEY$1 = 'Escape';
 const EVENT_HIDE$4 = `hide${EVENT_KEY$4}`;
 const EVENT_HIDE_PREVENTED$1 = `hidePrevented${EVENT_KEY$4}`;
 const EVENT_HIDDEN$4 = `hidden${EVENT_KEY$4}`;
@@ -2517,13 +2529,13 @@ const EVENT_CLICK_DISMISS = `click.dismiss${EVENT_KEY$4}`;
 const EVENT_MOUSEDOWN_DISMISS = `mousedown.dismiss${EVENT_KEY$4}`;
 const EVENT_KEYDOWN_DISMISS$1 = `keydown.dismiss${EVENT_KEY$4}`;
 const EVENT_CLICK_DATA_API$2 = `click${EVENT_KEY$4}${DATA_API_KEY$2}`;
-const CLASS_NAME_OPEN = "modal-open";
-const CLASS_NAME_FADE$3 = "fade";
-const CLASS_NAME_SHOW$4 = "show";
-const CLASS_NAME_STATIC = "modal-static";
-const OPEN_SELECTOR$1 = ".modal.show";
-const SELECTOR_DIALOG = ".modal-dialog";
-const SELECTOR_MODAL_BODY = ".modal-body";
+const CLASS_NAME_OPEN = 'modal-open';
+const CLASS_NAME_FADE$3 = 'fade';
+const CLASS_NAME_SHOW$4 = 'show';
+const CLASS_NAME_STATIC = 'modal-static';
+const OPEN_SELECTOR$1 = '.modal.show';
+const SELECTOR_DIALOG = '.modal-dialog';
+const SELECTOR_MODAL_BODY = '.modal-body';
 const SELECTOR_DATA_TOGGLE$2 = '[data-bs-toggle="modal"]';
 const Default$6 = {
     backdrop: true,
@@ -2531,9 +2543,9 @@ const Default$6 = {
     keyboard: true
 };
 const DefaultType$6 = {
-    backdrop: "(boolean|string)",
-    focus: "boolean",
-    keyboard: "boolean"
+    backdrop: '(boolean|string)',
+    focus: 'boolean',
+    keyboard: 'boolean'
 };
 /**
  * Class definition
@@ -2611,10 +2623,10 @@ const DefaultType$6 = {
     _showElement(relatedTarget) {
         // try to append dynamic modal
         if (!document.body.contains(this._element)) document.body.append(this._element);
-        this._element.style.display = "block";
-        this._element.removeAttribute("aria-hidden");
-        this._element.setAttribute("aria-modal", true);
-        this._element.setAttribute("role", "dialog");
+        this._element.style.display = 'block';
+        this._element.removeAttribute('aria-hidden');
+        this._element.setAttribute('aria-modal', true);
+        this._element.setAttribute('role', 'dialog');
         this._element.scrollTop = 0;
         const modalBody = SelectorEngine.findOne(SELECTOR_MODAL_BODY, this._dialog);
         if (modalBody) modalBody.scrollTop = 0;
@@ -2645,7 +2657,7 @@ const DefaultType$6 = {
             // a bad trick to segregate clicks that may start inside dialog but end outside, and avoid listen to scrollbar clicks
             EventHandler.one(this._element, EVENT_CLICK_DISMISS, (event2)=>{
                 if (this._element !== event.target || this._element !== event2.target) return;
-                if (this._config.backdrop === "static") {
+                if (this._config.backdrop === 'static') {
                     this._triggerBackdropTransition();
                     return;
                 }
@@ -2654,10 +2666,10 @@ const DefaultType$6 = {
         });
     }
     _hideModal() {
-        this._element.style.display = "none";
-        this._element.setAttribute("aria-hidden", true);
-        this._element.removeAttribute("aria-modal");
-        this._element.removeAttribute("role");
+        this._element.style.display = 'none';
+        this._element.setAttribute('aria-hidden', true);
+        this._element.removeAttribute('aria-modal');
+        this._element.removeAttribute('role');
         this._isTransitioning = false;
         this._backdrop.hide(()=>{
             document.body.classList.remove(CLASS_NAME_OPEN);
@@ -2675,8 +2687,8 @@ const DefaultType$6 = {
         const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
         const initialOverflowY = this._element.style.overflowY;
         // return if the following background transition hasn't yet completed
-        if (initialOverflowY === "hidden" || this._element.classList.contains(CLASS_NAME_STATIC)) return;
-        if (!isModalOverflowing) this._element.style.overflowY = "hidden";
+        if (initialOverflowY === 'hidden' || this._element.classList.contains(CLASS_NAME_STATIC)) return;
+        if (!isModalOverflowing) this._element.style.overflowY = 'hidden';
         this._element.classList.add(CLASS_NAME_STATIC);
         this._queueCallback(()=>{
             this._element.classList.remove(CLASS_NAME_STATIC);
@@ -2693,24 +2705,24 @@ const DefaultType$6 = {
         const scrollbarWidth = this._scrollBar.getWidth();
         const isBodyOverflowing = scrollbarWidth > 0;
         if (isBodyOverflowing && !isModalOverflowing) {
-            const property = isRTL() ? "paddingLeft" : "paddingRight";
+            const property = isRTL() ? 'paddingLeft' : 'paddingRight';
             this._element.style[property] = `${scrollbarWidth}px`;
         }
         if (!isBodyOverflowing && isModalOverflowing) {
-            const property = isRTL() ? "paddingRight" : "paddingLeft";
+            const property = isRTL() ? 'paddingRight' : 'paddingLeft';
             this._element.style[property] = `${scrollbarWidth}px`;
         }
     }
     _resetAdjustments() {
-        this._element.style.paddingLeft = "";
-        this._element.style.paddingRight = "";
+        this._element.style.paddingLeft = '';
+        this._element.style.paddingRight = '';
     }
     // Static
     static jQueryInterface(config, relatedTarget) {
         return this.each(function() {
             const data = Modal.getOrCreateInstance(this, config);
-            if (typeof config !== "string") return;
-            if (typeof data[config] === "undefined") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (typeof data[config] === 'undefined') throw new TypeError(`No method named "${config}"`);
             data[config](relatedTarget);
         });
     }
@@ -2720,8 +2732,8 @@ const DefaultType$6 = {
  */ EventHandler.on(document, EVENT_CLICK_DATA_API$2, SELECTOR_DATA_TOGGLE$2, function(event) {
     const target = SelectorEngine.getElementFromSelector(this);
     if ([
-        "A",
-        "AREA"
+        'A',
+        'AREA'
     ].includes(this.tagName)) event.preventDefault();
     EventHandler.one(target, EVENT_SHOW$4, (showEvent)=>{
         if (showEvent.defaultPrevented) // only register focus restorer if modal will actually get shown
@@ -2747,17 +2759,17 @@ enableDismissTrigger(Modal);
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$6 = "offcanvas";
-const DATA_KEY$3 = "bs.offcanvas";
+ */ const NAME$6 = 'offcanvas';
+const DATA_KEY$3 = 'bs.offcanvas';
 const EVENT_KEY$3 = `.${DATA_KEY$3}`;
-const DATA_API_KEY$1 = ".data-api";
+const DATA_API_KEY$1 = '.data-api';
 const EVENT_LOAD_DATA_API$2 = `load${EVENT_KEY$3}${DATA_API_KEY$1}`;
-const ESCAPE_KEY = "Escape";
-const CLASS_NAME_SHOW$3 = "show";
-const CLASS_NAME_SHOWING$1 = "showing";
-const CLASS_NAME_HIDING = "hiding";
-const CLASS_NAME_BACKDROP = "offcanvas-backdrop";
-const OPEN_SELECTOR = ".offcanvas.show";
+const ESCAPE_KEY = 'Escape';
+const CLASS_NAME_SHOW$3 = 'show';
+const CLASS_NAME_SHOWING$1 = 'showing';
+const CLASS_NAME_HIDING = 'hiding';
+const CLASS_NAME_BACKDROP = 'offcanvas-backdrop';
+const OPEN_SELECTOR = '.offcanvas.show';
 const EVENT_SHOW$3 = `show${EVENT_KEY$3}`;
 const EVENT_SHOWN$3 = `shown${EVENT_KEY$3}`;
 const EVENT_HIDE$3 = `hide${EVENT_KEY$3}`;
@@ -2773,9 +2785,9 @@ const Default$5 = {
     scroll: false
 };
 const DefaultType$5 = {
-    backdrop: "(boolean|string)",
-    keyboard: "boolean",
-    scroll: "boolean"
+    backdrop: '(boolean|string)',
+    keyboard: 'boolean',
+    scroll: 'boolean'
 };
 /**
  * Class definition
@@ -2810,8 +2822,8 @@ const DefaultType$5 = {
         this._isShown = true;
         this._backdrop.show();
         if (!this._config.scroll) new ScrollBarHelper().hide();
-        this._element.setAttribute("aria-modal", true);
-        this._element.setAttribute("role", "dialog");
+        this._element.setAttribute('aria-modal', true);
+        this._element.setAttribute('role', 'dialog');
         this._element.classList.add(CLASS_NAME_SHOWING$1);
         const completeCallBack = ()=>{
             if (!this._config.scroll || this._config.backdrop) this._focustrap.activate();
@@ -2834,8 +2846,8 @@ const DefaultType$5 = {
         this._backdrop.hide();
         const completeCallback = ()=>{
             this._element.classList.remove(CLASS_NAME_SHOW$3, CLASS_NAME_HIDING);
-            this._element.removeAttribute("aria-modal");
-            this._element.removeAttribute("role");
+            this._element.removeAttribute('aria-modal');
+            this._element.removeAttribute('role');
             if (!this._config.scroll) new ScrollBarHelper().reset();
             EventHandler.trigger(this._element, EVENT_HIDDEN$3);
         };
@@ -2849,7 +2861,7 @@ const DefaultType$5 = {
     // Private
     _initializeBackDrop() {
         const clickCallback = ()=>{
-            if (this._config.backdrop === "static") {
+            if (this._config.backdrop === 'static') {
                 EventHandler.trigger(this._element, EVENT_HIDE_PREVENTED);
                 return;
             }
@@ -2884,8 +2896,8 @@ const DefaultType$5 = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Offcanvas.getOrCreateInstance(this, config);
-            if (typeof config !== "string") return;
-            if (data[config] === undefined || config.startsWith("_") || config === "constructor") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (data[config] === undefined || config.startsWith('_') || config === 'constructor') throw new TypeError(`No method named "${config}"`);
             data[config](this);
         });
     }
@@ -2895,8 +2907,8 @@ const DefaultType$5 = {
  */ EventHandler.on(document, EVENT_CLICK_DATA_API$1, SELECTOR_DATA_TOGGLE$1, function(event) {
     const target = SelectorEngine.getElementFromSelector(this);
     if ([
-        "A",
-        "AREA"
+        'A',
+        'AREA'
     ].includes(this.tagName)) event.preventDefault();
     if (isDisabled(this)) return;
     EventHandler.one(target, EVENT_HIDDEN$3, ()=>{
@@ -2913,7 +2925,7 @@ EventHandler.on(window, EVENT_LOAD_DATA_API$2, ()=>{
     for (const selector of SelectorEngine.find(OPEN_SELECTOR))Offcanvas.getOrCreateInstance(selector).show();
 });
 EventHandler.on(window, EVENT_RESIZE, ()=>{
-    for (const element of SelectorEngine.find("[aria-modal][class*=show][class*=offcanvas-]"))if (getComputedStyle(element).position !== "fixed") Offcanvas.getOrCreateInstance(element).hide();
+    for (const element of SelectorEngine.find('[aria-modal][class*=show][class*=offcanvas-]'))if (getComputedStyle(element).position !== 'fixed') Offcanvas.getOrCreateInstance(element).hide();
 });
 enableDismissTrigger(Offcanvas);
 /**
@@ -2928,19 +2940,19 @@ enableDismissTrigger(Offcanvas);
 const ARIA_ATTRIBUTE_PATTERN = /^aria-[\w-]*$/i;
 const DefaultAllowlist = {
     // Global attributes allowed on any supplied element below.
-    "*": [
-        "class",
-        "dir",
-        "id",
-        "lang",
-        "role",
+    '*': [
+        'class',
+        'dir',
+        'id',
+        'lang',
+        'role',
         ARIA_ATTRIBUTE_PATTERN
     ],
     a: [
-        "target",
-        "href",
-        "title",
-        "rel"
+        'target',
+        'href',
+        'title',
+        'rel'
     ],
     area: [],
     b: [],
@@ -2961,12 +2973,12 @@ const DefaultAllowlist = {
     h6: [],
     i: [],
     img: [
-        "src",
-        "srcset",
-        "alt",
-        "title",
-        "width",
-        "height"
+        'src',
+        'srcset',
+        'alt',
+        'title',
+        'width',
+        'height'
     ],
     li: [],
     ol: [],
@@ -2983,14 +2995,14 @@ const DefaultAllowlist = {
 };
 // js-docs-end allow-list
 const uriAttributes = new Set([
-    "background",
-    "cite",
-    "href",
-    "itemtype",
-    "longdesc",
-    "poster",
-    "src",
-    "xlink:href"
+    'background',
+    'cite',
+    'href',
+    'itemtype',
+    'longdesc',
+    'poster',
+    'src',
+    'xlink:href'
 ]);
 /**
  * A pattern that recognizes URLs that are safe wrt. XSS in URL navigation
@@ -3010,10 +3022,10 @@ const allowedAttribute = (attribute, allowedAttributeList)=>{
 };
 function sanitizeHtml(unsafeHtml, allowList, sanitizeFunction) {
     if (!unsafeHtml.length) return unsafeHtml;
-    if (sanitizeFunction && typeof sanitizeFunction === "function") return sanitizeFunction(unsafeHtml);
+    if (sanitizeFunction && typeof sanitizeFunction === 'function') return sanitizeFunction(unsafeHtml);
     const domParser = new window.DOMParser();
-    const createdDocument = domParser.parseFromString(unsafeHtml, "text/html");
-    const elements = [].concat(...createdDocument.body.querySelectorAll("*"));
+    const createdDocument = domParser.parseFromString(unsafeHtml, 'text/html');
+    const elements = [].concat(...createdDocument.body.querySelectorAll('*'));
     for (const element of elements){
         const elementName = element.nodeName.toLowerCase();
         if (!Object.keys(allowList).includes(elementName)) {
@@ -3021,7 +3033,7 @@ function sanitizeHtml(unsafeHtml, allowList, sanitizeFunction) {
             continue;
         }
         const attributeList = [].concat(...element.attributes);
-        const allowedAttributes = [].concat(allowList["*"] || [], allowList[elementName] || []);
+        const allowedAttributes = [].concat(allowList['*'] || [], allowList[elementName] || []);
         for (const attribute of attributeList)if (!allowedAttribute(attribute, allowedAttributes)) element.removeAttribute(attribute.nodeName);
     }
     return createdDocument.body.innerHTML;
@@ -3033,29 +3045,29 @@ function sanitizeHtml(unsafeHtml, allowList, sanitizeFunction) {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$5 = "TemplateFactory";
+ */ const NAME$5 = 'TemplateFactory';
 const Default$4 = {
     allowList: DefaultAllowlist,
     content: {},
     // { selector : text ,  selector2 : text2 , }
-    extraClass: "",
+    extraClass: '',
     html: false,
     sanitize: true,
     sanitizeFn: null,
-    template: "<div></div>"
+    template: '<div></div>'
 };
 const DefaultType$4 = {
-    allowList: "object",
-    content: "object",
-    extraClass: "(string|function)",
-    html: "boolean",
-    sanitize: "boolean",
-    sanitizeFn: "(null|function)",
-    template: "string"
+    allowList: 'object',
+    content: 'object',
+    extraClass: '(string|function)',
+    html: 'boolean',
+    sanitize: 'boolean',
+    sanitizeFn: '(null|function)',
+    template: 'string'
 };
 const DefaultContentType = {
-    entry: "(string|element|function|null)",
-    selector: "(string|element)"
+    entry: '(string|element|function|null)',
+    selector: '(string|element)'
 };
 /**
  * Class definition
@@ -3090,12 +3102,12 @@ const DefaultContentType = {
         return this;
     }
     toHtml() {
-        const templateWrapper = document.createElement("div");
+        const templateWrapper = document.createElement('div');
         templateWrapper.innerHTML = this._maybeSanitize(this._config.template);
         for (const [selector, text] of Object.entries(this._config.content))this._setContent(templateWrapper, text, selector);
         const template = templateWrapper.children[0];
         const extraClass = this._resolvePossibleFunction(this._config.extraClass);
-        if (extraClass) template.classList.add(...extraClass.split(" "));
+        if (extraClass) template.classList.add(...extraClass.split(' '));
         return template;
     }
     // Private
@@ -3137,7 +3149,7 @@ const DefaultContentType = {
     }
     _putElementInTemplate(element, templateElement) {
         if (this._config.html) {
-            templateElement.innerHTML = "";
+            templateElement.innerHTML = '';
             templateElement.append(element);
             return;
         }
@@ -3151,90 +3163,90 @@ const DefaultContentType = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$4 = "tooltip";
+ */ const NAME$4 = 'tooltip';
 const DISALLOWED_ATTRIBUTES = new Set([
-    "sanitize",
-    "allowList",
-    "sanitizeFn"
+    'sanitize',
+    'allowList',
+    'sanitizeFn'
 ]);
-const CLASS_NAME_FADE$2 = "fade";
-const CLASS_NAME_MODAL = "modal";
-const CLASS_NAME_SHOW$2 = "show";
-const SELECTOR_TOOLTIP_INNER = ".tooltip-inner";
+const CLASS_NAME_FADE$2 = 'fade';
+const CLASS_NAME_MODAL = 'modal';
+const CLASS_NAME_SHOW$2 = 'show';
+const SELECTOR_TOOLTIP_INNER = '.tooltip-inner';
 const SELECTOR_MODAL = `.${CLASS_NAME_MODAL}`;
-const EVENT_MODAL_HIDE = "hide.bs.modal";
-const TRIGGER_HOVER = "hover";
-const TRIGGER_FOCUS = "focus";
-const TRIGGER_CLICK = "click";
-const TRIGGER_MANUAL = "manual";
-const EVENT_HIDE$2 = "hide";
-const EVENT_HIDDEN$2 = "hidden";
-const EVENT_SHOW$2 = "show";
-const EVENT_SHOWN$2 = "shown";
-const EVENT_INSERTED = "inserted";
-const EVENT_CLICK$1 = "click";
-const EVENT_FOCUSIN$1 = "focusin";
-const EVENT_FOCUSOUT$1 = "focusout";
-const EVENT_MOUSEENTER = "mouseenter";
-const EVENT_MOUSELEAVE = "mouseleave";
+const EVENT_MODAL_HIDE = 'hide.bs.modal';
+const TRIGGER_HOVER = 'hover';
+const TRIGGER_FOCUS = 'focus';
+const TRIGGER_CLICK = 'click';
+const TRIGGER_MANUAL = 'manual';
+const EVENT_HIDE$2 = 'hide';
+const EVENT_HIDDEN$2 = 'hidden';
+const EVENT_SHOW$2 = 'show';
+const EVENT_SHOWN$2 = 'shown';
+const EVENT_INSERTED = 'inserted';
+const EVENT_CLICK$1 = 'click';
+const EVENT_FOCUSIN$1 = 'focusin';
+const EVENT_FOCUSOUT$1 = 'focusout';
+const EVENT_MOUSEENTER = 'mouseenter';
+const EVENT_MOUSELEAVE = 'mouseleave';
 const AttachmentMap = {
-    AUTO: "auto",
-    TOP: "top",
-    RIGHT: isRTL() ? "left" : "right",
-    BOTTOM: "bottom",
-    LEFT: isRTL() ? "right" : "left"
+    AUTO: 'auto',
+    TOP: 'top',
+    RIGHT: isRTL() ? 'left' : 'right',
+    BOTTOM: 'bottom',
+    LEFT: isRTL() ? 'right' : 'left'
 };
 const Default$3 = {
     allowList: DefaultAllowlist,
     animation: true,
-    boundary: "clippingParents",
+    boundary: 'clippingParents',
     container: false,
-    customClass: "",
+    customClass: '',
     delay: 0,
     fallbackPlacements: [
-        "top",
-        "right",
-        "bottom",
-        "left"
+        'top',
+        'right',
+        'bottom',
+        'left'
     ],
     html: false,
     offset: [
         0,
         6
     ],
-    placement: "top",
+    placement: 'top',
     popperConfig: null,
     sanitize: true,
     sanitizeFn: null,
     selector: false,
     template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-    title: "",
-    trigger: "hover focus"
+    title: '',
+    trigger: 'hover focus'
 };
 const DefaultType$3 = {
-    allowList: "object",
-    animation: "boolean",
-    boundary: "(string|element)",
-    container: "(string|element|boolean)",
-    customClass: "(string|function)",
-    delay: "(number|object)",
-    fallbackPlacements: "array",
-    html: "boolean",
-    offset: "(array|string|function)",
-    placement: "(string|function)",
-    popperConfig: "(null|object|function)",
-    sanitize: "boolean",
-    sanitizeFn: "(null|function)",
-    selector: "(string|boolean)",
-    template: "string",
-    title: "(string|element|function)",
-    trigger: "string"
+    allowList: 'object',
+    animation: 'boolean',
+    boundary: '(string|element)',
+    container: '(string|element|boolean)',
+    customClass: '(string|function)',
+    delay: '(number|object)',
+    fallbackPlacements: 'array',
+    html: 'boolean',
+    offset: '(array|string|function)',
+    placement: '(string|function)',
+    popperConfig: '(null|object|function)',
+    sanitize: 'boolean',
+    sanitizeFn: '(null|function)',
+    selector: '(string|boolean)',
+    template: 'string',
+    title: '(string|element|function)',
+    trigger: 'string'
 };
 /**
  * Class definition
  */ class Tooltip extends BaseComponent {
     constructor(element, config){
-        if (typeof _core === "undefined") throw new TypeError("Bootstrap's tooltips require Popper (https://popper.js.org)");
+        if (typeof _core === 'undefined') throw new TypeError('Bootstrap\'s tooltips require Popper (https://popper.js.org)');
         super(element, config);
         // Private
         this._isEnabled = true;
@@ -3281,12 +3293,12 @@ const DefaultType$3 = {
     dispose() {
         clearTimeout(this._timeout);
         EventHandler.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-        if (this._element.getAttribute("data-bs-original-title")) this._element.setAttribute("title", this._element.getAttribute("data-bs-original-title"));
+        if (this._element.getAttribute('data-bs-original-title')) this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
         this._disposePopper();
         super.dispose();
     }
     show() {
-        if (this._element.style.display === "none") throw new Error("Please use show on visible elements");
+        if (this._element.style.display === 'none') throw new Error('Please use show on visible elements');
         if (!(this._isWithContent() && this._isEnabled)) return;
         const showEvent = EventHandler.trigger(this._element, this.constructor.eventName(EVENT_SHOW$2));
         const shadowRoot = findShadowRoot(this._element);
@@ -3295,7 +3307,7 @@ const DefaultType$3 = {
         // TODO: v6 remove this or make it optional
         this._disposePopper();
         const tip = this._getTipElement();
-        this._element.setAttribute("aria-describedby", tip.getAttribute("id"));
+        this._element.setAttribute('aria-describedby', tip.getAttribute('id'));
         const { container } = this._config;
         if (!this._element.ownerDocument.documentElement.contains(this.tip)) {
             container.append(tip);
@@ -3307,7 +3319,7 @@ const DefaultType$3 = {
         // empty mouseover listeners to the body's immediate children;
         // only needed because of broken event delegation on iOS
         // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
-        if ("ontouchstart" in document.documentElement) for (const element of [].concat(...document.body.children))EventHandler.on(element, "mouseover", noop);
+        if ('ontouchstart' in document.documentElement) for (const element of [].concat(...document.body.children))EventHandler.on(element, 'mouseover', noop);
         const complete = ()=>{
             EventHandler.trigger(this._element, this.constructor.eventName(EVENT_SHOWN$2));
             if (this._isHovered === false) this._leave();
@@ -3323,7 +3335,7 @@ const DefaultType$3 = {
         tip.classList.remove(CLASS_NAME_SHOW$2);
         // If this is a touch-enabled device we remove the extra
         // empty mouseover listeners we added for iOS support
-        if ("ontouchstart" in document.documentElement) for (const element of [].concat(...document.body.children))EventHandler.off(element, "mouseover", noop);
+        if ('ontouchstart' in document.documentElement) for (const element of [].concat(...document.body.children))EventHandler.off(element, 'mouseover', noop);
         this._activeTrigger[TRIGGER_CLICK] = false;
         this._activeTrigger[TRIGGER_FOCUS] = false;
         this._activeTrigger[TRIGGER_HOVER] = false;
@@ -3331,7 +3343,7 @@ const DefaultType$3 = {
         const complete = ()=>{
             if (this._isWithActiveTrigger()) return;
             if (!this._isHovered) this._disposePopper();
-            this._element.removeAttribute("aria-describedby");
+            this._element.removeAttribute('aria-describedby');
             EventHandler.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN$2));
         };
         this._queueCallback(complete, this.tip, this._isAnimated());
@@ -3355,7 +3367,7 @@ const DefaultType$3 = {
         // TODO: v6 the following can be achieved with CSS only
         tip.classList.add(`bs-${this.constructor.NAME}-auto`);
         const tipId = getUID(this.constructor.NAME).toString();
-        tip.setAttribute("id", tipId);
+        tip.setAttribute('id', tipId);
         if (this._isAnimated()) tip.classList.add(CLASS_NAME_FADE$2);
         return tip;
     }
@@ -3383,7 +3395,7 @@ const DefaultType$3 = {
         };
     }
     _getTitle() {
-        return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute("data-bs-original-title");
+        return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute('data-bs-original-title');
     }
     // Private
     _initializeOnDelegatedTarget(event) {
@@ -3406,8 +3418,8 @@ const DefaultType$3 = {
     }
     _getOffset() {
         const { offset } = this._config;
-        if (typeof offset === "string") return offset.split(",").map((value)=>Number.parseInt(value, 10));
-        if (typeof offset === "function") return (popperData)=>offset(popperData, this._element);
+        if (typeof offset === 'string') return offset.split(',').map((value)=>Number.parseInt(value, 10));
+        if (typeof offset === 'function') return (popperData)=>offset(popperData, this._element);
         return offset;
     }
     _resolvePossibleFunction(arg) {
@@ -3420,37 +3432,37 @@ const DefaultType$3 = {
             placement: attachment,
             modifiers: [
                 {
-                    name: "flip",
+                    name: 'flip',
                     options: {
                         fallbackPlacements: this._config.fallbackPlacements
                     }
                 },
                 {
-                    name: "offset",
+                    name: 'offset',
                     options: {
                         offset: this._getOffset()
                     }
                 },
                 {
-                    name: "preventOverflow",
+                    name: 'preventOverflow',
                     options: {
                         boundary: this._config.boundary
                     }
                 },
                 {
-                    name: "arrow",
+                    name: 'arrow',
                     options: {
                         element: `.${this.constructor.NAME}-arrow`
                     }
                 },
                 {
-                    name: "preSetPlacement",
+                    name: 'preSetPlacement',
                     enabled: true,
-                    phase: "beforeMain",
+                    phase: 'beforeMain',
                     fn: (data)=>{
                         // Pre-set Popper's placement attribute in order to read the arrow sizes properly.
                         // Otherwise, Popper mixes up the width and height dimensions since the initial arrow style is for top placement
-                        this._getTipElement().setAttribute("data-popper-placement", data.state.placement);
+                        this._getTipElement().setAttribute('data-popper-placement', data.state.placement);
                     }
                 }
             ]
@@ -3463,9 +3475,9 @@ const DefaultType$3 = {
         };
     }
     _setListeners() {
-        const triggers = this._config.trigger.split(" ");
+        const triggers = this._config.trigger.split(' ');
         for (const trigger of triggers){
-            if (trigger === "click") EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, (event)=>{
+            if (trigger === 'click') EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, (event)=>{
                 const context = this._initializeOnDelegatedTarget(event);
                 context.toggle();
             });
@@ -3474,12 +3486,12 @@ const DefaultType$3 = {
                 const eventOut = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT$1);
                 EventHandler.on(this._element, eventIn, this._config.selector, (event)=>{
                     const context = this._initializeOnDelegatedTarget(event);
-                    context._activeTrigger[event.type === "focusin" ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
+                    context._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
                     context._enter();
                 });
                 EventHandler.on(this._element, eventOut, this._config.selector, (event)=>{
                     const context = this._initializeOnDelegatedTarget(event);
-                    context._activeTrigger[event.type === "focusout" ? TRIGGER_FOCUS : TRIGGER_HOVER] = context._element.contains(event.relatedTarget);
+                    context._activeTrigger[event.type === 'focusout' ? TRIGGER_FOCUS : TRIGGER_HOVER] = context._element.contains(event.relatedTarget);
                     context._leave();
                 });
             }
@@ -3490,11 +3502,11 @@ const DefaultType$3 = {
         EventHandler.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
     }
     _fixTitle() {
-        const title = this._element.getAttribute("title");
+        const title = this._element.getAttribute('title');
         if (!title) return;
-        if (!this._element.getAttribute("aria-label") && !this._element.textContent.trim()) this._element.setAttribute("aria-label", title);
-        this._element.setAttribute("data-bs-original-title", title); // DO NOT USE IT. Is only for backwards compatibility
-        this._element.removeAttribute("title");
+        if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) this._element.setAttribute('aria-label', title);
+        this._element.setAttribute('data-bs-original-title', title); // DO NOT USE IT. Is only for backwards compatibility
+        this._element.removeAttribute('title');
     }
     _enter() {
         if (this._isShown() || this._isHovered) {
@@ -3525,7 +3537,7 @@ const DefaultType$3 = {
         for (const dataAttribute of Object.keys(dataAttributes))if (DISALLOWED_ATTRIBUTES.has(dataAttribute)) delete dataAttributes[dataAttribute];
         config = {
             ...dataAttributes,
-            ...typeof config === "object" && config ? config : {}
+            ...typeof config === 'object' && config ? config : {}
         };
         config = this._mergeConfigObj(config);
         config = this._configAfterMerge(config);
@@ -3534,19 +3546,19 @@ const DefaultType$3 = {
     }
     _configAfterMerge(config) {
         config.container = config.container === false ? document.body : getElement(config.container);
-        if (typeof config.delay === "number") config.delay = {
+        if (typeof config.delay === 'number') config.delay = {
             show: config.delay,
             hide: config.delay
         };
-        if (typeof config.title === "number") config.title = config.title.toString();
-        if (typeof config.content === "number") config.content = config.content.toString();
+        if (typeof config.title === 'number') config.title = config.title.toString();
+        if (typeof config.content === 'number') config.content = config.content.toString();
         return config;
     }
     _getDelegateConfig() {
         const config = {};
         for (const [key, value] of Object.entries(this._config))if (this.constructor.Default[key] !== value) config[key] = value;
         config.selector = false;
-        config.trigger = "manual";
+        config.trigger = 'manual';
         // In the future can be replaced with:
         // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
         // `Object.fromEntries(keysWithDifferentValues)`
@@ -3566,8 +3578,8 @@ const DefaultType$3 = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Tooltip.getOrCreateInstance(this, config);
-            if (typeof config !== "string") return;
-            if (typeof data[config] === "undefined") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (typeof data[config] === 'undefined') throw new TypeError(`No method named "${config}"`);
             data[config]();
         });
     }
@@ -3582,23 +3594,23 @@ const DefaultType$3 = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$3 = "popover";
-const SELECTOR_TITLE = ".popover-header";
-const SELECTOR_CONTENT = ".popover-body";
+ */ const NAME$3 = 'popover';
+const SELECTOR_TITLE = '.popover-header';
+const SELECTOR_CONTENT = '.popover-body';
 const Default$2 = {
     ...Tooltip.Default,
-    content: "",
+    content: '',
     offset: [
         0,
         8
     ],
-    placement: "right",
+    placement: 'right',
     template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
-    trigger: "click"
+    trigger: 'click'
 };
 const DefaultType$2 = {
     ...Tooltip.DefaultType,
-    content: "(null|string|element|function)"
+    content: '(null|string|element|function)'
 };
 /**
  * Class definition
@@ -3631,8 +3643,8 @@ const DefaultType$2 = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Popover.getOrCreateInstance(this, config);
-            if (typeof config !== "string") return;
-            if (typeof data[config] === "undefined") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (typeof data[config] === 'undefined') throw new TypeError(`No method named "${config}"`);
             data[config]();
         });
     }
@@ -3647,28 +3659,28 @@ const DefaultType$2 = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$2 = "scrollspy";
-const DATA_KEY$2 = "bs.scrollspy";
+ */ const NAME$2 = 'scrollspy';
+const DATA_KEY$2 = 'bs.scrollspy';
 const EVENT_KEY$2 = `.${DATA_KEY$2}`;
-const DATA_API_KEY = ".data-api";
+const DATA_API_KEY = '.data-api';
 const EVENT_ACTIVATE = `activate${EVENT_KEY$2}`;
 const EVENT_CLICK = `click${EVENT_KEY$2}`;
 const EVENT_LOAD_DATA_API$1 = `load${EVENT_KEY$2}${DATA_API_KEY}`;
-const CLASS_NAME_DROPDOWN_ITEM = "dropdown-item";
-const CLASS_NAME_ACTIVE$1 = "active";
+const CLASS_NAME_DROPDOWN_ITEM = 'dropdown-item';
+const CLASS_NAME_ACTIVE$1 = 'active';
 const SELECTOR_DATA_SPY = '[data-bs-spy="scroll"]';
-const SELECTOR_TARGET_LINKS = "[href]";
-const SELECTOR_NAV_LIST_GROUP = ".nav, .list-group";
-const SELECTOR_NAV_LINKS = ".nav-link";
-const SELECTOR_NAV_ITEMS = ".nav-item";
-const SELECTOR_LIST_ITEMS = ".list-group-item";
+const SELECTOR_TARGET_LINKS = '[href]';
+const SELECTOR_NAV_LIST_GROUP = '.nav, .list-group';
+const SELECTOR_NAV_LINKS = '.nav-link';
+const SELECTOR_NAV_ITEMS = '.nav-item';
+const SELECTOR_LIST_ITEMS = '.list-group-item';
 const SELECTOR_LINK_ITEMS = `${SELECTOR_NAV_LINKS}, ${SELECTOR_NAV_ITEMS} > ${SELECTOR_NAV_LINKS}, ${SELECTOR_LIST_ITEMS}`;
-const SELECTOR_DROPDOWN = ".dropdown";
-const SELECTOR_DROPDOWN_TOGGLE$1 = ".dropdown-toggle";
+const SELECTOR_DROPDOWN = '.dropdown';
+const SELECTOR_DROPDOWN_TOGGLE$1 = '.dropdown-toggle';
 const Default$1 = {
     offset: null,
     // TODO: v6 @deprecated, keep it for backwards compatibility reasons
-    rootMargin: "0px 0px -25%",
+    rootMargin: '0px 0px -25%',
     smoothScroll: false,
     target: null,
     threshold: [
@@ -3678,12 +3690,12 @@ const Default$1 = {
     ]
 };
 const DefaultType$1 = {
-    offset: "(number|null)",
+    offset: '(number|null)',
     // TODO v6 @deprecated, keep it for backwards compatibility reasons
-    rootMargin: "string",
-    smoothScroll: "boolean",
-    target: "element",
-    threshold: "array"
+    rootMargin: 'string',
+    smoothScroll: 'boolean',
+    target: 'element',
+    threshold: 'array'
 };
 /**
  * Class definition
@@ -3693,7 +3705,7 @@ const DefaultType$1 = {
         // this._element is the observablesContainer and config.target the menu links wrapper
         this._targetLinks = new Map();
         this._observableSections = new Map();
-        this._rootElement = getComputedStyle(this._element).overflowY === "visible" ? null : this._element;
+        this._rootElement = getComputedStyle(this._element).overflowY === 'visible' ? null : this._element;
         this._activeTarget = null;
         this._observer = null;
         this._previousScrollData = {
@@ -3730,7 +3742,7 @@ const DefaultType$1 = {
         config.target = getElement(config.target) || document.body;
         // TODO: v6 Only for backwards compatibility reasons. Use rootMargin only
         config.rootMargin = config.offset ? `${config.offset}px 0px -30%` : config.rootMargin;
-        if (typeof config.threshold === "string") config.threshold = config.threshold.split(",").map((value)=>Number.parseFloat(value));
+        if (typeof config.threshold === 'string') config.threshold = config.threshold.split(',').map((value)=>Number.parseFloat(value));
         return config;
     }
     _maybeEnableSmoothScroll() {
@@ -3746,7 +3758,7 @@ const DefaultType$1 = {
                 if (root.scrollTo) {
                     root.scrollTo({
                         top: height,
-                        behavior: "smooth"
+                        behavior: 'smooth'
                     });
                     return;
                 }
@@ -3835,8 +3847,8 @@ const DefaultType$1 = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = ScrollSpy.getOrCreateInstance(this, config);
-            if (typeof config !== "string") return;
-            if (data[config] === undefined || config.startsWith("_") || config === "constructor") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (data[config] === undefined || config.startsWith('_') || config === 'constructor') throw new TypeError(`No method named "${config}"`);
             data[config]();
         });
     }
@@ -3856,8 +3868,8 @@ const DefaultType$1 = {
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME$1 = "tab";
-const DATA_KEY$1 = "bs.tab";
+ */ const NAME$1 = 'tab';
+const DATA_KEY$1 = 'bs.tab';
 const EVENT_KEY$1 = `.${DATA_KEY$1}`;
 const EVENT_HIDE$1 = `hide${EVENT_KEY$1}`;
 const EVENT_HIDDEN$1 = `hidden${EVENT_KEY$1}`;
@@ -3866,21 +3878,21 @@ const EVENT_SHOWN$1 = `shown${EVENT_KEY$1}`;
 const EVENT_CLICK_DATA_API = `click${EVENT_KEY$1}`;
 const EVENT_KEYDOWN = `keydown${EVENT_KEY$1}`;
 const EVENT_LOAD_DATA_API = `load${EVENT_KEY$1}`;
-const ARROW_LEFT_KEY = "ArrowLeft";
-const ARROW_RIGHT_KEY = "ArrowRight";
-const ARROW_UP_KEY = "ArrowUp";
-const ARROW_DOWN_KEY = "ArrowDown";
-const HOME_KEY = "Home";
-const END_KEY = "End";
-const CLASS_NAME_ACTIVE = "active";
-const CLASS_NAME_FADE$1 = "fade";
-const CLASS_NAME_SHOW$1 = "show";
-const CLASS_DROPDOWN = "dropdown";
-const SELECTOR_DROPDOWN_TOGGLE = ".dropdown-toggle";
-const SELECTOR_DROPDOWN_MENU = ".dropdown-menu";
+const ARROW_LEFT_KEY = 'ArrowLeft';
+const ARROW_RIGHT_KEY = 'ArrowRight';
+const ARROW_UP_KEY = 'ArrowUp';
+const ARROW_DOWN_KEY = 'ArrowDown';
+const HOME_KEY = 'Home';
+const END_KEY = 'End';
+const CLASS_NAME_ACTIVE = 'active';
+const CLASS_NAME_FADE$1 = 'fade';
+const CLASS_NAME_SHOW$1 = 'show';
+const CLASS_DROPDOWN = 'dropdown';
+const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
+const SELECTOR_DROPDOWN_MENU = '.dropdown-menu';
 const NOT_SELECTOR_DROPDOWN_TOGGLE = `:not(${SELECTOR_DROPDOWN_TOGGLE})`;
 const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
-const SELECTOR_OUTER = ".nav-item, .list-group-item";
+const SELECTOR_OUTER = '.nav-item, .list-group-item';
 const SELECTOR_INNER = `.nav-link${NOT_SELECTOR_DROPDOWN_TOGGLE}, .list-group-item${NOT_SELECTOR_DROPDOWN_TOGGLE}, [role="tab"]${NOT_SELECTOR_DROPDOWN_TOGGLE}`;
 const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'; // TODO: could only be `tab` in v6
 const SELECTOR_INNER_ELEM = `${SELECTOR_INNER}, ${SELECTOR_DATA_TOGGLE}`;
@@ -3923,12 +3935,12 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
         element.classList.add(CLASS_NAME_ACTIVE);
         this._activate(SelectorEngine.getElementFromSelector(element)); // Search and activate/show the proper section
         const complete = ()=>{
-            if (element.getAttribute("role") !== "tab") {
+            if (element.getAttribute('role') !== 'tab') {
                 element.classList.add(CLASS_NAME_SHOW$1);
                 return;
             }
-            element.removeAttribute("tabindex");
-            element.setAttribute("aria-selected", true);
+            element.removeAttribute('tabindex');
+            element.setAttribute('aria-selected', true);
             this._toggleDropDown(element, true);
             EventHandler.trigger(element, EVENT_SHOWN$1, {
                 relatedTarget: relatedElem
@@ -3942,12 +3954,12 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
         element.blur();
         this._deactivate(SelectorEngine.getElementFromSelector(element)); // Search and deactivate the shown section too
         const complete = ()=>{
-            if (element.getAttribute("role") !== "tab") {
+            if (element.getAttribute('role') !== 'tab') {
                 element.classList.remove(CLASS_NAME_SHOW$1);
                 return;
             }
-            element.setAttribute("aria-selected", false);
-            element.setAttribute("tabindex", "-1");
+            element.setAttribute('aria-selected', false);
+            element.setAttribute('tabindex', '-1');
             this._toggleDropDown(element, false);
             EventHandler.trigger(element, EVENT_HIDDEN$1, {
                 relatedTarget: relatedElem
@@ -3994,25 +4006,25 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
         return this._getChildren().find((child)=>this._elemIsActive(child)) || null;
     }
     _setInitialAttributes(parent, children) {
-        this._setAttributeIfNotExists(parent, "role", "tablist");
+        this._setAttributeIfNotExists(parent, 'role', 'tablist');
         for (const child of children)this._setInitialAttributesOnChild(child);
     }
     _setInitialAttributesOnChild(child) {
         child = this._getInnerElement(child);
         const isActive = this._elemIsActive(child);
         const outerElem = this._getOuterElement(child);
-        child.setAttribute("aria-selected", isActive);
-        if (outerElem !== child) this._setAttributeIfNotExists(outerElem, "role", "presentation");
-        if (!isActive) child.setAttribute("tabindex", "-1");
-        this._setAttributeIfNotExists(child, "role", "tab");
+        child.setAttribute('aria-selected', isActive);
+        if (outerElem !== child) this._setAttributeIfNotExists(outerElem, 'role', 'presentation');
+        if (!isActive) child.setAttribute('tabindex', '-1');
+        this._setAttributeIfNotExists(child, 'role', 'tab');
         // set attributes to the related panel too
         this._setInitialAttributesOnTargetPanel(child);
     }
     _setInitialAttributesOnTargetPanel(child) {
         const target = SelectorEngine.getElementFromSelector(child);
         if (!target) return;
-        this._setAttributeIfNotExists(target, "role", "tabpanel");
-        if (child.id) this._setAttributeIfNotExists(target, "aria-labelledby", `${child.id}`);
+        this._setAttributeIfNotExists(target, 'role', 'tabpanel');
+        if (child.id) this._setAttributeIfNotExists(target, 'aria-labelledby', `${child.id}`);
     }
     _toggleDropDown(element, open) {
         const outerElem = this._getOuterElement(element);
@@ -4023,7 +4035,7 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
         };
         toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE);
         toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW$1);
-        outerElem.setAttribute("aria-expanded", open);
+        outerElem.setAttribute('aria-expanded', open);
     }
     _setAttributeIfNotExists(element, attribute, value) {
         if (!element.hasAttribute(attribute)) element.setAttribute(attribute, value);
@@ -4043,8 +4055,8 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Tab.getOrCreateInstance(this);
-            if (typeof config !== "string") return;
-            if (data[config] === undefined || config.startsWith("_") || config === "constructor") throw new TypeError(`No method named "${config}"`);
+            if (typeof config !== 'string') return;
+            if (data[config] === undefined || config.startsWith('_') || config === 'constructor') throw new TypeError(`No method named "${config}"`);
             data[config]();
         });
     }
@@ -4053,8 +4065,8 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
  * Data API implementation
  */ EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function(event) {
     if ([
-        "A",
-        "AREA"
+        'A',
+        'AREA'
     ].includes(this.tagName)) event.preventDefault();
     if (isDisabled(this)) return;
     Tab.getOrCreateInstance(this).show();
@@ -4074,8 +4086,8 @@ const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"]
  * --------------------------------------------------------------------------
  */ /**
  * Constants
- */ const NAME = "toast";
-const DATA_KEY = "bs.toast";
+ */ const NAME = 'toast';
+const DATA_KEY = 'bs.toast';
 const EVENT_KEY = `.${DATA_KEY}`;
 const EVENT_MOUSEOVER = `mouseover${EVENT_KEY}`;
 const EVENT_MOUSEOUT = `mouseout${EVENT_KEY}`;
@@ -4085,14 +4097,14 @@ const EVENT_HIDE = `hide${EVENT_KEY}`;
 const EVENT_HIDDEN = `hidden${EVENT_KEY}`;
 const EVENT_SHOW = `show${EVENT_KEY}`;
 const EVENT_SHOWN = `shown${EVENT_KEY}`;
-const CLASS_NAME_FADE = "fade";
-const CLASS_NAME_HIDE = "hide"; // @deprecated - kept here only for backwards compatibility
-const CLASS_NAME_SHOW = "show";
-const CLASS_NAME_SHOWING = "showing";
+const CLASS_NAME_FADE = 'fade';
+const CLASS_NAME_HIDE = 'hide'; // @deprecated - kept here only for backwards compatibility
+const CLASS_NAME_SHOW = 'show';
+const CLASS_NAME_SHOWING = 'showing';
 const DefaultType = {
-    animation: "boolean",
-    autohide: "boolean",
-    delay: "number"
+    animation: 'boolean',
+    autohide: 'boolean',
+    delay: 'number'
 };
 const Default = {
     animation: true,
@@ -4165,12 +4177,12 @@ const Default = {
     }
     _onInteraction(event, isInteracting) {
         switch(event.type){
-            case "mouseover":
-            case "mouseout":
+            case 'mouseover':
+            case 'mouseout':
                 this._hasMouseInteraction = isInteracting;
                 break;
-            case "focusin":
-            case "focusout":
+            case 'focusin':
+            case 'focusout':
                 this._hasKeyboardInteraction = isInteracting;
                 break;
         }
@@ -4196,8 +4208,8 @@ const Default = {
     static jQueryInterface(config) {
         return this.each(function() {
             const data = Toast.getOrCreateInstance(this, config);
-            if (typeof config === "string") {
-                if (typeof data[config] === "undefined") throw new TypeError(`No method named "${config}"`);
+            if (typeof config === 'string') {
+                if (typeof data[config] === 'undefined') throw new TypeError(`No method named "${config}"`);
                 data[config](this);
             }
         });
@@ -4210,7 +4222,7 @@ const Default = {
  * jQuery
  */ defineJQueryPlugin(Toast);
 
-},{"@popperjs/core":"7unqC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7unqC":[function(require,module,exports) {
+},{"@popperjs/core":"7unqC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7unqC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "popperGenerator", ()=>(0, _createPopperJs.popperGenerator)) // eslint-disable-next-line import/no-unused-modules
@@ -4228,7 +4240,7 @@ var _createPopperJs = require("./createPopper.js");
 var _popperJs = require("./popper.js");
 var _popperLiteJs = require("./popper-lite.js");
 
-},{"./enums.js":"lCAq5","./modifiers/index.js":"cap3W","./createPopper.js":"cHuNp","./popper.js":"1PuRF","./popper-lite.js":"gKW1N","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lCAq5":[function(require,module,exports) {
+},{"./enums.js":"lCAq5","./modifiers/index.js":"cap3W","./createPopper.js":"cHuNp","./popper.js":"1PuRF","./popper-lite.js":"gKW1N","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lCAq5":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "top", ()=>top);
@@ -4255,23 +4267,23 @@ parcelHelpers.export(exports, "beforeWrite", ()=>beforeWrite);
 parcelHelpers.export(exports, "write", ()=>write);
 parcelHelpers.export(exports, "afterWrite", ()=>afterWrite);
 parcelHelpers.export(exports, "modifierPhases", ()=>modifierPhases);
-var top = "top";
-var bottom = "bottom";
-var right = "right";
-var left = "left";
-var auto = "auto";
+var top = 'top';
+var bottom = 'bottom';
+var right = 'right';
+var left = 'left';
+var auto = 'auto';
 var basePlacements = [
     top,
     bottom,
     right,
     left
 ];
-var start = "start";
-var end = "end";
-var clippingParents = "clippingParents";
-var viewport = "viewport";
-var popper = "popper";
-var reference = "reference";
+var start = 'start';
+var end = 'end';
+var clippingParents = 'clippingParents';
+var viewport = 'viewport';
+var popper = 'popper';
+var reference = 'reference';
 var variationPlacements = /*#__PURE__*/ basePlacements.reduce(function(acc, placement) {
     return acc.concat([
         placement + "-" + start,
@@ -4287,15 +4299,15 @@ var placements = /*#__PURE__*/ [].concat(basePlacements, [
         placement + "-" + end
     ]);
 }, []); // modifiers that need to read the DOM
-var beforeRead = "beforeRead";
-var read = "read";
-var afterRead = "afterRead"; // pure-logic modifiers
-var beforeMain = "beforeMain";
-var main = "main";
-var afterMain = "afterMain"; // modifier with the purpose to write to the DOM (or write into a framework state)
-var beforeWrite = "beforeWrite";
-var write = "write";
-var afterWrite = "afterWrite";
+var beforeRead = 'beforeRead';
+var read = 'read';
+var afterRead = 'afterRead'; // pure-logic modifiers
+var beforeMain = 'beforeMain';
+var main = 'main';
+var afterMain = 'afterMain'; // modifier with the purpose to write to the DOM (or write into a framework state)
+var beforeWrite = 'beforeWrite';
+var write = 'write';
+var afterWrite = 'afterWrite';
 var modifierPhases = [
     beforeRead,
     read,
@@ -4308,20 +4320,20 @@ var modifierPhases = [
     afterWrite
 ];
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
     };
 };
 exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
+    Object.defineProperty(a, '__esModule', {
         value: true
     });
 };
 exports.exportAll = function(source, dest) {
     Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
         Object.defineProperty(dest, key, {
             enumerable: true,
             get: function() {
@@ -4338,7 +4350,7 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"cap3W":[function(require,module,exports) {
+},{}],"cap3W":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "applyStyles", ()=>(0, _applyStylesJsDefault.default));
@@ -4369,7 +4381,7 @@ var _popperOffsetsJsDefault = parcelHelpers.interopDefault(_popperOffsetsJs);
 var _preventOverflowJs = require("./preventOverflow.js");
 var _preventOverflowJsDefault = parcelHelpers.interopDefault(_preventOverflowJs);
 
-},{"./applyStyles.js":"4iMn4","./arrow.js":"31HFW","./computeStyles.js":"gDlm2","./eventListeners.js":"hBKsL","./flip.js":"fv5wq","./hide.js":"2g4OF","./offset.js":"3GKVY","./popperOffsets.js":"6I679","./preventOverflow.js":"1AMhb","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4iMn4":[function(require,module,exports) {
+},{"./applyStyles.js":"4iMn4","./arrow.js":"31HFW","./computeStyles.js":"gDlm2","./eventListeners.js":"hBKsL","./flip.js":"fv5wq","./hide.js":"2g4OF","./offset.js":"3GKVY","./popperOffsets.js":"6I679","./preventOverflow.js":"1AMhb","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4iMn4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _getNodeNameJs = require("../dom-utils/getNodeName.js");
@@ -4390,7 +4402,7 @@ function applyStyles(_ref) {
         Object.keys(attributes).forEach(function(name) {
             var value = attributes[name];
             if (value === false) element.removeAttribute(name);
-            else element.setAttribute(name, value === true ? "" : value);
+            else element.setAttribute(name, value === true ? '' : value);
         });
     });
 }
@@ -4399,12 +4411,12 @@ function effect(_ref2) {
     var initialStyles = {
         popper: {
             position: state.options.strategy,
-            left: "0",
-            top: "0",
-            margin: "0"
+            left: '0',
+            top: '0',
+            margin: '0'
         },
         arrow: {
-            position: "absolute"
+            position: 'absolute'
         },
         reference: {}
     };
@@ -4417,7 +4429,7 @@ function effect(_ref2) {
             var attributes = state.attributes[name] || {};
             var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
             var style = styleProperties.reduce(function(style, property) {
-                style[property] = "";
+                style[property] = '';
                 return style;
             }, {}); // arrow is optional + virtual elements
             if (!(0, _instanceOfJs.isHTMLElement)(element) || !(0, _getNodeNameJsDefault.default)(element)) return;
@@ -4429,25 +4441,25 @@ function effect(_ref2) {
     };
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "applyStyles",
+    name: 'applyStyles',
     enabled: true,
-    phase: "write",
+    phase: 'write',
     fn: applyStyles,
     effect: effect,
     requires: [
-        "computeStyles"
+        'computeStyles'
     ]
 };
 
-},{"../dom-utils/getNodeName.js":"a2Qom","../dom-utils/instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a2Qom":[function(require,module,exports) {
+},{"../dom-utils/getNodeName.js":"a2Qom","../dom-utils/instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a2Qom":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getNodeName);
 function getNodeName(element) {
-    return element ? (element.nodeName || "").toLowerCase() : null;
+    return element ? (element.nodeName || '').toLowerCase() : null;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gYFUC":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gYFUC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "isElement", ()=>isElement);
@@ -4465,25 +4477,25 @@ function isHTMLElement(node) {
 }
 function isShadowRoot(node) {
     // IE 11 has no ShadowRoot
-    if (typeof ShadowRoot === "undefined") return false;
+    if (typeof ShadowRoot === 'undefined') return false;
     var OwnElement = (0, _getWindowJsDefault.default)(node).ShadowRoot;
     return node instanceof OwnElement || node instanceof ShadowRoot;
 }
 
-},{"./getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2SkOo":[function(require,module,exports) {
+},{"./getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2SkOo":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getWindow);
 function getWindow(node) {
     if (node == null) return window;
-    if (node.toString() !== "[object Window]") {
+    if (node.toString() !== '[object Window]') {
         var ownerDocument = node.ownerDocument;
         return ownerDocument ? ownerDocument.defaultView || window : window;
     }
     return node;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"31HFW":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"31HFW":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _getBasePlacementJs = require("../utils/getBasePlacement.js");
@@ -4503,10 +4515,10 @@ var _expandToHashMapJs = require("../utils/expandToHashMap.js");
 var _expandToHashMapJsDefault = parcelHelpers.interopDefault(_expandToHashMapJs);
 var _enumsJs = require("../enums.js"); // eslint-disable-next-line import/no-unused-modules
 var toPaddingObject = function toPaddingObject(padding, state) {
-    padding = typeof padding === "function" ? padding(Object.assign({}, state.rects, {
+    padding = typeof padding === 'function' ? padding(Object.assign({}, state.rects, {
         placement: state.placement
     })) : padding;
-    return (0, _mergePaddingObjectJsDefault.default)(typeof padding !== "number" ? padding : (0, _expandToHashMapJsDefault.default)(padding, (0, _enumsJs.basePlacements)));
+    return (0, _mergePaddingObjectJsDefault.default)(typeof padding !== 'number' ? padding : (0, _expandToHashMapJsDefault.default)(padding, (0, _enumsJs.basePlacements)));
 };
 function arrow(_ref) {
     var _state$modifiersData$;
@@ -4519,16 +4531,16 @@ function arrow(_ref) {
         (0, _enumsJs.left),
         (0, _enumsJs.right)
     ].indexOf(basePlacement) >= 0;
-    var len = isVertical ? "height" : "width";
+    var len = isVertical ? 'height' : 'width';
     if (!arrowElement || !popperOffsets) return;
     var paddingObject = toPaddingObject(options.padding, state);
     var arrowRect = (0, _getLayoutRectJsDefault.default)(arrowElement);
-    var minProp = axis === "y" ? (0, _enumsJs.top) : (0, _enumsJs.left);
-    var maxProp = axis === "y" ? (0, _enumsJs.bottom) : (0, _enumsJs.right);
+    var minProp = axis === 'y' ? (0, _enumsJs.top) : (0, _enumsJs.left);
+    var maxProp = axis === 'y' ? (0, _enumsJs.bottom) : (0, _enumsJs.right);
     var endDiff = state.rects.reference[len] + state.rects.reference[axis] - popperOffsets[axis] - state.rects.popper[len];
     var startDiff = popperOffsets[axis] - state.rects.reference[axis];
     var arrowOffsetParent = (0, _getOffsetParentJsDefault.default)(arrowElement);
-    var clientSize = arrowOffsetParent ? axis === "y" ? arrowOffsetParent.clientHeight || 0 : arrowOffsetParent.clientWidth || 0 : 0;
+    var clientSize = arrowOffsetParent ? axis === 'y' ? arrowOffsetParent.clientHeight || 0 : arrowOffsetParent.clientWidth || 0 : 0;
     var centerToReference = endDiff / 2 - startDiff / 2; // Make sure the arrow doesn't overflow the popper if the center point is
     // outside of the popper bounds
     var min = paddingObject[minProp];
@@ -4540,10 +4552,10 @@ function arrow(_ref) {
 }
 function effect(_ref2) {
     var state = _ref2.state, options = _ref2.options;
-    var _options$element = options.element, arrowElement = _options$element === void 0 ? "[data-popper-arrow]" : _options$element;
+    var _options$element = options.element, arrowElement = _options$element === void 0 ? '[data-popper-arrow]' : _options$element;
     if (arrowElement == null) return;
      // CSS selector
-    if (typeof arrowElement === "string") {
+    if (typeof arrowElement === 'string') {
         arrowElement = state.elements.popper.querySelector(arrowElement);
         if (!arrowElement) return;
     }
@@ -4551,29 +4563,29 @@ function effect(_ref2) {
     state.elements.arrow = arrowElement;
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "arrow",
+    name: 'arrow',
     enabled: true,
-    phase: "main",
+    phase: 'main',
     fn: arrow,
     effect: effect,
     requires: [
-        "popperOffsets"
+        'popperOffsets'
     ],
     requiresIfExists: [
-        "preventOverflow"
+        'preventOverflow'
     ]
 };
 
-},{"../utils/getBasePlacement.js":"59Wp3","../dom-utils/getLayoutRect.js":"jvjuf","../dom-utils/contains.js":"4QxRR","../dom-utils/getOffsetParent.js":"laoYw","../utils/getMainAxisFromPlacement.js":"1Xlom","../utils/within.js":"3glSz","../utils/mergePaddingObject.js":"lEIf9","../utils/expandToHashMap.js":"iQlH5","../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"59Wp3":[function(require,module,exports) {
+},{"../utils/getBasePlacement.js":"59Wp3","../dom-utils/getLayoutRect.js":"jvjuf","../dom-utils/contains.js":"4QxRR","../dom-utils/getOffsetParent.js":"laoYw","../utils/getMainAxisFromPlacement.js":"1Xlom","../utils/within.js":"3glSz","../utils/mergePaddingObject.js":"lEIf9","../utils/expandToHashMap.js":"iQlH5","../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"59Wp3":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getBasePlacement);
 var _enumsJs = require("../enums.js");
 function getBasePlacement(placement) {
-    return placement.split("-")[0];
+    return placement.split('-')[0];
 }
 
-},{"../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jvjuf":[function(require,module,exports) {
+},{"../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jvjuf":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getLayoutRect);
@@ -4594,7 +4606,7 @@ function getLayoutRect(element) {
     };
 }
 
-},{"./getBoundingClientRect.js":"9CFSQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9CFSQ":[function(require,module,exports) {
+},{"./getBoundingClientRect.js":"9CFSQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9CFSQ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getBoundingClientRect);
@@ -4632,7 +4644,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy) {
     };
 }
 
-},{"./instanceOf.js":"gYFUC","../utils/math.js":"gQqVe","./getWindow.js":"2SkOo","./isLayoutViewport.js":"3ipHv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gQqVe":[function(require,module,exports) {
+},{"./instanceOf.js":"gYFUC","../utils/math.js":"gQqVe","./getWindow.js":"2SkOo","./isLayoutViewport.js":"3ipHv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gQqVe":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "max", ()=>max);
@@ -4642,7 +4654,7 @@ var max = Math.max;
 var min = Math.min;
 var round = Math.round;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ipHv":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ipHv":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>isLayoutViewport);
@@ -4652,7 +4664,7 @@ function isLayoutViewport() {
     return !/^((?!chrome|android).)*safari/i.test((0, _userAgentJsDefault.default)());
 }
 
-},{"../utils/userAgent.js":"1hEx0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1hEx0":[function(require,module,exports) {
+},{"../utils/userAgent.js":"1hEx0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1hEx0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getUAString);
@@ -4660,11 +4672,11 @@ function getUAString() {
     var uaData = navigator.userAgentData;
     if (uaData != null && uaData.brands && Array.isArray(uaData.brands)) return uaData.brands.map(function(item) {
         return item.brand + "/" + item.version;
-    }).join(" ");
+    }).join(' ');
     return navigator.userAgent;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4QxRR":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4QxRR":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>contains);
@@ -4683,7 +4695,7 @@ function contains(parent, child) {
     return false;
 }
 
-},{"./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"laoYw":[function(require,module,exports) {
+},{"./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"laoYw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getOffsetParent);
@@ -4702,7 +4714,7 @@ var _userAgentJs = require("../utils/userAgent.js");
 var _userAgentJsDefault = parcelHelpers.interopDefault(_userAgentJs);
 function getTrueOffsetParent(element) {
     if (!(0, _instanceOfJs.isHTMLElement)(element) || // https://github.com/popperjs/popper-core/issues/837
-    (0, _getComputedStyleJsDefault.default)(element).position === "fixed") return null;
+    (0, _getComputedStyleJsDefault.default)(element).position === 'fixed') return null;
     return element.offsetParent;
 } // `.offsetParent` reports `null` for fixed elements, while absolute elements
 // return the containing block
@@ -4712,21 +4724,21 @@ function getContainingBlock(element) {
     if (isIE && (0, _instanceOfJs.isHTMLElement)(element)) {
         // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
         var elementCss = (0, _getComputedStyleJsDefault.default)(element);
-        if (elementCss.position === "fixed") return null;
+        if (elementCss.position === 'fixed') return null;
     }
     var currentNode = (0, _getParentNodeJsDefault.default)(element);
     if ((0, _instanceOfJs.isShadowRoot)(currentNode)) currentNode = currentNode.host;
     while((0, _instanceOfJs.isHTMLElement)(currentNode) && [
-        "html",
-        "body"
+        'html',
+        'body'
     ].indexOf((0, _getNodeNameJsDefault.default)(currentNode)) < 0){
         var css = (0, _getComputedStyleJsDefault.default)(currentNode); // This is non-exhaustive but covers the most common CSS properties that
         // create a containing block.
         // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-        if (css.transform !== "none" || css.perspective !== "none" || css.contain === "paint" || [
-            "transform",
-            "perspective"
-        ].indexOf(css.willChange) !== -1 || isFirefox && css.willChange === "filter" || isFirefox && css.filter && css.filter !== "none") return currentNode;
+        if (css.transform !== 'none' || css.perspective !== 'none' || css.contain === 'paint' || [
+            'transform',
+            'perspective'
+        ].indexOf(css.willChange) !== -1 || isFirefox && css.willChange === 'filter' || isFirefox && css.filter && css.filter !== 'none') return currentNode;
         else currentNode = currentNode.parentNode;
     }
     return null;
@@ -4734,12 +4746,12 @@ function getContainingBlock(element) {
 function getOffsetParent(element) {
     var window = (0, _getWindowJsDefault.default)(element);
     var offsetParent = getTrueOffsetParent(element);
-    while(offsetParent && (0, _isTableElementJsDefault.default)(offsetParent) && (0, _getComputedStyleJsDefault.default)(offsetParent).position === "static")offsetParent = getTrueOffsetParent(offsetParent);
-    if (offsetParent && ((0, _getNodeNameJsDefault.default)(offsetParent) === "html" || (0, _getNodeNameJsDefault.default)(offsetParent) === "body" && (0, _getComputedStyleJsDefault.default)(offsetParent).position === "static")) return window;
+    while(offsetParent && (0, _isTableElementJsDefault.default)(offsetParent) && (0, _getComputedStyleJsDefault.default)(offsetParent).position === 'static')offsetParent = getTrueOffsetParent(offsetParent);
+    if (offsetParent && ((0, _getNodeNameJsDefault.default)(offsetParent) === 'html' || (0, _getNodeNameJsDefault.default)(offsetParent) === 'body' && (0, _getComputedStyleJsDefault.default)(offsetParent).position === 'static')) return window;
     return offsetParent || getContainingBlock(element) || window;
 }
 
-},{"./getWindow.js":"2SkOo","./getNodeName.js":"a2Qom","./getComputedStyle.js":"3mZjB","./instanceOf.js":"gYFUC","./isTableElement.js":"2qBb7","./getParentNode.js":"bIHpd","../utils/userAgent.js":"1hEx0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3mZjB":[function(require,module,exports) {
+},{"./getWindow.js":"2SkOo","./getNodeName.js":"a2Qom","./getComputedStyle.js":"3mZjB","./instanceOf.js":"gYFUC","./isTableElement.js":"2qBb7","./getParentNode.js":"bIHpd","../utils/userAgent.js":"1hEx0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3mZjB":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getComputedStyle);
@@ -4749,7 +4761,7 @@ function getComputedStyle(element) {
     return (0, _getWindowJsDefault.default)(element).getComputedStyle(element);
 }
 
-},{"./getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2qBb7":[function(require,module,exports) {
+},{"./getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2qBb7":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>isTableElement);
@@ -4757,13 +4769,13 @@ var _getNodeNameJs = require("./getNodeName.js");
 var _getNodeNameJsDefault = parcelHelpers.interopDefault(_getNodeNameJs);
 function isTableElement(element) {
     return [
-        "table",
-        "td",
-        "th"
+        'table',
+        'td',
+        'th'
     ].indexOf((0, _getNodeNameJsDefault.default)(element)) >= 0;
 }
 
-},{"./getNodeName.js":"a2Qom","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bIHpd":[function(require,module,exports) {
+},{"./getNodeName.js":"a2Qom","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bIHpd":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getParentNode);
@@ -4773,7 +4785,7 @@ var _getDocumentElementJs = require("./getDocumentElement.js");
 var _getDocumentElementJsDefault = parcelHelpers.interopDefault(_getDocumentElementJs);
 var _instanceOfJs = require("./instanceOf.js");
 function getParentNode(element) {
-    if ((0, _getNodeNameJsDefault.default)(element) === "html") return element;
+    if ((0, _getNodeNameJsDefault.default)(element) === 'html') return element;
     return(// $FlowFixMe[incompatible-return]
     // $FlowFixMe[prop-missing]
     element.assignedSlot || // step into the shadow DOM of the parent of a slotted node
@@ -4783,7 +4795,7 @@ function getParentNode(element) {
     );
 }
 
-},{"./getNodeName.js":"a2Qom","./getDocumentElement.js":"eJ9Y1","./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eJ9Y1":[function(require,module,exports) {
+},{"./getNodeName.js":"a2Qom","./getDocumentElement.js":"eJ9Y1","./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eJ9Y1":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getDocumentElement);
@@ -4793,18 +4805,18 @@ function getDocumentElement(element) {
     return (((0, _instanceOfJs.isElement)(element) ? element.ownerDocument : element.document) || window.document).documentElement;
 }
 
-},{"./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1Xlom":[function(require,module,exports) {
+},{"./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1Xlom":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getMainAxisFromPlacement);
 function getMainAxisFromPlacement(placement) {
     return [
-        "top",
-        "bottom"
-    ].indexOf(placement) >= 0 ? "x" : "y";
+        'top',
+        'bottom'
+    ].indexOf(placement) >= 0 ? 'x' : 'y';
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3glSz":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3glSz":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "within", ()=>within);
@@ -4818,7 +4830,7 @@ function withinMaxClamp(min, value, max) {
     return v > max ? max : v;
 }
 
-},{"./math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lEIf9":[function(require,module,exports) {
+},{"./math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lEIf9":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>mergePaddingObject);
@@ -4828,7 +4840,7 @@ function mergePaddingObject(paddingObject) {
     return Object.assign({}, (0, _getFreshSideObjectJsDefault.default)(), paddingObject);
 }
 
-},{"./getFreshSideObject.js":"g4xOt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g4xOt":[function(require,module,exports) {
+},{"./getFreshSideObject.js":"g4xOt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g4xOt":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getFreshSideObject);
@@ -4841,7 +4853,7 @@ function getFreshSideObject() {
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iQlH5":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iQlH5":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>expandToHashMap);
@@ -4852,7 +4864,7 @@ function expandToHashMap(value, keys) {
     }, {});
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gDlm2":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gDlm2":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "mapToStyles", ()=>mapToStyles);
@@ -4871,10 +4883,10 @@ var _getVariationJs = require("../utils/getVariation.js");
 var _getVariationJsDefault = parcelHelpers.interopDefault(_getVariationJs);
 var _mathJs = require("../utils/math.js"); // eslint-disable-next-line import/no-unused-modules
 var unsetSides = {
-    top: "auto",
-    right: "auto",
-    bottom: "auto",
-    left: "auto"
+    top: 'auto',
+    right: 'auto',
+    bottom: 'auto',
+    left: 'auto'
 }; // Round the offsets to the nearest suitable subpixel based on the DPR.
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
@@ -4890,7 +4902,7 @@ function mapToStyles(_ref2) {
     var _Object$assign2;
     var popper = _ref2.popper, popperRect = _ref2.popperRect, placement = _ref2.placement, variation = _ref2.variation, offsets = _ref2.offsets, position = _ref2.position, gpuAcceleration = _ref2.gpuAcceleration, adaptive = _ref2.adaptive, roundOffsets = _ref2.roundOffsets, isFixed = _ref2.isFixed;
     var _offsets$x = offsets.x, x = _offsets$x === void 0 ? 0 : _offsets$x, _offsets$y = offsets.y, y = _offsets$y === void 0 ? 0 : _offsets$y;
-    var _ref3 = typeof roundOffsets === "function" ? roundOffsets({
+    var _ref3 = typeof roundOffsets === 'function' ? roundOffsets({
         x: x,
         y: y
     }) : {
@@ -4899,20 +4911,20 @@ function mapToStyles(_ref2) {
     };
     x = _ref3.x;
     y = _ref3.y;
-    var hasX = offsets.hasOwnProperty("x");
-    var hasY = offsets.hasOwnProperty("y");
+    var hasX = offsets.hasOwnProperty('x');
+    var hasY = offsets.hasOwnProperty('y');
     var sideX = (0, _enumsJs.left);
     var sideY = (0, _enumsJs.top);
     var win = window;
     if (adaptive) {
         var offsetParent = (0, _getOffsetParentJsDefault.default)(popper);
-        var heightProp = "clientHeight";
-        var widthProp = "clientWidth";
+        var heightProp = 'clientHeight';
+        var widthProp = 'clientWidth';
         if (offsetParent === (0, _getWindowJsDefault.default)(popper)) {
             offsetParent = (0, _getDocumentElementJsDefault.default)(popper);
-            if ((0, _getComputedStyleJsDefault.default)(offsetParent).position !== "static" && position === "absolute") {
-                heightProp = "scrollHeight";
-                widthProp = "scrollWidth";
+            if ((0, _getComputedStyleJsDefault.default)(offsetParent).position !== 'static' && position === 'absolute') {
+                heightProp = 'scrollHeight';
+                widthProp = 'scrollWidth';
             }
         } // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
         offsetParent;
@@ -4943,9 +4955,9 @@ function mapToStyles(_ref2) {
     y = _ref4.y;
     if (gpuAcceleration) {
         var _Object$assign;
-        return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? "0" : "", _Object$assign[sideX] = hasX ? "0" : "", _Object$assign.transform = (win.devicePixelRatio || 1) <= 1 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
+        return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) <= 1 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
     }
-    return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : "", _Object$assign2[sideX] = hasX ? x + "px" : "", _Object$assign2.transform = "", _Object$assign2));
+    return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
 }
 function computeStyles(_ref5) {
     var state = _ref5.state, options = _ref5.options;
@@ -4956,7 +4968,7 @@ function computeStyles(_ref5) {
         popper: state.elements.popper,
         popperRect: state.rects.popper,
         gpuAcceleration: gpuAcceleration,
-        isFixed: state.options.strategy === "fixed"
+        isFixed: state.options.strategy === 'fixed'
     };
     if (state.modifiersData.popperOffsets != null) state.styles.popper = Object.assign({}, state.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
         offsets: state.modifiersData.popperOffsets,
@@ -4966,31 +4978,31 @@ function computeStyles(_ref5) {
     })));
     if (state.modifiersData.arrow != null) state.styles.arrow = Object.assign({}, state.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
         offsets: state.modifiersData.arrow,
-        position: "absolute",
+        position: 'absolute',
         adaptive: false,
         roundOffsets: roundOffsets
     })));
     state.attributes.popper = Object.assign({}, state.attributes.popper, {
-        "data-popper-placement": state.placement
+        'data-popper-placement': state.placement
     });
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "computeStyles",
+    name: 'computeStyles',
     enabled: true,
-    phase: "beforeWrite",
+    phase: 'beforeWrite',
     fn: computeStyles,
     data: {}
 };
 
-},{"../enums.js":"lCAq5","../dom-utils/getOffsetParent.js":"laoYw","../dom-utils/getWindow.js":"2SkOo","../dom-utils/getDocumentElement.js":"eJ9Y1","../dom-utils/getComputedStyle.js":"3mZjB","../utils/getBasePlacement.js":"59Wp3","../utils/getVariation.js":"hIo7Y","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hIo7Y":[function(require,module,exports) {
+},{"../enums.js":"lCAq5","../dom-utils/getOffsetParent.js":"laoYw","../dom-utils/getWindow.js":"2SkOo","../dom-utils/getDocumentElement.js":"eJ9Y1","../dom-utils/getComputedStyle.js":"3mZjB","../utils/getBasePlacement.js":"59Wp3","../utils/getVariation.js":"hIo7Y","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hIo7Y":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getVariation);
 function getVariation(placement) {
-    return placement.split("-")[1];
+    return placement.split('-')[1];
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hBKsL":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hBKsL":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _getWindowJs = require("../dom-utils/getWindow.js"); // eslint-disable-next-line import/no-unused-modules
@@ -5004,26 +5016,26 @@ function effect(_ref) {
     var window = (0, _getWindowJsDefault.default)(state.elements.popper);
     var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
     if (scroll) scrollParents.forEach(function(scrollParent) {
-        scrollParent.addEventListener("scroll", instance.update, passive);
+        scrollParent.addEventListener('scroll', instance.update, passive);
     });
-    if (resize) window.addEventListener("resize", instance.update, passive);
+    if (resize) window.addEventListener('resize', instance.update, passive);
     return function() {
         if (scroll) scrollParents.forEach(function(scrollParent) {
-            scrollParent.removeEventListener("scroll", instance.update, passive);
+            scrollParent.removeEventListener('scroll', instance.update, passive);
         });
-        if (resize) window.removeEventListener("resize", instance.update, passive);
+        if (resize) window.removeEventListener('resize', instance.update, passive);
     };
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "eventListeners",
+    name: 'eventListeners',
     enabled: true,
-    phase: "write",
+    phase: 'write',
     fn: function fn() {},
     effect: effect,
     data: {}
 };
 
-},{"../dom-utils/getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fv5wq":[function(require,module,exports) {
+},{"../dom-utils/getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fv5wq":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _getOppositePlacementJs = require("../utils/getOppositePlacement.js");
@@ -5083,7 +5095,7 @@ function flip(_ref) {
             (0, _enumsJs.top),
             (0, _enumsJs.bottom)
         ].indexOf(_basePlacement) >= 0;
-        var len = isVertical ? "width" : "height";
+        var len = isVertical ? 'width' : 'height';
         var overflow = (0, _detectOverflowJsDefault.default)(state, {
             placement: placement,
             boundary: boundary,
@@ -5133,27 +5145,27 @@ function flip(_ref) {
     }
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "flip",
+    name: 'flip',
     enabled: true,
-    phase: "main",
+    phase: 'main',
     fn: flip,
     requiresIfExists: [
-        "offset"
+        'offset'
     ],
     data: {
         _skip: false
     }
 };
 
-},{"../utils/getOppositePlacement.js":"a8CY0","../utils/getBasePlacement.js":"59Wp3","../utils/getOppositeVariationPlacement.js":"bKTLC","../utils/detectOverflow.js":"ltCuw","../utils/computeAutoPlacement.js":"gytMj","../enums.js":"lCAq5","../utils/getVariation.js":"hIo7Y","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a8CY0":[function(require,module,exports) {
+},{"../utils/getOppositePlacement.js":"a8CY0","../utils/getBasePlacement.js":"59Wp3","../utils/getOppositeVariationPlacement.js":"bKTLC","../utils/detectOverflow.js":"ltCuw","../utils/computeAutoPlacement.js":"gytMj","../enums.js":"lCAq5","../utils/getVariation.js":"hIo7Y","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a8CY0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getOppositePlacement);
 var hash = {
-    left: "right",
-    right: "left",
-    bottom: "top",
-    top: "bottom"
+    left: 'right',
+    right: 'left',
+    bottom: 'top',
+    top: 'bottom'
 };
 function getOppositePlacement(placement) {
     return placement.replace(/left|right|bottom|top/g, function(matched) {
@@ -5161,13 +5173,13 @@ function getOppositePlacement(placement) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bKTLC":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bKTLC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getOppositeVariationPlacement);
 var hash = {
-    start: "end",
-    end: "start"
+    start: 'end',
+    end: 'start'
 };
 function getOppositeVariationPlacement(placement) {
     return placement.replace(/start|end/g, function(matched) {
@@ -5175,7 +5187,7 @@ function getOppositeVariationPlacement(placement) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ltCuw":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ltCuw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>detectOverflow);
@@ -5198,7 +5210,7 @@ var _expandToHashMapJsDefault = parcelHelpers.interopDefault(_expandToHashMapJs)
 function detectOverflow(state, options) {
     if (options === void 0) options = {};
     var _options = options, _options$placement = _options.placement, placement = _options$placement === void 0 ? state.placement : _options$placement, _options$strategy = _options.strategy, strategy = _options$strategy === void 0 ? state.strategy : _options$strategy, _options$boundary = _options.boundary, boundary = _options$boundary === void 0 ? (0, _enumsJs.clippingParents) : _options$boundary, _options$rootBoundary = _options.rootBoundary, rootBoundary = _options$rootBoundary === void 0 ? (0, _enumsJs.viewport) : _options$rootBoundary, _options$elementConte = _options.elementContext, elementContext = _options$elementConte === void 0 ? (0, _enumsJs.popper) : _options$elementConte, _options$altBoundary = _options.altBoundary, altBoundary = _options$altBoundary === void 0 ? false : _options$altBoundary, _options$padding = _options.padding, padding = _options$padding === void 0 ? 0 : _options$padding;
-    var paddingObject = (0, _mergePaddingObjectJsDefault.default)(typeof padding !== "number" ? padding : (0, _expandToHashMapJsDefault.default)(padding, (0, _enumsJs.basePlacements)));
+    var paddingObject = (0, _mergePaddingObjectJsDefault.default)(typeof padding !== 'number' ? padding : (0, _expandToHashMapJsDefault.default)(padding, (0, _enumsJs.basePlacements)));
     var altContext = elementContext === (0, _enumsJs.popper) ? (0, _enumsJs.reference) : (0, _enumsJs.popper);
     var popperRect = state.rects.popper;
     var element = state.elements[altBoundary ? altContext : elementContext];
@@ -5207,7 +5219,7 @@ function detectOverflow(state, options) {
     var popperOffsets = (0, _computeOffsetsJsDefault.default)({
         reference: referenceClientRect,
         element: popperRect,
-        strategy: "absolute",
+        strategy: 'absolute',
         placement: placement
     });
     var popperClientRect = (0, _rectToClientRectJsDefault.default)(Object.assign({}, popperRect, popperOffsets));
@@ -5230,14 +5242,14 @@ function detectOverflow(state, options) {
             var axis = [
                 (0, _enumsJs.top),
                 (0, _enumsJs.bottom)
-            ].indexOf(key) >= 0 ? "y" : "x";
+            ].indexOf(key) >= 0 ? 'y' : 'x';
             overflowOffsets[key] += offset[axis] * multiply;
         });
     }
     return overflowOffsets;
 }
 
-},{"../dom-utils/getClippingRect.js":"eeg2s","../dom-utils/getDocumentElement.js":"eJ9Y1","../dom-utils/getBoundingClientRect.js":"9CFSQ","./computeOffsets.js":"7jtXk","./rectToClientRect.js":"cQ3tg","../enums.js":"lCAq5","../dom-utils/instanceOf.js":"gYFUC","./mergePaddingObject.js":"lEIf9","./expandToHashMap.js":"iQlH5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eeg2s":[function(require,module,exports) {
+},{"../dom-utils/getClippingRect.js":"eeg2s","../dom-utils/getDocumentElement.js":"eJ9Y1","../dom-utils/getBoundingClientRect.js":"9CFSQ","./computeOffsets.js":"7jtXk","./rectToClientRect.js":"cQ3tg","../enums.js":"lCAq5","../dom-utils/instanceOf.js":"gYFUC","./mergePaddingObject.js":"lEIf9","./expandToHashMap.js":"iQlH5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eeg2s":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getClippingRect);
@@ -5267,7 +5279,7 @@ var _rectToClientRectJs = require("../utils/rectToClientRect.js");
 var _rectToClientRectJsDefault = parcelHelpers.interopDefault(_rectToClientRectJs);
 var _mathJs = require("../utils/math.js");
 function getInnerBoundingClientRect(element, strategy) {
-    var rect = (0, _getBoundingClientRectJsDefault.default)(element, false, strategy === "fixed");
+    var rect = (0, _getBoundingClientRectJsDefault.default)(element, false, strategy === 'fixed');
     rect.top = rect.top + element.clientTop;
     rect.left = rect.left + element.clientLeft;
     rect.bottom = rect.top + element.clientHeight;
@@ -5286,18 +5298,18 @@ function getClientRectFromMixedType(element, clippingParent, strategy) {
 function getClippingParents(element) {
     var clippingParents = (0, _listScrollParentsJsDefault.default)((0, _getParentNodeJsDefault.default)(element));
     var canEscapeClipping = [
-        "absolute",
-        "fixed"
+        'absolute',
+        'fixed'
     ].indexOf((0, _getComputedStyleJsDefault.default)(element).position) >= 0;
     var clipperElement = canEscapeClipping && (0, _instanceOfJs.isHTMLElement)(element) ? (0, _getOffsetParentJsDefault.default)(element) : element;
     if (!(0, _instanceOfJs.isElement)(clipperElement)) return [];
      // $FlowFixMe[incompatible-return]: https://github.com/facebook/flow/issues/1414
     return clippingParents.filter(function(clippingParent) {
-        return (0, _instanceOfJs.isElement)(clippingParent) && (0, _containsJsDefault.default)(clippingParent, clipperElement) && (0, _getNodeNameJsDefault.default)(clippingParent) !== "body";
+        return (0, _instanceOfJs.isElement)(clippingParent) && (0, _containsJsDefault.default)(clippingParent, clipperElement) && (0, _getNodeNameJsDefault.default)(clippingParent) !== 'body';
     });
 } // Gets the maximum area that the element is visible in due to any number of
 function getClippingRect(element, boundary, rootBoundary, strategy) {
-    var mainClippingParents = boundary === "clippingParents" ? getClippingParents(element) : [].concat(boundary);
+    var mainClippingParents = boundary === 'clippingParents' ? getClippingParents(element) : [].concat(boundary);
     var clippingParents = [].concat(mainClippingParents, [
         rootBoundary
     ]);
@@ -5317,7 +5329,7 @@ function getClippingRect(element, boundary, rootBoundary, strategy) {
     return clippingRect;
 }
 
-},{"../enums.js":"lCAq5","./getViewportRect.js":"cnH2G","./getDocumentRect.js":"d94SC","./listScrollParents.js":"2di3T","./getOffsetParent.js":"laoYw","./getDocumentElement.js":"eJ9Y1","./getComputedStyle.js":"3mZjB","./instanceOf.js":"gYFUC","./getBoundingClientRect.js":"9CFSQ","./getParentNode.js":"bIHpd","./contains.js":"4QxRR","./getNodeName.js":"a2Qom","../utils/rectToClientRect.js":"cQ3tg","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cnH2G":[function(require,module,exports) {
+},{"../enums.js":"lCAq5","./getViewportRect.js":"cnH2G","./getDocumentRect.js":"d94SC","./listScrollParents.js":"2di3T","./getOffsetParent.js":"laoYw","./getDocumentElement.js":"eJ9Y1","./getComputedStyle.js":"3mZjB","./instanceOf.js":"gYFUC","./getBoundingClientRect.js":"9CFSQ","./getParentNode.js":"bIHpd","./contains.js":"4QxRR","./getNodeName.js":"a2Qom","../utils/rectToClientRect.js":"cQ3tg","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cnH2G":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getViewportRect);
@@ -5341,7 +5353,7 @@ function getViewportRect(element, strategy) {
         width = visualViewport.width;
         height = visualViewport.height;
         var layoutViewport = (0, _isLayoutViewportJsDefault.default)();
-        if (layoutViewport || !layoutViewport && strategy === "fixed") {
+        if (layoutViewport || !layoutViewport && strategy === 'fixed') {
             x = visualViewport.offsetLeft;
             y = visualViewport.offsetTop;
         }
@@ -5354,7 +5366,7 @@ function getViewportRect(element, strategy) {
     };
 }
 
-},{"./getWindow.js":"2SkOo","./getDocumentElement.js":"eJ9Y1","./getWindowScrollBarX.js":"sz4Ld","./isLayoutViewport.js":"3ipHv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"sz4Ld":[function(require,module,exports) {
+},{"./getWindow.js":"2SkOo","./getDocumentElement.js":"eJ9Y1","./getWindowScrollBarX.js":"sz4Ld","./isLayoutViewport.js":"3ipHv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"sz4Ld":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getWindowScrollBarX);
@@ -5375,7 +5387,7 @@ function getWindowScrollBarX(element) {
     return (0, _getBoundingClientRectJsDefault.default)((0, _getDocumentElementJsDefault.default)(element)).left + (0, _getWindowScrollJsDefault.default)(element).scrollLeft;
 }
 
-},{"./getBoundingClientRect.js":"9CFSQ","./getDocumentElement.js":"eJ9Y1","./getWindowScroll.js":"1XUtN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1XUtN":[function(require,module,exports) {
+},{"./getBoundingClientRect.js":"9CFSQ","./getDocumentElement.js":"eJ9Y1","./getWindowScroll.js":"1XUtN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1XUtN":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getWindowScroll);
@@ -5391,7 +5403,7 @@ function getWindowScroll(node) {
     };
 }
 
-},{"./getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d94SC":[function(require,module,exports) {
+},{"./getWindow.js":"2SkOo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d94SC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getDocumentRect);
@@ -5413,7 +5425,7 @@ function getDocumentRect(element) {
     var height = (0, _mathJs.max)(html.scrollHeight, html.clientHeight, body ? body.scrollHeight : 0, body ? body.clientHeight : 0);
     var x = -winScroll.scrollLeft + (0, _getWindowScrollBarXJsDefault.default)(element);
     var y = -winScroll.scrollTop;
-    if ((0, _getComputedStyleJsDefault.default)(body || html).direction === "rtl") x += (0, _mathJs.max)(html.clientWidth, body ? body.clientWidth : 0) - width;
+    if ((0, _getComputedStyleJsDefault.default)(body || html).direction === 'rtl') x += (0, _mathJs.max)(html.clientWidth, body ? body.clientWidth : 0) - width;
     return {
         width: width,
         height: height,
@@ -5422,7 +5434,7 @@ function getDocumentRect(element) {
     };
 }
 
-},{"./getDocumentElement.js":"eJ9Y1","./getComputedStyle.js":"3mZjB","./getWindowScrollBarX.js":"sz4Ld","./getWindowScroll.js":"1XUtN","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2di3T":[function(require,module,exports) {
+},{"./getDocumentElement.js":"eJ9Y1","./getComputedStyle.js":"3mZjB","./getWindowScrollBarX.js":"sz4Ld","./getWindowScroll.js":"1XUtN","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2di3T":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>listScrollParents);
@@ -5447,7 +5459,7 @@ function listScrollParents(element, list) {
     return isBody ? updatedList : updatedList.concat(listScrollParents((0, _getParentNodeJsDefault.default)(target)));
 }
 
-},{"./getScrollParent.js":"jy4ZS","./getParentNode.js":"bIHpd","./getWindow.js":"2SkOo","./isScrollParent.js":"9rLGO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jy4ZS":[function(require,module,exports) {
+},{"./getScrollParent.js":"jy4ZS","./getParentNode.js":"bIHpd","./getWindow.js":"2SkOo","./isScrollParent.js":"9rLGO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jy4ZS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getScrollParent);
@@ -5460,16 +5472,16 @@ var _getNodeNameJsDefault = parcelHelpers.interopDefault(_getNodeNameJs);
 var _instanceOfJs = require("./instanceOf.js");
 function getScrollParent(node) {
     if ([
-        "html",
-        "body",
-        "#document"
+        'html',
+        'body',
+        '#document'
     ].indexOf((0, _getNodeNameJsDefault.default)(node)) >= 0) // $FlowFixMe[incompatible-return]: assume body is always available
     return node.ownerDocument.body;
     if ((0, _instanceOfJs.isHTMLElement)(node) && (0, _isScrollParentJsDefault.default)(node)) return node;
     return getScrollParent((0, _getParentNodeJsDefault.default)(node));
 }
 
-},{"./getParentNode.js":"bIHpd","./isScrollParent.js":"9rLGO","./getNodeName.js":"a2Qom","./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9rLGO":[function(require,module,exports) {
+},{"./getParentNode.js":"bIHpd","./isScrollParent.js":"9rLGO","./getNodeName.js":"a2Qom","./instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9rLGO":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>isScrollParent);
@@ -5481,7 +5493,7 @@ function isScrollParent(element) {
     return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
 }
 
-},{"./getComputedStyle.js":"3mZjB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cQ3tg":[function(require,module,exports) {
+},{"./getComputedStyle.js":"3mZjB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cQ3tg":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>rectToClientRect);
@@ -5494,7 +5506,7 @@ function rectToClientRect(rect) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7jtXk":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7jtXk":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>computeOffsets);
@@ -5545,7 +5557,7 @@ function computeOffsets(_ref) {
     }
     var mainAxis = basePlacement ? (0, _getMainAxisFromPlacementJsDefault.default)(basePlacement) : null;
     if (mainAxis != null) {
-        var len = mainAxis === "y" ? "height" : "width";
+        var len = mainAxis === 'y' ? 'height' : 'width';
         switch(variation){
             case 0, _enumsJs.start:
                 offsets[mainAxis] = offsets[mainAxis] - (reference[len] / 2 - element[len] / 2);
@@ -5559,7 +5571,7 @@ function computeOffsets(_ref) {
     return offsets;
 }
 
-},{"./getBasePlacement.js":"59Wp3","./getVariation.js":"hIo7Y","./getMainAxisFromPlacement.js":"1Xlom","../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gytMj":[function(require,module,exports) {
+},{"./getBasePlacement.js":"59Wp3","./getVariation.js":"hIo7Y","./getMainAxisFromPlacement.js":"1Xlom","../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gytMj":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>computeAutoPlacement);
@@ -5596,7 +5608,7 @@ function computeAutoPlacement(state, options) {
     });
 }
 
-},{"./getVariation.js":"hIo7Y","../enums.js":"lCAq5","./detectOverflow.js":"ltCuw","./getBasePlacement.js":"59Wp3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2g4OF":[function(require,module,exports) {
+},{"./getVariation.js":"hIo7Y","../enums.js":"lCAq5","./detectOverflow.js":"ltCuw","./getBasePlacement.js":"59Wp3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2g4OF":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _enumsJs = require("../enums.js");
@@ -5630,7 +5642,7 @@ function hide(_ref) {
     var popperRect = state.rects.popper;
     var preventedOffsets = state.modifiersData.preventOverflow;
     var referenceOverflow = (0, _detectOverflowJsDefault.default)(state, {
-        elementContext: "reference"
+        elementContext: 'reference'
     });
     var popperAltOverflow = (0, _detectOverflowJsDefault.default)(state, {
         altBoundary: true
@@ -5646,21 +5658,21 @@ function hide(_ref) {
         hasPopperEscaped: hasPopperEscaped
     };
     state.attributes.popper = Object.assign({}, state.attributes.popper, {
-        "data-popper-reference-hidden": isReferenceHidden,
-        "data-popper-escaped": hasPopperEscaped
+        'data-popper-reference-hidden': isReferenceHidden,
+        'data-popper-escaped': hasPopperEscaped
     });
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "hide",
+    name: 'hide',
     enabled: true,
-    phase: "main",
+    phase: 'main',
     requiresIfExists: [
-        "preventOverflow"
+        'preventOverflow'
     ],
     fn: hide
 };
 
-},{"../enums.js":"lCAq5","../utils/detectOverflow.js":"ltCuw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3GKVY":[function(require,module,exports) {
+},{"../enums.js":"lCAq5","../utils/detectOverflow.js":"ltCuw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3GKVY":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "distanceAndSkiddingToXY", ()=>distanceAndSkiddingToXY);
@@ -5673,7 +5685,7 @@ function distanceAndSkiddingToXY(placement, rects, offset) {
         (0, _enumsJs.left),
         (0, _enumsJs.top)
     ].indexOf(basePlacement) >= 0 ? -1 : 1;
-    var _ref = typeof offset === "function" ? offset(Object.assign({}, rects, {
+    var _ref = typeof offset === 'function' ? offset(Object.assign({}, rects, {
         placement: placement
     })) : offset, skidding = _ref[0], distance = _ref[1];
     skidding = skidding || 0;
@@ -5707,16 +5719,16 @@ function offset(_ref2) {
     state.modifiersData[name] = data;
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "offset",
+    name: 'offset',
     enabled: true,
-    phase: "main",
+    phase: 'main',
     requires: [
-        "popperOffsets"
+        'popperOffsets'
     ],
     fn: offset
 };
 
-},{"../utils/getBasePlacement.js":"59Wp3","../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6I679":[function(require,module,exports) {
+},{"../utils/getBasePlacement.js":"59Wp3","../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6I679":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _computeOffsetsJs = require("../utils/computeOffsets.js");
@@ -5730,19 +5742,19 @@ function popperOffsets(_ref) {
     state.modifiersData[name] = (0, _computeOffsetsJsDefault.default)({
         reference: state.rects.reference,
         element: state.rects.popper,
-        strategy: "absolute",
+        strategy: 'absolute',
         placement: state.placement
     });
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "popperOffsets",
+    name: 'popperOffsets',
     enabled: true,
-    phase: "read",
+    phase: 'read',
     fn: popperOffsets,
     data: {}
 };
 
-},{"../utils/computeOffsets.js":"7jtXk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1AMhb":[function(require,module,exports) {
+},{"../utils/computeOffsets.js":"7jtXk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1AMhb":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _enumsJs = require("../enums.js");
@@ -5781,10 +5793,10 @@ function preventOverflow(_ref) {
     var popperOffsets = state.modifiersData.popperOffsets;
     var referenceRect = state.rects.reference;
     var popperRect = state.rects.popper;
-    var tetherOffsetValue = typeof tetherOffset === "function" ? tetherOffset(Object.assign({}, state.rects, {
+    var tetherOffsetValue = typeof tetherOffset === 'function' ? tetherOffset(Object.assign({}, state.rects, {
         placement: state.placement
     })) : tetherOffset;
-    var normalizedTetherOffsetValue = typeof tetherOffsetValue === "number" ? {
+    var normalizedTetherOffsetValue = typeof tetherOffsetValue === 'number' ? {
         mainAxis: tetherOffsetValue,
         altAxis: tetherOffsetValue
     } : Object.assign({
@@ -5799,9 +5811,9 @@ function preventOverflow(_ref) {
     if (!popperOffsets) return;
     if (checkMainAxis) {
         var _offsetModifierState$;
-        var mainSide = mainAxis === "y" ? (0, _enumsJs.top) : (0, _enumsJs.left);
-        var altSide = mainAxis === "y" ? (0, _enumsJs.bottom) : (0, _enumsJs.right);
-        var len = mainAxis === "y" ? "height" : "width";
+        var mainSide = mainAxis === 'y' ? (0, _enumsJs.top) : (0, _enumsJs.left);
+        var altSide = mainAxis === 'y' ? (0, _enumsJs.bottom) : (0, _enumsJs.right);
+        var len = mainAxis === 'y' ? 'height' : 'width';
         var offset = popperOffsets[mainAxis];
         var min = offset + overflow[mainSide];
         var max = offset - overflow[altSide];
@@ -5814,7 +5826,7 @@ function preventOverflow(_ref) {
             width: 0,
             height: 0
         };
-        var arrowPaddingObject = state.modifiersData["arrow#persistent"] ? state.modifiersData["arrow#persistent"].padding : (0, _getFreshSideObjectJsDefault.default)();
+        var arrowPaddingObject = state.modifiersData['arrow#persistent'] ? state.modifiersData['arrow#persistent'].padding : (0, _getFreshSideObjectJsDefault.default)();
         var arrowPaddingMin = arrowPaddingObject[mainSide];
         var arrowPaddingMax = arrowPaddingObject[altSide]; // If the reference length is smaller than the arrow length, we don't want
         // to include its full size in the calculation. If the reference is small
@@ -5825,7 +5837,7 @@ function preventOverflow(_ref) {
         var minOffset = isBasePlacement ? referenceRect[len] / 2 - additive - arrowLen - arrowPaddingMin - normalizedTetherOffsetValue.mainAxis : minLen - arrowLen - arrowPaddingMin - normalizedTetherOffsetValue.mainAxis;
         var maxOffset = isBasePlacement ? -referenceRect[len] / 2 + additive + arrowLen + arrowPaddingMax + normalizedTetherOffsetValue.mainAxis : maxLen + arrowLen + arrowPaddingMax + normalizedTetherOffsetValue.mainAxis;
         var arrowOffsetParent = state.elements.arrow && (0, _getOffsetParentJsDefault.default)(state.elements.arrow);
-        var clientOffset = arrowOffsetParent ? mainAxis === "y" ? arrowOffsetParent.clientTop || 0 : arrowOffsetParent.clientLeft || 0 : 0;
+        var clientOffset = arrowOffsetParent ? mainAxis === 'y' ? arrowOffsetParent.clientTop || 0 : arrowOffsetParent.clientLeft || 0 : 0;
         var offsetModifierValue = (_offsetModifierState$ = offsetModifierState == null ? void 0 : offsetModifierState[mainAxis]) != null ? _offsetModifierState$ : 0;
         var tetherMin = offset + minOffset - offsetModifierValue - clientOffset;
         var tetherMax = offset + maxOffset - offsetModifierValue;
@@ -5835,10 +5847,10 @@ function preventOverflow(_ref) {
     }
     if (checkAltAxis) {
         var _offsetModifierState$2;
-        var _mainSide = mainAxis === "x" ? (0, _enumsJs.top) : (0, _enumsJs.left);
-        var _altSide = mainAxis === "x" ? (0, _enumsJs.bottom) : (0, _enumsJs.right);
+        var _mainSide = mainAxis === 'x' ? (0, _enumsJs.top) : (0, _enumsJs.left);
+        var _altSide = mainAxis === 'x' ? (0, _enumsJs.bottom) : (0, _enumsJs.right);
         var _offset = popperOffsets[altAxis];
-        var _len = altAxis === "y" ? "height" : "width";
+        var _len = altAxis === 'y' ? 'height' : 'width';
         var _min = _offset + overflow[_mainSide];
         var _max = _offset - overflow[_altSide];
         var isOriginSide = [
@@ -5855,24 +5867,24 @@ function preventOverflow(_ref) {
     state.modifiersData[name] = data;
 } // eslint-disable-next-line import/no-unused-modules
 exports.default = {
-    name: "preventOverflow",
+    name: 'preventOverflow',
     enabled: true,
-    phase: "main",
+    phase: 'main',
     fn: preventOverflow,
     requiresIfExists: [
-        "offset"
+        'offset'
     ]
 };
 
-},{"../enums.js":"lCAq5","../utils/getBasePlacement.js":"59Wp3","../utils/getMainAxisFromPlacement.js":"1Xlom","../utils/getAltAxis.js":"59FWE","../utils/within.js":"3glSz","../dom-utils/getLayoutRect.js":"jvjuf","../dom-utils/getOffsetParent.js":"laoYw","../utils/detectOverflow.js":"ltCuw","../utils/getVariation.js":"hIo7Y","../utils/getFreshSideObject.js":"g4xOt","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"59FWE":[function(require,module,exports) {
+},{"../enums.js":"lCAq5","../utils/getBasePlacement.js":"59Wp3","../utils/getMainAxisFromPlacement.js":"1Xlom","../utils/getAltAxis.js":"59FWE","../utils/within.js":"3glSz","../dom-utils/getLayoutRect.js":"jvjuf","../dom-utils/getOffsetParent.js":"laoYw","../utils/detectOverflow.js":"ltCuw","../utils/getVariation.js":"hIo7Y","../utils/getFreshSideObject.js":"g4xOt","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"59FWE":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getAltAxis);
 function getAltAxis(axis) {
-    return axis === "x" ? "y" : "x";
+    return axis === 'x' ? 'y' : 'x';
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cHuNp":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cHuNp":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "popperGenerator", ()=>popperGenerator);
@@ -5896,14 +5908,14 @@ var _detectOverflowJs = require("./utils/detectOverflow.js");
 var _detectOverflowJsDefault = parcelHelpers.interopDefault(_detectOverflowJs);
 var _instanceOfJs = require("./dom-utils/instanceOf.js");
 var DEFAULT_OPTIONS = {
-    placement: "bottom",
+    placement: 'bottom',
     modifiers: [],
-    strategy: "absolute"
+    strategy: 'absolute'
 };
 function areValidElements() {
     for(var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)args[_key] = arguments[_key];
     return !args.some(function(element) {
-        return !(element && typeof element.getBoundingClientRect === "function");
+        return !(element && typeof element.getBoundingClientRect === 'function');
     });
 }
 function popperGenerator(generatorOptions) {
@@ -5912,7 +5924,7 @@ function popperGenerator(generatorOptions) {
     return function createPopper(reference, popper, options) {
         if (options === void 0) options = defaultOptions;
         var state = {
-            placement: "bottom",
+            placement: 'bottom',
             orderedModifiers: [],
             options: Object.assign({}, DEFAULT_OPTIONS, defaultOptions),
             modifiersData: {},
@@ -5928,7 +5940,7 @@ function popperGenerator(generatorOptions) {
         var instance = {
             state: state,
             setOptions: function setOptions(setOptionsAction) {
-                var options = typeof setOptionsAction === "function" ? setOptionsAction(state.options) : setOptionsAction;
+                var options = typeof setOptionsAction === 'function' ? setOptionsAction(state.options) : setOptionsAction;
                 cleanupModifierEffects();
                 state.options = Object.assign({}, defaultOptions, state.options, options);
                 state.scrollParents = {
@@ -5955,7 +5967,7 @@ function popperGenerator(generatorOptions) {
                 if (!areValidElements(reference, popper)) return;
                  // Store the reference and popper rects to be read by modifiers
                 state.rects = {
-                    reference: (0, _getCompositeRectJsDefault.default)(reference, (0, _getOffsetParentJsDefault.default)(popper), state.options.strategy === "fixed"),
+                    reference: (0, _getCompositeRectJsDefault.default)(reference, (0, _getOffsetParentJsDefault.default)(popper), state.options.strategy === 'fixed'),
                     popper: (0, _getLayoutRectJsDefault.default)(popper)
                 }; // Modifiers have the ability to reset the current update cycle. The
                 // most common use case for this is the `flip` modifier changing the
@@ -5977,7 +5989,7 @@ function popperGenerator(generatorOptions) {
                         continue;
                     }
                     var _state$orderedModifie = state.orderedModifiers[index], fn = _state$orderedModifie.fn, _state$orderedModifie2 = _state$orderedModifie.options, _options = _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2, name = _state$orderedModifie.name;
-                    if (typeof fn === "function") state = fn({
+                    if (typeof fn === 'function') state = fn({
                         state: state,
                         options: _options,
                         name: name,
@@ -6009,7 +6021,7 @@ function popperGenerator(generatorOptions) {
         function runModifierEffects() {
             state.orderedModifiers.forEach(function(_ref) {
                 var name = _ref.name, _ref$options = _ref.options, options = _ref$options === void 0 ? {} : _ref$options, effect = _ref.effect;
-                if (typeof effect === "function") {
+                if (typeof effect === 'function') {
                     var cleanupFn = effect({
                         state: state,
                         name: name,
@@ -6032,7 +6044,7 @@ function popperGenerator(generatorOptions) {
 }
 var createPopper = /*#__PURE__*/ popperGenerator(); // eslint-disable-next-line import/no-unused-modules
 
-},{"./dom-utils/getCompositeRect.js":"ijPls","./dom-utils/getLayoutRect.js":"jvjuf","./dom-utils/listScrollParents.js":"2di3T","./dom-utils/getOffsetParent.js":"laoYw","./utils/orderModifiers.js":"N0VO0","./utils/debounce.js":"g6Chr","./utils/mergeByName.js":"2zTVN","./utils/detectOverflow.js":"ltCuw","./dom-utils/instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ijPls":[function(require,module,exports) {
+},{"./dom-utils/getCompositeRect.js":"ijPls","./dom-utils/getLayoutRect.js":"jvjuf","./dom-utils/listScrollParents.js":"2di3T","./dom-utils/getOffsetParent.js":"laoYw","./utils/orderModifiers.js":"N0VO0","./utils/debounce.js":"g6Chr","./utils/mergeByName.js":"2zTVN","./utils/detectOverflow.js":"ltCuw","./dom-utils/instanceOf.js":"gYFUC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ijPls":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getCompositeRect);
@@ -6071,7 +6083,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
         y: 0
     };
     if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
-        if ((0, _getNodeNameJsDefault.default)(offsetParent) !== "body" || // https://github.com/popperjs/popper-core/issues/1078
+        if ((0, _getNodeNameJsDefault.default)(offsetParent) !== 'body' || // https://github.com/popperjs/popper-core/issues/1078
         (0, _isScrollParentJsDefault.default)(documentElement)) scroll = (0, _getNodeScrollJsDefault.default)(offsetParent);
         if ((0, _instanceOfJs.isHTMLElement)(offsetParent)) {
             offsets = (0, _getBoundingClientRectJsDefault.default)(offsetParent, true);
@@ -6087,7 +6099,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
     };
 }
 
-},{"./getBoundingClientRect.js":"9CFSQ","./getNodeScroll.js":"bBjCr","./getNodeName.js":"a2Qom","./instanceOf.js":"gYFUC","./getWindowScrollBarX.js":"sz4Ld","./getDocumentElement.js":"eJ9Y1","./isScrollParent.js":"9rLGO","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bBjCr":[function(require,module,exports) {
+},{"./getBoundingClientRect.js":"9CFSQ","./getNodeScroll.js":"bBjCr","./getNodeName.js":"a2Qom","./instanceOf.js":"gYFUC","./getWindowScrollBarX.js":"sz4Ld","./getDocumentElement.js":"eJ9Y1","./isScrollParent.js":"9rLGO","../utils/math.js":"gQqVe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bBjCr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getNodeScroll);
@@ -6103,7 +6115,7 @@ function getNodeScroll(node) {
     else return (0, _getHTMLElementScrollJsDefault.default)(node);
 }
 
-},{"./getWindowScroll.js":"1XUtN","./getWindow.js":"2SkOo","./instanceOf.js":"gYFUC","./getHTMLElementScroll.js":"6pwY2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6pwY2":[function(require,module,exports) {
+},{"./getWindowScroll.js":"1XUtN","./getWindow.js":"2SkOo","./instanceOf.js":"gYFUC","./getHTMLElementScroll.js":"6pwY2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6pwY2":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>getHTMLElementScroll);
@@ -6114,7 +6126,7 @@ function getHTMLElementScroll(element) {
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"N0VO0":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"N0VO0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>orderModifiers);
@@ -6153,7 +6165,7 @@ function orderModifiers(modifiers) {
     }, []);
 }
 
-},{"../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g6Chr":[function(require,module,exports) {
+},{"../enums.js":"lCAq5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g6Chr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>debounce);
@@ -6170,7 +6182,7 @@ function debounce(fn) {
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2zTVN":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2zTVN":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>mergeByName);
@@ -6188,7 +6200,7 @@ function mergeByName(modifiers) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1PuRF":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1PuRF":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "createPopperLite", ()=>(0, _popperLiteJs.createPopper)) // eslint-disable-next-line import/no-unused-modules
@@ -6235,7 +6247,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","./modifiers/offset.js":"3GKVY","./modifiers/flip.js":"fv5wq","./modifiers/preventOverflow.js":"1AMhb","./modifiers/arrow.js":"31HFW","./modifiers/hide.js":"2g4OF","./popper-lite.js":false,"./modifiers/index.js":false,"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gKW1N":[function(require,module,exports) {
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","./modifiers/offset.js":"3GKVY","./modifiers/flip.js":"fv5wq","./modifiers/preventOverflow.js":"1AMhb","./modifiers/arrow.js":"31HFW","./modifiers/hide.js":"2g4OF","./popper-lite.js":false,"./modifiers/index.js":false,"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gKW1N":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "createPopper", ()=>createPopper);
@@ -6261,7 +6273,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     defaultModifiers: defaultModifiers
 }); // eslint-disable-next-line import/no-unused-modules
 
-},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c8YxN":[function(require,module,exports) {
+},{"./createPopper.js":"cHuNp","./modifiers/eventListeners.js":"hBKsL","./modifiers/popperOffsets.js":"6I679","./modifiers/computeStyles.js":"gDlm2","./modifiers/applyStyles.js":"4iMn4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c8YxN":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap alert.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6269,7 +6281,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory(require("2ef635d35540af83"), require("1ae550aa84881397"), require("75aef0c87b06b98f"), require("c6e68d2d5080998b"));
 })(this, function(BaseComponent, EventHandler, componentFunctions_js, index_js) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap alert.js
@@ -6277,13 +6289,13 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
    * --------------------------------------------------------------------------
    */ /**
    * Constants
-   */ const NAME = "alert";
-    const DATA_KEY = "bs.alert";
+   */ const NAME = 'alert';
+    const DATA_KEY = 'bs.alert';
     const EVENT_KEY = `.${DATA_KEY}`;
     const EVENT_CLOSE = `close${EVENT_KEY}`;
     const EVENT_CLOSED = `closed${EVENT_KEY}`;
-    const CLASS_NAME_FADE = "fade";
-    const CLASS_NAME_SHOW = "show";
+    const CLASS_NAME_FADE = 'fade';
+    const CLASS_NAME_SHOW = 'show';
     /**
    * Class definition
    */ class Alert extends BaseComponent {
@@ -6309,22 +6321,22 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         static jQueryInterface(config) {
             return this.each(function() {
                 const data = Alert.getOrCreateInstance(this);
-                if (typeof config !== "string") return;
-                if (data[config] === undefined || config.startsWith("_") || config === "constructor") throw new TypeError(`No method named "${config}"`);
+                if (typeof config !== 'string') return;
+                if (data[config] === undefined || config.startsWith('_') || config === 'constructor') throw new TypeError(`No method named "${config}"`);
                 data[config](this);
             });
         }
     }
     /**
    * Data API implementation
-   */ componentFunctions_js.enableDismissTrigger(Alert, "close");
+   */ componentFunctions_js.enableDismissTrigger(Alert, 'close');
     /**
    * jQuery
    */ index_js.defineJQueryPlugin(Alert);
     return Alert;
 });
 
-},{"2ef635d35540af83":"cf8HC","1ae550aa84881397":"i00FR","75aef0c87b06b98f":"2uwqb","c6e68d2d5080998b":"FkwT1"}],"cf8HC":[function(require,module,exports) {
+},{"2ef635d35540af83":"cf8HC","1ae550aa84881397":"i00FR","75aef0c87b06b98f":"2uwqb","c6e68d2d5080998b":"FkwT1"}],"cf8HC":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap base-component.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6332,7 +6344,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory(require("919ebdab53ee0553"), require("af2f735d44e6aee1"), require("ddd60b14853bb67f"), require("e946c18ef4fb753d"));
 })(this, function(Data, EventHandler, Config, index_js) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap base-component.js
@@ -6340,7 +6352,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
    * --------------------------------------------------------------------------
    */ /**
    * Constants
-   */ const VERSION = "5.3.3";
+   */ const VERSION = '5.3.3';
     /**
    * Class definition
    */ class BaseComponent extends Config {
@@ -6372,7 +6384,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
             return Data.get(index_js.getElement(element), this.DATA_KEY);
         }
         static getOrCreateInstance(element, config = {}) {
-            return this.getInstance(element) || new this(element, typeof config === "object" ? config : null);
+            return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
         }
         static get VERSION() {
             return VERSION;
@@ -6390,7 +6402,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     return BaseComponent;
 });
 
-},{"919ebdab53ee0553":"c1tiI","af2f735d44e6aee1":"i00FR","ddd60b14853bb67f":"hIe1C","e946c18ef4fb753d":"FkwT1"}],"c1tiI":[function(require,module,exports) {
+},{"919ebdab53ee0553":"c1tiI","af2f735d44e6aee1":"i00FR","ddd60b14853bb67f":"hIe1C","e946c18ef4fb753d":"FkwT1"}],"c1tiI":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap data.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6398,7 +6410,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory();
 })(this, function() {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap dom/data.js
@@ -6435,7 +6447,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     return data;
 });
 
-},{}],"i00FR":[function(require,module,exports) {
+},{}],"i00FR":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap event-handler.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6443,7 +6455,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory(require("ac26295f7488b8d8"));
 })(this, function(index_js) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap dom/event-handler.js
@@ -6457,56 +6469,56 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     const eventRegistry = {}; // Events storage
     let uidEvent = 1;
     const customEvents = {
-        mouseenter: "mouseover",
-        mouseleave: "mouseout"
+        mouseenter: 'mouseover',
+        mouseleave: 'mouseout'
     };
     const nativeEvents = new Set([
-        "click",
-        "dblclick",
-        "mouseup",
-        "mousedown",
-        "contextmenu",
-        "mousewheel",
-        "DOMMouseScroll",
-        "mouseover",
-        "mouseout",
-        "mousemove",
-        "selectstart",
-        "selectend",
-        "keydown",
-        "keypress",
-        "keyup",
-        "orientationchange",
-        "touchstart",
-        "touchmove",
-        "touchend",
-        "touchcancel",
-        "pointerdown",
-        "pointermove",
-        "pointerup",
-        "pointerleave",
-        "pointercancel",
-        "gesturestart",
-        "gesturechange",
-        "gestureend",
-        "focus",
-        "blur",
-        "change",
-        "reset",
-        "select",
-        "submit",
-        "focusin",
-        "focusout",
-        "load",
-        "unload",
-        "beforeunload",
-        "resize",
-        "move",
-        "DOMContentLoaded",
-        "readystatechange",
-        "error",
-        "abort",
-        "scroll"
+        'click',
+        'dblclick',
+        'mouseup',
+        'mousedown',
+        'contextmenu',
+        'mousewheel',
+        'DOMMouseScroll',
+        'mouseover',
+        'mouseout',
+        'mousemove',
+        'selectstart',
+        'selectend',
+        'keydown',
+        'keypress',
+        'keyup',
+        'orientationchange',
+        'touchstart',
+        'touchmove',
+        'touchend',
+        'touchcancel',
+        'pointerdown',
+        'pointermove',
+        'pointerup',
+        'pointerleave',
+        'pointercancel',
+        'gesturestart',
+        'gesturechange',
+        'gestureend',
+        'focus',
+        'blur',
+        'change',
+        'reset',
+        'select',
+        'submit',
+        'focusin',
+        'focusout',
+        'load',
+        'unload',
+        'beforeunload',
+        'resize',
+        'move',
+        'DOMContentLoaded',
+        'readystatechange',
+        'error',
+        'abort',
+        'scroll'
     ]);
     /**
    * Private methods
@@ -6549,7 +6561,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         return Object.values(events).find((event)=>event.callable === callable && event.delegationSelector === delegationSelector);
     }
     function normalizeParameters(originalTypeEvent, handler, delegationFunction) {
-        const isDelegated = typeof handler === "string";
+        const isDelegated = typeof handler === 'string';
         // TODO: tooltip passes `false` instead of selector, so we need to check
         const callable = isDelegated ? delegationFunction : handler || delegationFunction;
         let typeEvent = getTypeEvent(originalTypeEvent);
@@ -6561,7 +6573,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         ];
     }
     function addHandler(element, originalTypeEvent, handler, delegationFunction, oneOff) {
-        if (typeof originalTypeEvent !== "string" || !element) return;
+        if (typeof originalTypeEvent !== 'string' || !element) return;
         let [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
         // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
         // this prevents the handler from being dispatched the same way as mouseover or mouseout does
@@ -6580,7 +6592,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
             previousFunction.oneOff = previousFunction.oneOff && oneOff;
             return;
         }
-        const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ""));
+        const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ''));
         const fn = isDelegated ? bootstrapDelegationHandler(element, handler, callable) : bootstrapHandler(element, callable);
         fn.delegationSelector = isDelegated ? handler : null;
         fn.callable = callable;
@@ -6601,7 +6613,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     }
     function getTypeEvent(event) {
         // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
-        event = event.replace(stripNameRegex, "");
+        event = event.replace(stripNameRegex, '');
         return customEvents[event] || event;
     }
     const EventHandler = {
@@ -6612,13 +6624,13 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
             addHandler(element, event, handler, delegationFunction, true);
         },
         off (element, originalTypeEvent, handler, delegationFunction) {
-            if (typeof originalTypeEvent !== "string" || !element) return;
+            if (typeof originalTypeEvent !== 'string' || !element) return;
             const [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
             const inNamespace = typeEvent !== originalTypeEvent;
             const events = getElementEvents(element);
             const storeElementEvent = events[typeEvent] || {};
-            const isNamespace = originalTypeEvent.startsWith(".");
-            if (typeof callable !== "undefined") {
+            const isNamespace = originalTypeEvent.startsWith('.');
+            if (typeof callable !== 'undefined') {
                 // Simplest case: handler is passed, remove that listener ONLY.
                 if (!Object.keys(storeElementEvent).length) return;
                 removeHandler(element, events, typeEvent, callable, isDelegated ? handler : null);
@@ -6626,12 +6638,12 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
             }
             if (isNamespace) for (const elementEvent of Object.keys(events))removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
             for (const [keyHandlers, event] of Object.entries(storeElementEvent)){
-                const handlerKey = keyHandlers.replace(stripUidRegex, "");
+                const handlerKey = keyHandlers.replace(stripUidRegex, '');
                 if (!inNamespace || originalTypeEvent.includes(handlerKey)) removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
             }
         },
         trigger (element, event, args) {
-            if (typeof event !== "string" || !element) return null;
+            if (typeof event !== 'string' || !element) return null;
             const $ = index_js.getjQuery();
             const typeEvent = getTypeEvent(event);
             const inNamespace = event !== typeEvent;
@@ -6672,7 +6684,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     return EventHandler;
 });
 
-},{"ac26295f7488b8d8":"FkwT1"}],"FkwT1":[function(require,module,exports) {
+},{"ac26295f7488b8d8":"FkwT1"}],"FkwT1":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap index.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6680,7 +6692,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     factory(exports);
 })(this, function(exports1) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap util/index.js
@@ -6688,7 +6700,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
    * --------------------------------------------------------------------------
    */ const MAX_UID = 1000000;
     const MILLISECONDS_MULTIPLIER = 1000;
-    const TRANSITION_END = "transitionend";
+    const TRANSITION_END = 'transitionend';
     /**
    * Properly escape IDs selectors to handle weird IDs
    * @param {string} selector
@@ -6719,32 +6731,32 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         // Return 0 if element or transition duration is not found
         if (!floatTransitionDuration && !floatTransitionDelay) return 0;
         // If multiple durations are defined, take the first
-        transitionDuration = transitionDuration.split(",")[0];
-        transitionDelay = transitionDelay.split(",")[0];
+        transitionDuration = transitionDuration.split(',')[0];
+        transitionDelay = transitionDelay.split(',')[0];
         return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
     };
     const triggerTransitionEnd = (element)=>{
         element.dispatchEvent(new Event(TRANSITION_END));
     };
     const isElement = (object)=>{
-        if (!object || typeof object !== "object") return false;
-        if (typeof object.jquery !== "undefined") object = object[0];
-        return typeof object.nodeType !== "undefined";
+        if (!object || typeof object !== 'object') return false;
+        if (typeof object.jquery !== 'undefined') object = object[0];
+        return typeof object.nodeType !== 'undefined';
     };
     const getElement = (object)=>{
         // it's a jQuery object or a node element
         if (isElement(object)) return object.jquery ? object[0] : object;
-        if (typeof object === "string" && object.length > 0) return document.querySelector(parseSelector(object));
+        if (typeof object === 'string' && object.length > 0) return document.querySelector(parseSelector(object));
         return null;
     };
     const isVisible = (element)=>{
         if (!isElement(element) || element.getClientRects().length === 0) return false;
-        const elementIsVisible = getComputedStyle(element).getPropertyValue("visibility") === "visible";
+        const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible';
         // Handle `details` element as its content may falsie appear visible when it is closed
-        const closedDetails = element.closest("details:not([open])");
+        const closedDetails = element.closest('details:not([open])');
         if (!closedDetails) return elementIsVisible;
         if (closedDetails !== element) {
-            const summary = element.closest("summary");
+            const summary = element.closest('summary');
             if (summary && summary.parentNode !== closedDetails) return false;
             if (summary === null) return false;
         }
@@ -6752,14 +6764,14 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     };
     const isDisabled = (element)=>{
         if (!element || element.nodeType !== Node.ELEMENT_NODE) return true;
-        if (element.classList.contains("disabled")) return true;
-        if (typeof element.disabled !== "undefined") return element.disabled;
-        return element.hasAttribute("disabled") && element.getAttribute("disabled") !== "false";
+        if (element.classList.contains('disabled')) return true;
+        if (typeof element.disabled !== 'undefined') return element.disabled;
+        return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
     };
     const findShadowRoot = (element)=>{
         if (!document.documentElement.attachShadow) return null;
         // Can find the shadow root otherwise it'll return the document
-        if (typeof element.getRootNode === "function") {
+        if (typeof element.getRootNode === 'function') {
             const root = element.getRootNode();
             return root instanceof ShadowRoot ? root : null;
         }
@@ -6780,20 +6792,20 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         element.offsetHeight; // eslint-disable-line no-unused-expressions
     };
     const getjQuery = ()=>{
-        if (window.jQuery && !document.body.hasAttribute("data-bs-no-jquery")) return window.jQuery;
+        if (window.jQuery && !document.body.hasAttribute('data-bs-no-jquery')) return window.jQuery;
         return null;
     };
     const DOMContentLoadedCallbacks = [];
     const onDOMContentLoaded = (callback)=>{
-        if (document.readyState === "loading") {
+        if (document.readyState === 'loading') {
             // add listener on the first call when the document is in loading state
-            if (!DOMContentLoadedCallbacks.length) document.addEventListener("DOMContentLoaded", ()=>{
+            if (!DOMContentLoadedCallbacks.length) document.addEventListener('DOMContentLoaded', ()=>{
                 for (const callback of DOMContentLoadedCallbacks)callback();
             });
             DOMContentLoadedCallbacks.push(callback);
         } else callback();
     };
-    const isRTL = ()=>document.documentElement.dir === "rtl";
+    const isRTL = ()=>document.documentElement.dir === 'rtl';
     const defineJQueryPlugin = (plugin)=>{
         onDOMContentLoaded(()=>{
             const $ = getjQuery();
@@ -6810,7 +6822,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         });
     };
     const execute = (possibleCallback, args = [], defaultValue = possibleCallback)=>{
-        return typeof possibleCallback === "function" ? possibleCallback(...args) : defaultValue;
+        return typeof possibleCallback === 'function' ? possibleCallback(...args) : defaultValue;
     };
     const executeAfterTransition = (callback, transitionElement, waitForTransition = true)=>{
         if (!waitForTransition) {
@@ -6869,11 +6881,11 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     exports1.toType = toType;
     exports1.triggerTransitionEnd = triggerTransitionEnd;
     Object.defineProperty(exports1, Symbol.toStringTag, {
-        value: "Module"
+        value: 'Module'
     });
 });
 
-},{}],"hIe1C":[function(require,module,exports) {
+},{}],"hIe1C":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap config.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6881,7 +6893,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory(require("b9edd4bcfa17f531"), require("5c783c6b19b673c3"));
 })(this, function(Manipulator, index_js) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap util/config.js
@@ -6910,18 +6922,18 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
             return config;
         }
         _mergeConfigObj(config, element) {
-            const jsonConfig = index_js.isElement(element) ? Manipulator.getDataAttribute(element, "config") : {}; // try to parse
+            const jsonConfig = index_js.isElement(element) ? Manipulator.getDataAttribute(element, 'config') : {}; // try to parse
             return {
                 ...this.constructor.Default,
-                ...typeof jsonConfig === "object" ? jsonConfig : {},
+                ...typeof jsonConfig === 'object' ? jsonConfig : {},
                 ...index_js.isElement(element) ? Manipulator.getDataAttributes(element) : {},
-                ...typeof config === "object" ? config : {}
+                ...typeof config === 'object' ? config : {}
             };
         }
         _typeCheckConfig(config, configTypes = this.constructor.DefaultType) {
             for (const [property, expectedTypes] of Object.entries(configTypes)){
                 const value = config[property];
-                const valueType = index_js.isElement(value) ? "element" : index_js.toType(value);
+                const valueType = index_js.isElement(value) ? 'element' : index_js.toType(value);
                 if (!new RegExp(expectedTypes).test(valueType)) throw new TypeError(`${this.constructor.NAME.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
             }
         }
@@ -6929,7 +6941,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     return Config;
 });
 
-},{"b9edd4bcfa17f531":"5Pbx3","5c783c6b19b673c3":"FkwT1"}],"5Pbx3":[function(require,module,exports) {
+},{"b9edd4bcfa17f531":"5Pbx3","5c783c6b19b673c3":"FkwT1"}],"5Pbx3":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap manipulator.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6937,18 +6949,18 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory();
 })(this, function() {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */ function normalizeData(value) {
-        if (value === "true") return true;
-        if (value === "false") return false;
+        if (value === 'true') return true;
+        if (value === 'false') return false;
         if (value === Number(value).toString()) return Number(value);
-        if (value === "" || value === "null") return null;
-        if (typeof value !== "string") return value;
+        if (value === '' || value === 'null') return null;
+        if (typeof value !== 'string') return value;
         try {
             return JSON.parse(decodeURIComponent(value));
         } catch (_unused) {
@@ -6968,9 +6980,9 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         getDataAttributes (element) {
             if (!element) return {};
             const attributes = {};
-            const bsKeys = Object.keys(element.dataset).filter((key)=>key.startsWith("bs") && !key.startsWith("bsConfig"));
+            const bsKeys = Object.keys(element.dataset).filter((key)=>key.startsWith('bs') && !key.startsWith('bsConfig'));
             for (const key of bsKeys){
-                let pureKey = key.replace(/^bs/, "");
+                let pureKey = key.replace(/^bs/, '');
                 pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
                 attributes[pureKey] = normalizeData(element.dataset[key]);
             }
@@ -6983,7 +6995,7 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     return Manipulator;
 });
 
-},{}],"2uwqb":[function(require,module,exports) {
+},{}],"2uwqb":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap component-functions.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -6991,19 +7003,19 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     factory(exports, require("4d81223265aca860"), require("17cad69b67eca00c"), require("c7f480a91a02097c"));
 })(this, function(exports1, EventHandler, SelectorEngine, index_js) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap util/component-functions.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
-   */ const enableDismissTrigger = (component, method = "hide")=>{
+   */ const enableDismissTrigger = (component, method = 'hide')=>{
         const clickEvent = `click.dismiss${component.EVENT_KEY}`;
         const name = component.NAME;
         EventHandler.on(document, clickEvent, `[data-bs-dismiss="${name}"]`, function(event) {
             if ([
-                "A",
-                "AREA"
+                'A',
+                'AREA'
             ].includes(this.tagName)) event.preventDefault();
             if (index_js.isDisabled(this)) return;
             const target = SelectorEngine.getElementFromSelector(this) || this.closest(`.${name}`);
@@ -7014,11 +7026,11 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     };
     exports1.enableDismissTrigger = enableDismissTrigger;
     Object.defineProperty(exports1, Symbol.toStringTag, {
-        value: "Module"
+        value: 'Module'
     });
 });
 
-},{"4d81223265aca860":"i00FR","17cad69b67eca00c":"c53ra","c7f480a91a02097c":"FkwT1"}],"c53ra":[function(require,module,exports) {
+},{"4d81223265aca860":"i00FR","17cad69b67eca00c":"c53ra","c7f480a91a02097c":"FkwT1"}],"c53ra":[function(require,module,exports,__globalThis) {
 /*!
   * Bootstrap selector-engine.js v5.3.3 (https://getbootstrap.com/)
   * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
@@ -7026,26 +7038,26 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
   */ (function(global, factory) {
     module.exports = factory(require("f23f5d23d66ff7f6"));
 })(this, function(index_js) {
-    "use strict";
+    'use strict';
     /**
    * --------------------------------------------------------------------------
    * Bootstrap dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */ const getSelector = (element)=>{
-        let selector = element.getAttribute("data-bs-target");
-        if (!selector || selector === "#") {
-            let hrefAttribute = element.getAttribute("href");
+        let selector = element.getAttribute('data-bs-target');
+        if (!selector || selector === '#') {
+            let hrefAttribute = element.getAttribute('href');
             // The only valid content that could double as a selector are IDs or classes,
             // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
             // `document.querySelector` will rightfully complain it is invalid.
             // See https://github.com/twbs/bootstrap/issues/32273
-            if (!hrefAttribute || !hrefAttribute.includes("#") && !hrefAttribute.startsWith(".")) return null;
+            if (!hrefAttribute || !hrefAttribute.includes('#') && !hrefAttribute.startsWith('.')) return null;
             // Just in case some CMS puts out a full URL with the anchor appended
-            if (hrefAttribute.includes("#") && !hrefAttribute.startsWith("#")) hrefAttribute = `#${hrefAttribute.split("#")[1]}`;
-            selector = hrefAttribute && hrefAttribute !== "#" ? hrefAttribute.trim() : null;
+            if (hrefAttribute.includes('#') && !hrefAttribute.startsWith('#')) hrefAttribute = `#${hrefAttribute.split('#')[1]}`;
+            selector = hrefAttribute && hrefAttribute !== '#' ? hrefAttribute.trim() : null;
         }
-        return selector ? selector.split(",").map((sel)=>index_js.parseSelector(sel)).join(",") : null;
+        return selector ? selector.split(',').map((sel)=>index_js.parseSelector(sel)).join(',') : null;
     };
     const SelectorEngine = {
         find (selector, element = document.documentElement) {
@@ -7089,15 +7101,15 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
         },
         focusableChildren (element) {
             const focusables = [
-                "a",
-                "button",
-                "input",
-                "textarea",
-                "select",
-                "details",
-                "[tabindex]",
+                'a',
+                'button',
+                'input',
+                'textarea',
+                'select',
+                'details',
+                '[tabindex]',
                 '[contenteditable="true"]'
-            ].map((selector)=>`${selector}:not([tabindex^="-"])`).join(",");
+            ].map((selector)=>`${selector}:not([tabindex^="-"])`).join(',');
             return this.find(focusables, element).filter((el)=>!index_js.isDisabled(el) && index_js.isVisible(el));
         },
         getSelectorFromElement (element) {
@@ -7117,6 +7129,6 @@ var createPopper = /*#__PURE__*/ (0, _createPopperJs.popperGenerator)({
     return SelectorEngine;
 });
 
-},{"f23f5d23d66ff7f6":"FkwT1"}]},["j2YDk","1SICI"], "1SICI", "parcelRequire716c")
+},{"f23f5d23d66ff7f6":"FkwT1"}]},["80cCk","1SICI"], "1SICI", "parcelRequire94c2")
 
 //# sourceMappingURL=index.18dbc454.js.map
