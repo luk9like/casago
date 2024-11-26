@@ -26,26 +26,40 @@
         </button>
         <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasTopLabel">Offcanvas top</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <a class="navbar-brand" href="index.html">
+              <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortbildmarke">
+            </a>
+            <!-- <h5 class="offcanvas-title" id="offcanvasTopLabel">Menu</h5> -->
+            <button class="btn btn-close d-flex align-items-center justify-content-center" type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21.917" height="21.919" viewBox="0 0 21.917 21.919"><g transform="translate(-1832.044 -70.12)"><path d="M4483-10121.92h28" transform="translate(5820.42 10418.219) rotate(-45)" fill="none" stroke="#fff" stroke-width="3"/><path d="M0,0H28" transform="translate(1852.9 90.978) rotate(-135)" fill="none" stroke="#fff" stroke-width="3"/></g></svg>
+            </button>
           </div>
           <div class="offcanvas-body">
             <div class="container-fluid">
-              <div class="row text-left">
-                <div class="class col-12 col-xl-3 my-0 mb-0 mb-md-4 mb-xl-0">
-                  <a class="h2 text-white d-none d-xl-inline" href="#">Home</a>
-                  <!-- <ul>
-                    <li class="nav-item">
-                      <a class="nav-link" href="/impressum/" title="Impressum">Impressum</a>
-                    </li>
-                  </ul>  -->
-                </div>
-              </div>
-              <div class="row text-left">
-                <div class="col-12 col-xl-3 my-0 mb-0 mb-md-4 mb-xl-0">
-                  <a class="h2 text-white d-none d-xl-inline" href="#">Home</a>
-                </div>
-              </div>
+
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">
+                    <span class="title">Über uns</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <span class="title">Geschäftsfelder</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <span class="title">Referenzen</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <span class="title">Kontakt</span>
+                  </a>
+                </li>
+              </ul>
+              
             </div>
           </div>
         </div>
