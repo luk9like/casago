@@ -3961,7 +3961,6 @@ textarea.form-control-lg {
 .nav {
   --bs-nav-link-padding-x: 2rem;
   --bs-nav-link-padding-y: 1rem;
-  --bs-nav-link-font-size: calc(1.425rem + 2.1vw);
   --bs-nav-link-font-weight: 600;
   --bs-nav-link-color: var(--bs-link-color);
   --bs-nav-link-hover-color: var(--bs-link-hover-color);
@@ -3971,12 +3970,6 @@ textarea.form-control-lg {
   padding-left: 0;
   list-style: none;
   display: flex;
-}
-
-@media (width >= 1200px) {
-  .nav {
-    --bs-nav-link-font-size: 3rem;
-  }
 }
 
 .nav-link {
@@ -4161,7 +4154,6 @@ textarea.form-control-lg {
 .navbar-nav {
   --bs-nav-link-padding-x: 0;
   --bs-nav-link-padding-y: 1rem;
-  --bs-nav-link-font-size: calc(1.425rem + 2.1vw);
   --bs-nav-link-font-weight: 600;
   --bs-nav-link-color: var(--bs-navbar-color);
   --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
@@ -4171,12 +4163,6 @@ textarea.form-control-lg {
   padding-left: 0;
   list-style: none;
   display: flex;
-}
-
-@media (width >= 1200px) {
-  .navbar-nav {
-    --bs-nav-link-font-size: 3rem;
-  }
 }
 
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
@@ -6638,7 +6624,7 @@ textarea.form-control-lg {
 .offcanvas, .offcanvas-xxl, .offcanvas-xl, .offcanvas-lg, .offcanvas-md, .offcanvas-sm {
   --bs-offcanvas-zindex: 1045;
   --bs-offcanvas-width: 400px;
-  --bs-offcanvas-height: 30vh;
+  --bs-offcanvas-height: 100vh;
   --bs-offcanvas-padding-x: 1rem;
   --bs-offcanvas-padding-y: 1rem;
   --bs-offcanvas-color: var(--bs-body-color);
@@ -13227,6 +13213,17 @@ textarea.form-control-lg {
 @media (width <= 575.98px) {
   .navbar-brand .navbar-logomark {
     width: 8.5rem;
+  }
+}
+
+.nav-link {
+  font-size: 3rem;
+}
+
+@media (width <= 767.98px) {
+  .nav-link {
+    padding: .5rem 1rem;
+    font-size: 1.5rem;
   }
 }
 

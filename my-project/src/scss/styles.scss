@@ -14,6 +14,15 @@
    }
 }
 
+.nav-link {
+    font-size: 3rem;
+
+    @include media-breakpoint-down(md) {
+        font-size: 1.5rem;
+        padding: .5rem 1rem;
+    }  
+}
+
 .menu-link {
     font-family: "Brockmann Semibold";
     font-weight: 600;
