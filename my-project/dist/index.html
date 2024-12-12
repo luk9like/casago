@@ -86,7 +86,7 @@ else main();
 </script>
   </head>
   <body>
-    <nav class="navbar sticky-top bg-dark">
+    <nav class="navbar sticky-top bg-cas-primary">
       <div class="container-fluid">
         <a class="navbar-brand" href="/index.html">
           <img class="navbar-logomark" src="/cas_wordmark-white.6a856829.svg" alt="CASAGO Wortbildmarke">
@@ -107,14 +107,14 @@ else main();
           <div class="offcanvas-body">
             <div class="container-fluid">
 
-              <ul class="nav flex-sm-column">
+              <ul class="nav flex-column flex-sm-row">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">
+                  <a class="nav-link active" aria-current="page" href="/ueber-uns.html">
                     <span class="title">Über uns</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link" href="/geschaeftsfelder.html">
                     <span class="title">Geschäftsfelder</span>
                   </a>
                 </li>
@@ -136,8 +136,8 @@ else main();
       
       </div>
     </nav>
-    <div class="container">
-      <!-- <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
+    <div class="container-wide">
+      <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -145,41 +145,57 @@ else main();
         </div>
         <div class="carousel-inner">
           <div class="carousel-item active" data-bs-interval="4200">
-            <img src="/src/assets/rott-luftbild-perspektive.png" class="d-block w-100" alt="...">
+            <img src="/rott-luftbild-perspektive.940ae896.png" class="d-block w-100 h-60" alt="...">
           </div>
           <div class="carousel-item" data-bs-interval="4200">
-            <img src="/src/assets/rott-luftbild-perspektive-detail.png" class="d-block w-100" alt="...">
+            <img src="/rott-luftbild-perspektive-detail.45596f1a.png" class="d-block w-100 h-60" alt="...">
           </div>
           <div class="carousel-item" data-bs-interval="4200">
-            <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="d-block w-100" alt="...">
+            <img src="/rott-luftbild-dachaufnahme.0664381a.png" class="d-block w-100 h-60" alt="...">
           </div>
-        </div> -->
+        </div>
 
-        <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
-        </button> -->
+        </button>
       </div>
-    
+    </div>
    
 
     <!-- <div class="container pt-2">
       <img class="fluid" src="/src/assets/rott-luftbild-perspektive.png"alt="Bauprojekt Rott Panorama" width="100%">
     </div> -->
-  <section class="welcome">
-    <div class="container">
+<!-- 
+  <section class="stage">
+    <div class="container-wide">
       <div class="row">
-        <div class="cta col-12-xl">
-          <h2 class="col-8-xl mx-auto">Demnächst können Sie uns digital kennenlernen</h2>
-          <p class="text col-6-xl mx-auto">Tragen Sie ihre E-Mail ein, um beim Go-Live unserer Website mit aktuellen Projekten benachrichtigt zu werden.</p>
-          <!-- <button class="btn btn-outline-light">Projektanfrage</button>
-          <a href="mmailto:info@casago.de">E-Mail senden</a> -->
+        <div class="img-fluid" src="/src/assets/rott-luftbild-dachaufnahme.png">
+          
         </div>
-        <div class="newsletter col-12 mx-auto">
+      </div>
+    </div>
+  </section> -->
+
+
+  <section class="stage">
+    <div class="container-fluid pb-4">
+      <div class="row">
+        <div class="cta col-sm-12">
+          <h2 class="col-sm-12 col-xl-8 mx-auto">Unsere Geschäftsbereiche</h2>
+          <p class="text col-sm-12 col-xl-6 mx-auto">Ein paar konkrete Eckpunkte für ihr Vorhaben, helfen uns herauszufinden wie wir optimal zusammenarbeiten können.</p>
+          <a href="mailto:info@casago.de" type="button" class="btn btn-outline-light m-2">Projektanfrage</a>
+          <a class="m-2" href="mailto:info@casago.de">E-Mail senden</a>
+        
+
+
+
+
+        <!-- <div class="newsletter col-12 mx-auto">
           <form class="layout_form cr_form cr_font" action="https://seu2.cleverreach.com/f/408779-400164/wcs/" method="post" target="_blank">
             <div class="cr_body cr_page cr_font formbox">
               <div class="non_sortable">
@@ -187,66 +203,139 @@ else main();
               </div>
               
               <div class="editable_content col-sm-8 col-md-6 col-xl-4 mx-auto">
-              <div id="9099191" rel="email" class="cr_form-component cr_form-component--email cr_ipe_item ui-sortable musthave">
+              <div id="9099191" rel="email" class="cr_form-component cr_form-component--email cr_ipe_item ui-sortable musthave" >
               <div class="cr_form-inputgroup cr_form-inputgroup--typeemail">
-                  <!-- <label for="text9099191">E-Mail*</label> -->
-                  <input class="form-control cr_form-input" type="email" id="text9099191" name="email" value="" placeholder="Ihre Mailadresse">
+                  <input class="form-control cr_form-input" type="email" id="text9099191" name="email" value="" placeholder="Ihre Mailadresse" >
               </div>
           </div><div id="9099195" rel="recaptcha" class="cr_ipe_item ui-sortable musthave">
-            
-          
-            
-          
-            <script src="https://www.google.com/recaptcha/api.js" async="" defer=""></script>
-            <br>
+
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+            <br/>
             <div id="recaptcha_v2_widget" class="g-recaptcha" data-theme="light" data-size="normal" data-sitekey="6Lfhcd0SAAAAAOBEHmAVEHJeRnrH8T7wPvvNzEPD"></div>
-            <br>
-          
-            
-          </div><div id="9099193" rel="button" class="cr_form-component cr_form-component--submit cr_ipe_item ui-sortable  submit_container">
+            <br/>
+           </div>
+          <div id="9099193" rel="button" class="cr_form-component cr_form-component--submit cr_ipe_item ui-sortable  submit_container">
               <button type="submit" class="btn btn-outline-light cr_form-block cr_button">Eintragen</button>
           </div>
-          
-                  </div>
+          </div>
                   
             <noscript><a href="http://www.cleverreach.de">www.CleverReach.de</a></noscript>
-              </div>
-          
-              
-          </form>
-        
-
-          <!-- <form class="form">
-            <div class="row justify-content-md-center">
-              <div class="col-auto">
-                <div class="mb-3">
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Ihre Mailadresse" aria-describedby="emailHelp"> -->
-                  <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
-                <!-- </div>
-              </div>
-              <div class="col-auto">
-                <button type="submit" class="btn btn-outline-light">eintragen</button>
-              </div>
             </div>
-          </form> -->
-        </div> 
+          </form>
+        </div>  -->
+
       </div>
     </div>
-  </section>
-<section class="container-fluid footer">
+
+  <div class="container-fluid bg-cas-primary">
+ 
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="/rott-luftbild-dachaufnahme.0664381a.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Bauträger</h5>
+            <p class="card-text text-body-secondary">Wir sind Bauträger für ihr Projekt.</p>
+            <a class="card-links" href="#">Mehr anzeigen</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="/rott-luftbild-dachaufnahme.0664381a.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Baubetreuung</h5>
+            <p class="card-text text-body-secondary">Wir sind Baubetreuer für ihr Projekt.</p>
+            <a class="card-links" href="#">Mehr anzeigen</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="/rott-luftbild-dachaufnahme.0664381a.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Baubetreuung Plus</h5>
+            <p class="card-text text-body-secondary">Zum gemeinsamen Projekt</p>
+            <a class="card-links" href="#">Mehr anzeigen</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="/rott-luftbild-dachaufnahme.0664381a.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Gründach</h5>
+            <p class="card-text text-body-secondary">Ihr Partner für smarte Gründachanlagen</p>
+            <a class="card-links" href="#">Mehr anzeigen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div></section>
+
+
+<!-- <section class="cards">
+  <div class="container-wide bg-cas-primary">
+ 
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a short card.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section> -->
+
+
+<section class="footer">
   <div class="container">
     <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5">
       <div class="col mb-3">
         <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-          <img class="footer-logo" src="/2024_CAS_Logo_Wort-Bildmarke.7fd43651.svg">
+          <img class="footer-logo" src="/cas_wordmark-white.6a856829.svg">
         </a>
+        <hr>
         
         <p class="text-body-secondary pt-2">Am Queracker 6 <br>
           83134 Prutting</p>
 
-          <p class="text-body-secondary pt-4">CASAGO © 2024</p>
+        <p class="text-body-white pt-4">© 2024 CASAGO GmbH. Alle Rechte vorbehalten.</p>
       </div>
-  
+
       <div class="col mb-3">
   
       </div>
@@ -260,12 +349,13 @@ else main();
       </div>
   
       <div class="col mb-3">
-        <h5>Menu</h5>
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2"><a href="/index.html" class="nav-link p-0 text-body-secondary">Home</a></li>
-          <li class="nav-item mb-2"><a href="/impressum.html" class="nav-link p-0 text-body-secondary">Impressum</a></li>
-          <li class="nav-item mb-2"><a href="/datenschutz.html" class="nav-link p-0 text-body-secondary">Datenschutz</a></li>
-        </ul>
+        <h5>Kontakt</h5>
+        <a href="mailto:info@casago.de">info@casago.de</a>
+        <br>
+        <a href="tel:+4980369086986">+49 803 690869-86</a>        
+        <p class="pt-4"></p>
+        <a href="/impressum.html">Impressum</a>
+        <a href="/datenschutz.html">Datenschutz</a>
       </div>
     </footer>
   </div>
