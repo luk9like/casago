@@ -1,0 +1,9 @@
+.accordion-faq {
+  padding-top: 1.5rem;
+  padding-bottom: 4.375rem;
+
+  @include media-breakpoint-down(sm) {
+    padding-top: 1.5rem;
+    padding-bottom: 2.625rem;
+  }
+}

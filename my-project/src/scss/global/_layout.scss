@@ -1,0 +1,9 @@
+.section {
+  padding-top: 5.625rem;
+  padding-bottom: 4.375rem;
+
+  @include media-breakpoint-down(sm) {
+    padding-top: 3.625rem;
+    padding-bottom: 2.625rem;
+  }
+}

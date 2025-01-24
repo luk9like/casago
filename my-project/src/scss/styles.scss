@@ -1,27 +1,58 @@
-// Import all of Bootstrap's CSS
-@import "bootstrap/scss/bootstrap";
+@import "functions";
+@import "mixins";
+@import "variables";
+@import "variables-custom";
 
-.navbar {
-  @include media-breakpoint-down(xxl) {
-    padding: 0.65rem 0;
-  }
-  @include media-breakpoint-down(sm) {
-    padding: 0.5rem 0;
-  }
+// scss-docs-start import bootstrap
+// Configuration
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/utilities";
 
-  .navbar-brand {
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
+// Layout & components
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/images";
+@import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/tables";
+@import "../../node_modules/bootstrap/scss/forms";
+@import "../../node_modules/bootstrap/scss/buttons";
+@import "../../node_modules/bootstrap/scss/transitions";
+@import "../../node_modules/bootstrap/scss/dropdown";
+@import "../../node_modules/bootstrap/scss/button-group";
+@import "../../node_modules/bootstrap/scss/nav";
+@import "../../node_modules/bootstrap/scss/navbar";
+@import "../../node_modules/bootstrap/scss/card";
+@import "../../node_modules/bootstrap/scss/accordion";
+@import "../../node_modules/bootstrap/scss/breadcrumb";
+@import "../../node_modules/bootstrap/scss/pagination";
+@import "../../node_modules/bootstrap/scss/badge";
+@import "../../node_modules/bootstrap/scss/alert";
+@import "../../node_modules/bootstrap/scss/progress";
+@import "../../node_modules/bootstrap/scss/list-group";
+@import "../../node_modules/bootstrap/scss/close";
+@import "../../node_modules/bootstrap/scss/toasts";
+@import "../../node_modules/bootstrap/scss/modal";
+@import "../../node_modules/bootstrap/scss/tooltip";
+@import "../../node_modules/bootstrap/scss/popover";
+@import "../../node_modules/bootstrap/scss/carousel";
+@import "../../node_modules/bootstrap/scss/spinners";
+@import "../../node_modules/bootstrap/scss/offcanvas";
+@import "../../node_modules/bootstrap/scss/placeholders";
 
-    .navbar-logomark {
-      width: 8.4rem;
+// Helpers
+@import "../../node_modules/bootstrap/scss/helpers";
 
-      @include media-breakpoint-down(sm) {
-        width: 7rem;
-      }
-    }
-  }
-}
+// Utilities
+@import "../../node_modules/bootstrap/scss/utilities/api";
+// scss-docs-end import bootstrap
+
+@import "elements/accordion";
+@import "global/footer";
+@import "global/header";
+@import "global/layout";
+@import "global/navigation";
 
 .carousel .carousel-item {
   max-height: 650px;
@@ -32,47 +63,19 @@
   max-height: 5650px;
 }
 
-.nav-link {
-  font-size: 3rem;
-
-  @include media-breakpoint-down(md) {
-    font-size: 1.5rem;
-    padding: 0.5rem 1rem;
-  }
-}
-
-.menu-link {
-  font-family: "Brockmann Semibold";
-  font-weight: 600;
-  font-size: 3rem;
-  // text-decoration:     ;
-
-  &:hover {
-    color: $green-400;
-    text-decoration: if($link-hover-decoration == underline, none, null);
-    background-color: var(--#{$prefix}btn-hover-bg);
-    border-color: var(--#{$prefix}btn-hover-border-color);
-  }
-}
-
 .cta {
   text-align: center;
-  padding-Top: 4.25rem;
-  padding-bottom: 4.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding: 4.25rem 1.5rem 4.5rem;
 }
 
 .card-links {
   color: $white;
-  font-family: "Brockmann Semibold";
+  font-family: "Brockmann Semibold", serif;
   font-weight: 600;
 }
 
 .partners {
   display: inline-block;
-  padding-left: 2rem;
-  padding-right: 2rem;
 
   .partner-card {
     width: 190px;
@@ -84,40 +87,12 @@
   }
 }
 
-.btn {
-  border-radius: 1.5rem;
-}
-
-a {
-  color: #c4c4c4;
-}
-
 .stage {
   padding-top: 2.25rem;
   padding-bottom: 4.375rem;
   
   @include media-breakpoint-down(sm) {
     padding-top: 1.75rem;
-    padding-bottom: 2.625rem;
-  }
-}
-
-.section {
-  padding-top: 5.625rem;
-  padding-bottom: 4.375rem;
-  
-  @include media-breakpoint-down(sm) {
-    padding-top: 3.625rem;
-    padding-bottom: 2.625rem;
-  }
-}
-
-.accordion-faq {
-  padding-top: 1.5rem;
-  padding-bottom: 4.375rem;
-  
-  @include media-breakpoint-down(sm) {
-    padding-top: 1.5rem;
     padding-bottom: 2.625rem;
   }
 }

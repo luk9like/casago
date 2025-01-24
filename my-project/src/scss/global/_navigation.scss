@@ -1,0 +1,44 @@
+.navbar {
+  @include media-breakpoint-down(xxl) {
+    padding: 0.65rem 0;
+  }
+  @include media-breakpoint-down(sm) {
+    padding: 0.5rem 0;
+  }
+
+  .navbar-brand {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+
+    .navbar-logomark {
+      width: 8.4rem;
+
+      @include media-breakpoint-down(sm) {
+        width: 7rem;
+      }
+    }
+  }
+}
+
+.nav-link {
+  font-size: 3rem;
+
+  @include media-breakpoint-down(md) {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.menu-link {
+  font-family: "Brockmann Semibold";
+  font-weight: 600;
+  font-size: 3rem;
+  // text-decoration:     ;
+
+  &:hover {
+    color: $green-400;
+    text-decoration: if($link-hover-decoration == underline, none, null);
+    background-color: var(--#{$prefix}btn-hover-bg);
+    border-color: var(--#{$prefix}btn-hover-border-color);
+  }
+}
