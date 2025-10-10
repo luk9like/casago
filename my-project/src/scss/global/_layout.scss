@@ -1,4 +1,6 @@
 .section {
+  background: $primary;
+
   padding-top: 5.625rem;
   padding-bottom: 4.375rem;
 
@@ -6,4 +8,8 @@
     padding-top: 3.625rem;
     padding-bottom: 2.625rem;
   }
+}
+
+section {
+  background: $primary;
 }

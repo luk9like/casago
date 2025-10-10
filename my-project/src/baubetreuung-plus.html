@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Baubetreuung Plus - CASAGO</title>
+    <link rel="stylesheet" href="scss/styles.scss">
+    <script type="module" src="js/main.js">
+
+        function loadjQuery(e, t) { var n = document.createElement("script"); n.setAttribute("src", e); n.onload = t; n.onreadystatechange = function () { if (this.readyState == "complete" || this.readyState == "loaded") t() }; document.getElementsByTagName("head")[0].appendChild(n) } function main() {
+            var $cr = jQuery.noConflict(); var old_src; $cr(document).ready(function () { $cr(".cr_form").submit(function () { $cr(this).find('.clever_form_error').removeClass('clever_form_error'); $cr(this).find('.clever_form_note').remove(); $cr(this).find(".musthave").find('input, textarea').each(function () { if (jQuery.trim($cr(this).val()) == "" || ($cr(this).is(':checkbox')) || ($cr(this).is(':radio'))) { if ($cr(this).is(':checkbox') || ($cr(this).is(':radio'))) { if (!$cr(this).parents(".cr_ipe_item").find(":checked").is(":checked")) { $cr(this).parents(".cr_ipe_item").addClass('clever_form_error') } } else { $cr(this).addClass('clever_form_error') } } }); if ($cr(this).attr("action").search(document.domain) > 0 && $cr(".cr_form").attr("action").search("wcs") > 0) { var cr_email = $cr(this).find('input[name=email]'); var unsub = false; if ($cr("input['name=cr_subunsubscribe'][value='false']").length) { if ($cr("input['name=cr_subunsubscribe'][value='false']").is(":checked")) { unsub = true } } if (cr_email.val() && !unsub) { $cr.ajax({ type: "GET", url: $cr(".cr_form").attr("action").replace("wcs", "check_email") + window.btoa($cr(this).find('input[name=email]').val()), success: function (data) { if (data) { cr_email.addClass('clever_form_error').before("<div class='clever_form_note cr_font'>" + data + "</div>"); return false } }, async: false }) } var cr_captcha = $cr(this).find('input[name=captcha]'); if (cr_captcha.val()) { $cr.ajax({ type: "GET", url: $cr(".cr_form").attr("action").replace("wcs", "check_captcha") + $cr(this).find('input[name=captcha]').val(), success: function (data) { if (data) { cr_captcha.addClass('clever_form_error').after("<div  class='clever_form_note cr_font'>" + data + "</div>"); return false } }, async: false }) } } if ($cr(this).find('.clever_form_error').length) { return false } return true }); $cr('input[class*="cr_number"]').change(function () { if (isNaN($cr(this).val())) { $cr(this).val(1) } if ($cr(this).attr("min")) { if (($cr(this).val() * 1) < ($cr(this).attr("min") * 1)) { $cr(this).val($cr(this).attr("min")) } } if ($cr(this).attr("max")) { if (($cr(this).val() * 1) > ($cr(this).attr("max") * 1)) { $cr(this).val($cr(this).attr("max")) } } }); old_src = $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src"); if ($cr("div[rel='captcha'] img:not(.captcha2_reload)").length != 0) { captcha_reload() } }); function captcha_reload() { var timestamp = new Date().getTime(); $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src", ""); $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src", old_src + "?t=" + timestamp); return false }
+
+        }
+        if (typeof jQuery === "undefined") { loadjQuery("//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js", main) } else { main() }
+
+    </script>
+</head>
+
+<body>
+
+    <header class="casago-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <!-- Logo/Brand -->
+                <a class="navbar-brand" href="index.html">
+                    <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Navigation umschalten">
+                    <!-- <span class="navbar-toggler-icon"></span> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+                        <g transform="translate(-1836.087 -42.5)" style="isolation: isolate">
+                            <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff"
+                                stroke-width="3" />
+                            <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff"
+                                stroke-width="3" />
+                        </g>
+                    </svg>
+                </button>
+
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav mx-auto">
+                        <!-- Geschäftsfelder Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="geschaeftsfelder.html" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Geschäftsfelder
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="bautraeger.html">Bauträger</a></li>
+                                <li><a class="dropdown-item" href="#">Baubetreuung Plus</a></li>
+                                <li><a class="dropdown-item" href="#">gemeinsame Projektrealisierung</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Begrünung</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Über uns -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Über uns</a>
+                        </li>
+
+                        <!-- Projekte (falls vorhanden) -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="referenzen.html">Referenzen</a>
+                        </li>
+
+                        <!-- Kontakt -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="kontakt.html">Kontakt</a>
+                        </li>
+                    </ul>
+
+                    <!-- CTA Button -->
+                    <div class="d-flex mt-3 mt-lg-0">
+                        <a href="mailto:info@casago.de" class="btn btn-casago-primary">Anfrage senden</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Single Column Page -->
+    <main class="sc-page">
+
+        <!-- Hero Section (Breiter Container) -->
+        <section class="sc-hero">
+            <div class="sc-container-wide">
+                <!-- <a class="sc-hero__breadcrumb" href="#">Geschäftsfeld Bauträger</a> -->
+                <h1 class="sc-hero__title">
+                    Baubetreuung Plus: von der ersten Idee mit zum fertigen Projekt
+                </h1>
+            </div>
+        </section>
+
+        <!-- Hero Image (Breiter Container) -->
+        <section class="sc-hero-image">
+            <div class="sc-container-wide">
+                <div class="sc-hero-image__wrapper">
+                    <img src="assets/images/referenzen/Edling/ED-AG13_Bild_2025-09-30_Visu01.jpg"
+                        alt="Bauträger Leistungen" class="sc-hero-image__img" loading="eager">
+                </div>
+            </div>
+        </section>
+
+        <!-- Company Intro -->
+        <section class="sc-intro">
+            <div class="sc-container">
+                <p class="sc-intro__lead">
+                    Mit unserem Angebot „Baubetreuung Plus“ eröffnen wir Bauherren eine echte Alternative und Option zu
+                    dem bekannten
+                    Marktmodellen bei der Realisierung von Bauvorhaben.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <article class="sc-article">
+            <div class="sc-container">
+
+                <!-- Opening Paragraph -->
+                <div class="sc-content">
+                    <p class="sc-text">
+                        Anstelle eines Erwerbs von einem Bauträger oder der Vergabe an Architekten und Ausführung durch
+                        einen Generalübernehmer
+                        können Sie als Bauherr mit uns als Ihrem Vertreter einen größtmöglichen Einfluss auf Ihr Projekt
+                        sicherstellen. Dies
+                        stellen wir durch die Erstellung von Entscheidungsvorlagen zu allen wesentlichen Festlegungen zu
+                        Bauausführungen und
+                        Auftragsvergaben sicher. Durch unsere „Projektsteuerungstools“ haben Sie zudem stets Ein- und
+                        Überblick in allen Phasen
+                        der Projektrealisierung.
+                    </p>
+
+                    <p class="sc-text">
+                        Als „Ihr Vertreter“ werden alle Interessenkonflikte sicher ausgeschlossen. Wir sind
+                        ausschließlich in Ihrem Sinne tätig.
+                        Unabhängig und transparent. Konsequent auf Qualität und Wirtschaftlichkeit ausgerichtet.
+                    </p>
+                    <p class="sc-text">
+                        Dabei geht unser Angebot und unser Anspruch über die meist angebotene kaufmännische und/oder
+                        technische Baubetreuung
+                        hinaus. Unseren Auftraggebern bieten wir an, alle Phasen eines Projektes zu begleiten und durch
+                        die Verzahnung von
+                        Projektentwicklung, Planung, Vergabe und Überwachung der Bauausführung häufige Störquellen und
+                        unnötige Kosten zu
+                        vermeiden.
+                    </p>
+                </div>
+
+                <!-- Section Heading -->
+                <h2 class="sc-heading" id="leistungen">
+                    Unsere kombinierten Leistungen für maximale Einflussnahme des Bauherren
+                </h2>
+                <!-- Sub-section -->
+                <h3 class="sc-subheading">
+                    Projektentwicklung
+                </h3>
+
+                <div class="sc-content">
+                    <p class="sc-text">
+                        Die Projektentwicklung umfasst die Prüfung der baurechtlichen Rahmenbedingungen, möglichen
+                        Fördermitteln und
+                        Vermarktungspotentialen bis hin zur Unterstützung bei Gesprächen mit Steuerberatern und Banken.
+                    </p>
+                    <h3 class="sc-subheading" id="Planung und Projektrealisierung">
+                        Planung und Projektrealisierung.
+                    </h3>
+                    <p class="sc-text">
+                        Nahtlos schließen sich Genehmigungsplanung, Ausführungsplanung und Erstellung von
+                        Leistungsverzeichnissen an. Bei der
+                        Ausschreibung und Vergabe bevorzugen wir die Einzelvergabe anstatt der Vergabe an
+                        Generalübernehmer. Damit wird der
+                        größtmögliche Einfluss auf die Auswahl der ausführenden Firmen sichergestellt. Es können dadurch
+                        für jedes einzelne
+                        Gewerk die besten Anbieter beauftragt werden.
+                    </p>
+                    <p class="sc-text">
+                        Durch unsere kooperative und wertschätzende Kommunikation gelingt es zudem, ausgewählte Firmen
+                        und Handwerker so in das
+                        Projekt zu integrieren, dass diese – gerne – sich mit Ihrem Know How zur Findung bestmöglicher
+                        Lösungen einzubringen
+                    </p>
+                    <p class="sc-text">
+                        All dies wirkt sich genauso unmittelbar und positiv auf die Überwachung der Bauausführung durch
+                        unsere örtliche
+                        Bauleitung wie die kaufmännische Baubetreuung. Diese umfasst die Liquiditätssteuerung sowie
+                        Prüfung und Freigabe aller
+                        Rechnungen. Abgerundet wird dies durch die Abnahme und bei Bedarf Überwachung der
+                        Mängelbeseitigung.
+                    </p>
+                </div>
+
+                <!-- Sub-section -->
+                <h3 class="sc-subheading">
+                    Vermarktung
+                </h3>
+
+                <div class="sc-content">
+                    <p class="sc-text">
+                        Sofern notwendig oder gewünscht, übernehmen wir mit unserer Partnergesellschaft auch die
+                        Vermarktung Ihres Projektes.
+                        Sei es Vermietung oder Verkauf.
+                    </p>
+                    <p class="sc-text">
+                        Mit dem Gesamtangebot „aus einer Hand“ werden Bruchstellen zwischen den einzelnen Bereichen
+                        ausgeschlossen und der
+                        Projekterfolg durch die umfassende Projektentwicklung und Projektsteuerung bis zur örtlichen
+                        Bauleitung abgesichert
+                    </p>
+                    <p class="sc-text">
+                        Mit unserem Angebot „Baubetreuung Plus“ können Sie Ihren Einfluss auf Ihr Projekt sichern, ohne
+                        selbst die notwendigen
+                        Ressourcen an Zeit, Kompetenzen und Erfahrungen einbringen zu müssen.
+                    </p>
+                </div>
+            </div>
+        </article>
+        <!-- CTA Section -->
+        <section class="sc-cta">
+            <div class="sc-container sc-container--narrow">
+                <h2 class="sc-cta__title">Lassen Sie uns zusammenarbeiten.</h2>
+                <p class="sc-cta__text">
+                    Lassen Sie uns gemeinsam Ihr nächstes Projekt realisieren.
+                    Kontaktieren Sie uns für ein persönliches Beratungsgespräch.
+                </p>
+                <a href="kontakt.html" class="sc-cta__button">
+                    Jetzt Beratung anfragen
+                </a>
+            </div>
+        </section>
+    </main>
+
+
+    <footer class="casago-footer">
+        <div class="container">
+            <!-- Footer Top -->
+            <div class="footer-top">
+                <div class="row align-items-start">
+                    <!-- Brand & Address -->
+                    <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                        <a class="footer-brand" href="index.html">
+                            <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+                        </a>
+                        <address class="footer-address">
+                            <a href="https://maps.google.com/?q=Am+Queracker+6,+83134+Prutting" target="_blank"
+                                rel="noopener noreferrer" class="address-link">
+                                Am Queracker 6<br>
+                                83134 Prutting
+                            </a>
+                        </address>
+                    </div>
+
+                    <!-- Spacer for alignment -->
+                    <div class="col-lg-4 d-none d-lg-block"></div>
+
+                    <!-- Contact Info -->
+                    <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                        <div class="footer-contact">
+                            <a href="mailto:info@casago.de" class="contact-link">
+                                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M18 5l-8 5.5L2 5" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                info@casago.de
+                            </a>
+                            <a href="tel:+4980369086986" class="contact-link">
+                                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M18 13.5v2.25a1.5 1.5 0 01-1.636 1.493 14.85 14.85 0 01-6.485-2.307A14.625 14.625 0 014.8 9.858a14.85 14.85 0 01-2.307-6.507A1.5 1.5 0 013.98 1.5h2.25a1.5 1.5 0 011.5 1.29c.095.722.271 1.432.526 2.118a1.5 1.5 0 01-.338 1.583l-.952.953a12 12 0 005.063 5.063l.953-.953a1.5 1.5 0 011.583-.337c.686.255 1.396.43 2.118.526a1.5 1.5 0 011.29 1.522z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                +49 80 36 - 908 69 86
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Divider -->
+            <div class="footer-divider"></div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <!-- Copyright -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <p class="footer-copyright">
+                            © 2025 Casago GmbH. Alle Rechte vorbehalten.
+                        </p>
+                    </div>
+
+                    <!-- Legal Links -->
+                    <div class="col-12 col-md-6">
+                        <nav class="footer-legal">
+                            <a href="impressum.html" class="legal-link">Impressum</a>
+                            <a href="datenschutz.html" class="legal-link">Datenschutz</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    </div>
+</body>
+
+</html>

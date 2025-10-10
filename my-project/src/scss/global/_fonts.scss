@@ -1,0 +1,36 @@
+// ============================================
+// Font Definitions für CASAGO
+// ============================================
+
+// Inter Font Family (Beispiel - ersetze mit deinem Font)
+@font-face {
+  font-family: "Aeonik Pro";
+  src: url("../assets/fonts/AeonikPro-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; // Wichtig für Performance
+}
+
+@font-face {
+  font-family: "Aeonik Pro";
+  src: url("../assets/fonts/AeonikPro-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Aeonik Pro";
+  src: url("../assets/fonts/AeonikPro-Regular.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/AeonikPro-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

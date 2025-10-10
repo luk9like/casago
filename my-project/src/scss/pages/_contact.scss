@@ -1,0 +1,421 @@
+// ============================================
+// Contact Page Styles
+// ============================================
+
+// Variables
+$contact-max-width: 1200px;
+$form-focus-color: var(--bs-primary);
+$success-color: #10b981;
+$error-color: #ef4444;
+
+// Base Page
+.contact-page {
+  background: #000;
+  color: rgba(255, 255, 255, 0.75);
+  min-height: 100vh;
+}
+
+// ============================================
+// Hero Section
+// ============================================
+
+.contact-hero {
+  padding: 6rem 0 4rem;
+  text-align: center;
+
+  @include media-breakpoint-down(md) {
+    padding: 4rem 0 3rem;
+  }
+}
+
+.contact-hero__title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--bs-white);
+  margin-bottom: 1.5rem;
+
+  @include media-breakpoint-down(lg) {
+    font-size: 3rem;
+  }
+
+  @include media-breakpoint-down(md) {
+    font-size: 2.25rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    font-size: 1.875rem;
+  }
+}
+
+.contact-hero__subtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 700px;
+  margin: 0 auto;
+
+  @include media-breakpoint-down(md) {
+    font-size: 1.125rem;
+  }
+}
+
+// ============================================
+// Contact Content
+// ============================================
+
+.contact-content {
+  padding-bottom: 6rem;
+
+  @include media-breakpoint-down(md) {
+    padding-bottom: 4rem;
+  }
+}
+
+.contact-container {
+  max-width: $contact-max-width;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+
+  @include media-breakpoint-down(sm) {
+    padding: 0 1rem;
+  }
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4rem;
+
+  @include media-breakpoint-down(lg) {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  @include media-breakpoint-down(md) {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+.contact-section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--bs-white);
+  margin-bottom: 2rem;
+
+  @include media-breakpoint-down(md) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// ============================================
+// Contact Form
+// ============================================
+
+.contact-form {
+  // Form groups will be styled below
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+
+  &--checkbox {
+    margin-bottom: 2rem;
+  }
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.5rem;
+}
+
+.form-required {
+  color: var(--bs-primary);
+}
+
+// Input & Textarea Base Styles
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--bs-white);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $form-focus-color;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.1);
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9375rem;
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 3rem;
+}
+
+// Checkbox
+.form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.25rem;
+    margin-right: 0.75rem;
+    margin-top: 0.125rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    &:checked {
+      background: var(--bs-primary);
+      border-color: var(--bs-primary);
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 6px;
+        width: 4px;
+        height: 8px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.1);
+    }
+  }
+}
+
+.form-checkbox-label {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+
+  a {
+    color: var(--bs-white);
+    text-decoration: underline;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--bs-primary);
+    }
+  }
+}
+
+// Submit Button
+.form-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: var(--bs-primary);
+  color: var(--bs-white);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(var(--bs-primary-rgb), 0.35);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+  }
+}
+
+.form-submit-icon {
+  transition: transform 0.25s ease;
+
+  .form-submit:hover & {
+    transform: translateX(4px);
+  }
+}
+
+// Form Messages
+.form-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+  }
+
+  &--success {
+    background: rgba($success-color, 0.1);
+    border: 1px solid rgba($success-color, 0.3);
+    color: lighten($success-color, 10%);
+
+    svg {
+      stroke: $success-color;
+    }
+  }
+
+  &--error {
+    background: rgba($error-color, 0.1);
+    border: 1px solid rgba($error-color, 0.3);
+    color: lighten($error-color, 10%);
+
+    svg {
+      stroke: $error-color;
+    }
+  }
+}
+
+// ============================================
+// Contact Info Sidebar
+// ============================================
+
+.contact-info {
+  @include media-breakpoint-down(md) {
+    order: -1;
+  }
+}
+
+.contact-info-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.contact-info-block {
+  display: flex;
+  gap: 1rem;
+}
+
+.contact-info-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  color: var(--bs-white);
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.contact-info-content {
+  flex: 1;
+}
+
+.contact-info-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.contact-info-value {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.contact-info-link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--bs-white);
+  }
+}
+
+.contact-info-note {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+
+  p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+  }
+}

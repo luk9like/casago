@@ -1,0 +1,10 @@
+// Body Padding für Fixed Header
+body {
+  padding-top: 74px; // Höhe des Headers
+}
+
+@include media-breakpoint-down(md) {
+  body {
+    padding-top: 70px;
+  }
+}

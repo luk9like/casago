@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kontakt - CASAGO</title>
+    <link rel="stylesheet" href="scss/styles.scss">
+    <script type="module" src="js/main.js">
+
+        function loadjQuery(e, t) { var n = document.createElement("script"); n.setAttribute("src", e); n.onload = t; n.onreadystatechange = function () { if (this.readyState == "complete" || this.readyState == "loaded") t() }; document.getElementsByTagName("head")[0].appendChild(n) } function main() {
+            var $cr = jQuery.noConflict(); var old_src; $cr(document).ready(function () { $cr(".cr_form").submit(function () { $cr(this).find('.clever_form_error').removeClass('clever_form_error'); $cr(this).find('.clever_form_note').remove(); $cr(this).find(".musthave").find('input, textarea').each(function () { if (jQuery.trim($cr(this).val()) == "" || ($cr(this).is(':checkbox')) || ($cr(this).is(':radio'))) { if ($cr(this).is(':checkbox') || ($cr(this).is(':radio'))) { if (!$cr(this).parents(".cr_ipe_item").find(":checked").is(":checked")) { $cr(this).parents(".cr_ipe_item").addClass('clever_form_error') } } else { $cr(this).addClass('clever_form_error') } } }); if ($cr(this).attr("action").search(document.domain) > 0 && $cr(".cr_form").attr("action").search("wcs") > 0) { var cr_email = $cr(this).find('input[name=email]'); var unsub = false; if ($cr("input['name=cr_subunsubscribe'][value='false']").length) { if ($cr("input['name=cr_subunsubscribe'][value='false']").is(":checked")) { unsub = true } } if (cr_email.val() && !unsub) { $cr.ajax({ type: "GET", url: $cr(".cr_form").attr("action").replace("wcs", "check_email") + window.btoa($cr(this).find('input[name=email]').val()), success: function (data) { if (data) { cr_email.addClass('clever_form_error').before("<div class='clever_form_note cr_font'>" + data + "</div>"); return false } }, async: false }) } var cr_captcha = $cr(this).find('input[name=captcha]'); if (cr_captcha.val()) { $cr.ajax({ type: "GET", url: $cr(".cr_form").attr("action").replace("wcs", "check_captcha") + $cr(this).find('input[name=captcha]').val(), success: function (data) { if (data) { cr_captcha.addClass('clever_form_error').after("<div  class='clever_form_note cr_font'>" + data + "</div>"); return false } }, async: false }) } } if ($cr(this).find('.clever_form_error').length) { return false } return true }); $cr('input[class*="cr_number"]').change(function () { if (isNaN($cr(this).val())) { $cr(this).val(1) } if ($cr(this).attr("min")) { if (($cr(this).val() * 1) < ($cr(this).attr("min") * 1)) { $cr(this).val($cr(this).attr("min")) } } if ($cr(this).attr("max")) { if (($cr(this).val() * 1) > ($cr(this).attr("max") * 1)) { $cr(this).val($cr(this).attr("max")) } } }); old_src = $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src"); if ($cr("div[rel='captcha'] img:not(.captcha2_reload)").length != 0) { captcha_reload() } }); function captcha_reload() { var timestamp = new Date().getTime(); $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src", ""); $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src", old_src + "?t=" + timestamp); return false }
+
+        }
+        if (typeof jQuery === "undefined") { loadjQuery("//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js", main) } else { main() }
+
+    </script>
+    <script src="js/contact-form.js"></script>
+</head>
+
+<body>
+
+    <header class="casago-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <!-- Logo/Brand -->
+                <a class="navbar-brand" href="index.html">
+                    <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Navigation umschalten">
+                    <!-- <span class="navbar-toggler-icon"></span> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+                        <g transform="translate(-1836.087 -42.5)" style="isolation: isolate">
+                            <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff"
+                                stroke-width="3" />
+                            <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff"
+                                stroke-width="3" />
+                        </g>
+                    </svg>
+                </button>
+
+                <!-- Navigation Menu -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav mx-auto">
+                        <!-- Geschäftsfelder Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="geschaeftsfelder.html" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Geschäftsfelder
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="bautraeger.html">Bauträger</a></li>
+                                <li><a class="dropdown-item" href="#">Baubetreuung Plus</a></li>
+                                <li><a class="dropdown-item" href="#">gemeinsame Projektrealisierung</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Begrünung</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Über uns -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Über uns</a>
+                        </li>
+
+                        <!-- Projekte (falls vorhanden) -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="referenzen.html">Referenzen</a>
+                        </li>
+
+                        <!-- Kontakt -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#kontakt">Kontakt</a>
+                        </li>
+                    </ul>
+
+                    <!-- CTA Button -->
+                    <div class="d-flex mt-3 mt-lg-0">
+                        <a href="mailto:info@casago.de" class="btn btn-casago-primary">Anfrage senden</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="contact-page">
+
+        <!-- Hero Section -->
+        <section class="contact-hero">
+            <div class="sc-container-wide">
+                <h1 class="contact-hero__title">
+                    Lassen Sie uns über Ihr Projekt sprechen
+                </h1>
+                <p class="contact-hero__subtitle">
+                    Ob Bauträger, Baubetreuung, eine gemeinsame Projektrealisierung oder Begrünung – wir beraten Sie
+                    gerne
+                    persönlich.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Content -->
+        <section class="contact-content">
+            <div class="contact-container">
+                <div class="contact-grid">
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-wrapper">
+                        <h2 class="contact-section-title">Nachricht senden</h2>
+
+                        <form class="contact-form" id="contactForm" action="/submit-form" method="POST">
+                            <!-- Name -->
+                            <div class="form-group">
+                                <label for="name" class="form-label">
+                                    Name <span class="form-required">*</span>
+                                </label>
+                                <input type="text" id="name" name="name" class="form-input" required
+                                    placeholder="Max Mustermann">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email" class="form-label">
+                                    E-Mail <span class="form-required">*</span>
+                                </label>
+                                <input type="email" id="email" name="email" class="form-input" required
+                                    placeholder="max@beispiel.de">
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="form-group">
+                                <label for="phone" class="form-label">
+                                    Telefon
+                                </label>
+                                <input type="tel" id="phone" name="phone" class="form-input"
+                                    placeholder="+49 123 456789">
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="form-group">
+                                <label for="subject" class="form-label">
+                                    Betreff <span class="form-required">*</span>
+                                </label>
+                                <select id="subject" name="subject" class="form-select" required>
+                                    <option value="">Bitte wählen</option>
+                                    <option value="bautraeger">Bauträger</option>
+                                    <option value="baubetreuung">Baubetreuung</option>
+                                    <option value="baubetreuung-plus">Baubetreuung Plus</option>
+                                    <option value="gruendach">Gründach</option>
+                                    <option value="sonstiges">Sonstiges</option>
+                                </select>
+                            </div>
+
+                            <!-- Message -->
+                            <div class="form-group">
+                                <label for="message" class="form-label">
+                                    Ihre Nachricht <span class="form-required">*</span>
+                                </label>
+                                <textarea id="message" name="message" class="form-textarea" rows="6" required
+                                    placeholder="Beschreiben Sie Ihr Projekt..."></textarea>
+                            </div>
+
+                            <!-- Privacy Checkbox -->
+                            <div class="form-group form-group--checkbox">
+                                <label class="form-checkbox">
+                                    <input type="checkbox" id="privacy" name="privacy" required>
+                                    <span class="form-checkbox-label">
+                                        Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>
+                                        gelesen und akzeptiert. <span class="form-required">*</span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="form-submit">
+                                <span class="form-submit-text">Nachricht senden</span>
+                                <svg class="form-submit-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M4 10h12m0 0l-5-5m5 5-5 5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+
+                            <!-- Success Message -->
+                            <div class="form-message form-message--success" id="successMessage" style="display: none;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span>Vielen Dank! Ihre Nachricht wurde erfolgreich versendet.</span>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div class="form-message form-message--error" id="errorMessage" style="display: none;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span>Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</span>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Contact Info Sidebar -->
+                    <div class="contact-info">
+                        <h2 class="contact-section-title">Kontaktinformationen</h2>
+
+                        <div class="contact-info-blocks">
+                            <!-- Address -->
+                            <div class="contact-info-block">
+                                <div class="contact-info-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h3 class="contact-info-label">Adresse</h3>
+                                    <a href="https://maps.google.com/?q=Am+Queracker+6,+83134+Prutting" target="_blank"
+                                        rel="noopener" class="contact-info-value contact-info-link">
+                                        Am Queracker 6<br>
+                                        83134 Prutting
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="contact-info-block">
+                                <div class="contact-info-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h3 class="contact-info-label">E-Mail</h3>
+                                    <a href="mailto:info@casago.de" class="contact-info-value contact-info-link">
+                                        info@casago.de
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="contact-info-block">
+                                <div class="contact-info-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h3 class="contact-info-label">Telefon</h3>
+                                    <a href="tel:+4980369086986" class="contact-info-value contact-info-link">
+                                        +49 80 36 - 908 69 86
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Office Hours -->
+                            <!-- <div class="contact-info-block">
+                                <div class="contact-info-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                                        <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                                <div class="contact-info-content">
+                                    <h3 class="contact-info-label">Öffnungszeiten</h3>
+                                    <div class="contact-info-value">
+                                        Mo–Fr: 08:00–17:00 Uhr<br>
+                                        Sa–So: Geschlossen
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                            <!-- Additional Info -->
+                            <div class="contact-info-note">
+                                <p>
+                                    Sie erreichen uns telefonisch während unserer Geschäftszeiten.
+                                    Außerhalb dieser Zeiten können Sie uns gerne eine Nachricht
+                                    über das Kontaktformular senden.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </section>
+
+    </main>
+
+    <footer class="casago-footer">
+        <div class="container">
+            <!-- Footer Top -->
+            <div class="footer-top">
+                <div class="row align-items-start">
+                    <!-- Brand & Address -->
+                    <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                        <a class="footer-brand" href="index.html">
+                            <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+                        </a>
+                        <address class="footer-address">
+                            <a href="https://maps.google.com/?q=Am+Queracker+6,+83134+Prutting" target="_blank"
+                                rel="noopener noreferrer" class="address-link">
+                                Am Queracker 6<br>
+                                83134 Prutting
+                            </a>
+                        </address>
+                    </div>
+
+                    <!-- Spacer for alignment -->
+                    <div class="col-lg-4 d-none d-lg-block"></div>
+
+                    <!-- Contact Info -->
+                    <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                        <div class="footer-contact">
+                            <a href="mailto:info@casago.de" class="contact-link">
+                                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M18 5l-8 5.5L2 5" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                info@casago.de
+                            </a>
+                            <a href="tel:+4980369086986" class="contact-link">
+                                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path
+                                        d="M18 13.5v2.25a1.5 1.5 0 01-1.636 1.493 14.85 14.85 0 01-6.485-2.307A14.625 14.625 0 014.8 9.858a14.85 14.85 0 01-2.307-6.507A1.5 1.5 0 013.98 1.5h2.25a1.5 1.5 0 011.5 1.29c.095.722.271 1.432.526 2.118a1.5 1.5 0 01-.338 1.583l-.952.953a12 12 0 005.063 5.063l.953-.953a1.5 1.5 0 011.583-.337c.686.255 1.396.43 2.118.526a1.5 1.5 0 011.29 1.522z"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                +49 80 36 - 908 69 86
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Divider -->
+            <div class="footer-divider"></div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <!-- Copyright -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <p class="footer-copyright">
+                            © 2025 Casago GmbH. Alle Rechte vorbehalten.
+                        </p>
+                    </div>
+
+                    <!-- Legal Links -->
+                    <div class="col-12 col-md-6">
+                        <nav class="footer-legal">
+                            <a href="impressum.html" class="legal-link">Impressum</a>
+                            <a href="datenschutz.html" class="legal-link">Datenschutz</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+</body>
+
+</html>

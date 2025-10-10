@@ -1,303 +1,676 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CASAGO</title>
-    <link rel="stylesheet" href="scss/styles.scss">
-    <script type="module" src="js/main.js">
 
-    function loadjQuery(e,t){var n=document.createElement("script");n.setAttribute("src",e);n.onload=t;n.onreadystatechange=function(){if(this.readyState=="complete"||this.readyState=="loaded")t()};document.getElementsByTagName("head")[0].appendChild(n)}function main(){
-    var $cr=jQuery.noConflict();var old_src;$cr(document).ready(function(){$cr(".cr_form").submit(function(){$cr(this).find('.clever_form_error').removeClass('clever_form_error');$cr(this).find('.clever_form_note').remove();$cr(this).find(".musthave").find('input, textarea').each(function(){if(jQuery.trim($cr(this).val())==""||($cr(this).is(':checkbox'))||($cr(this).is(':radio'))){if($cr(this).is(':checkbox')||($cr(this).is(':radio'))){if(!$cr(this).parents(".cr_ipe_item").find(":checked").is(":checked")){$cr(this).parents(".cr_ipe_item").addClass('clever_form_error')}}else{$cr(this).addClass('clever_form_error')}}});if($cr(this).attr("action").search(document.domain)>0&&$cr(".cr_form").attr("action").search("wcs")>0){var cr_email=$cr(this).find('input[name=email]');var unsub=false;if($cr("input['name=cr_subunsubscribe'][value='false']").length){if($cr("input['name=cr_subunsubscribe'][value='false']").is(":checked")){unsub=true}}if(cr_email.val()&&!unsub){$cr.ajax({type:"GET",url:$cr(".cr_form").attr("action").replace("wcs","check_email")+window.btoa($cr(this).find('input[name=email]').val()),success:function(data){if(data){cr_email.addClass('clever_form_error').before("<div class='clever_form_note cr_font'>"+data+"</div>");return false}},async:false})}var cr_captcha=$cr(this).find('input[name=captcha]');if(cr_captcha.val()){$cr.ajax({type:"GET",url:$cr(".cr_form").attr("action").replace("wcs","check_captcha")+$cr(this).find('input[name=captcha]').val(),success:function(data){if(data){cr_captcha.addClass('clever_form_error').after("<div  class='clever_form_note cr_font'>"+data+"</div>");return false}},async:false})}}if($cr(this).find('.clever_form_error').length){return false}return true});$cr('input[class*="cr_number"]').change(function(){if(isNaN($cr(this).val())){$cr(this).val(1)}if($cr(this).attr("min")){if(($cr(this).val()*1)<($cr(this).attr("min")*1)){$cr(this).val($cr(this).attr("min"))}}if($cr(this).attr("max")){if(($cr(this).val()*1)>($cr(this).attr("max")*1)){$cr(this).val($cr(this).attr("max"))}}});old_src=$cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src");if($cr("div[rel='captcha'] img:not(.captcha2_reload)").length!=0){captcha_reload()}});function captcha_reload(){var timestamp=new Date().getTime();$cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src","");$cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src",old_src+"?t="+timestamp);return false}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CASAGO</title>
+  <link rel="stylesheet" href="scss/styles.scss">
+  <script type="module" src="js/main.js">
+
+    function loadjQuery(e, t) { var n = document.createElement("script"); n.setAttribute("src", e); n.onload = t; n.onreadystatechange = function () { if (this.readyState == "complete" || this.readyState == "loaded") t() }; document.getElementsByTagName("head")[0].appendChild(n) } function main() {
+      var $cr = jQuery.noConflict(); var old_src; $cr(document).ready(function () { $cr(".cr_form").submit(function () { $cr(this).find('.clever_form_error').removeClass('clever_form_error'); $cr(this).find('.clever_form_note').remove(); $cr(this).find(".musthave").find('input, textarea').each(function () { if (jQuery.trim($cr(this).val()) == "" || ($cr(this).is(':checkbox')) || ($cr(this).is(':radio'))) { if ($cr(this).is(':checkbox') || ($cr(this).is(':radio'))) { if (!$cr(this).parents(".cr_ipe_item").find(":checked").is(":checked")) { $cr(this).parents(".cr_ipe_item").addClass('clever_form_error') } } else { $cr(this).addClass('clever_form_error') } } }); if ($cr(this).attr("action").search(document.domain) > 0 && $cr(".cr_form").attr("action").search("wcs") > 0) { var cr_email = $cr(this).find('input[name=email]'); var unsub = false; if ($cr("input['name=cr_subunsubscribe'][value='false']").length) { if ($cr("input['name=cr_subunsubscribe'][value='false']").is(":checked")) { unsub = true } } if (cr_email.val() && !unsub) { $cr.ajax({ type: "GET", url: $cr(".cr_form").attr("action").replace("wcs", "check_email") + window.btoa($cr(this).find('input[name=email]').val()), success: function (data) { if (data) { cr_email.addClass('clever_form_error').before("<div class='clever_form_note cr_font'>" + data + "</div>"); return false } }, async: false }) } var cr_captcha = $cr(this).find('input[name=captcha]'); if (cr_captcha.val()) { $cr.ajax({ type: "GET", url: $cr(".cr_form").attr("action").replace("wcs", "check_captcha") + $cr(this).find('input[name=captcha]').val(), success: function (data) { if (data) { cr_captcha.addClass('clever_form_error').after("<div  class='clever_form_note cr_font'>" + data + "</div>"); return false } }, async: false }) } } if ($cr(this).find('.clever_form_error').length) { return false } return true }); $cr('input[class*="cr_number"]').change(function () { if (isNaN($cr(this).val())) { $cr(this).val(1) } if ($cr(this).attr("min")) { if (($cr(this).val() * 1) < ($cr(this).attr("min") * 1)) { $cr(this).val($cr(this).attr("min")) } } if ($cr(this).attr("max")) { if (($cr(this).val() * 1) > ($cr(this).attr("max") * 1)) { $cr(this).val($cr(this).attr("max")) } } }); old_src = $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src"); if ($cr("div[rel='captcha'] img:not(.captcha2_reload)").length != 0) { captcha_reload() } }); function captcha_reload() { var timestamp = new Date().getTime(); $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src", ""); $cr("div[rel='captcha'] img:not(.captcha2_reload)").attr("src", old_src + "?t=" + timestamp); return false }
 
     }
-    if(typeof jQuery==="undefined"){loadjQuery("//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js",main)}else{main()}
+    if (typeof jQuery === "undefined") { loadjQuery("//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js", main) } else { main() }
 
-    </script>
-  </head>
-  <body>
-    <nav class="navbar sticky-top bg-cas-primary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
-          <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortbildmarke">
-        </a>
-        <button class="btn menu-open d-flex align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">        
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14"><g transform="translate(-1836.087 -42.5)" style="isolation:isolate"><line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3"/><line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3"/></g></svg>
-        </button>
-        <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
-          <div class="offcanvas-header">
-            <a class="navbar-brand" href="index.html">
-              <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortbildmarke">
-            </a>
-            <!-- <h5 class="offcanvas-title" id="offcanvasTopLabel">Menu</h5> -->
-            <button class="btn btn-close d-flex align-items-center justify-content-center" type="button" data-bs-dismiss="offcanvas" aria-label="Close">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21.917" height="21.919" viewBox="0 0 21.917 21.919"><g transform="translate(-1832.044 -70.12)"><path d="M4483-10121.92h28" transform="translate(5820.42 10418.219) rotate(-45)" fill="none" stroke="#fff" stroke-width="3"/><path d="M0,0H28" transform="translate(1852.9 90.978) rotate(-135)" fill="none" stroke="#fff" stroke-width="3"/></g></svg>
-            </button>
-          </div>
-          <div class="offcanvas-body">
-            <div class="container-fluid">
+  </script>
 
-              <ul class="nav flex-column flex-sm-row">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/src/ueber-uns.html">
-                    <span class="title">Über uns</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/src/geschaeftsfelder.html">
-                    <span class="title">Geschäftsfelder</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <span class="title">Referenzen</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <span class="title">Kontakt</span>
-                  </a>
-                </li>
-              </ul>
+  <script type="module" src="js/hero-slider.js"></script>
+</head>
 
-            </div>
+<body>
+
+  <!-- <nav class="navbar sticky-top bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+      </a>
+      <button class="btn menu-open d-flex align-items-center justify-content-center" type="button"
+        data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+          <g transform="translate(-1836.087 -42.5)" style="isolation:isolate">
+            <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3" />
+            <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3" />
+          </g>
+        </svg>
+      </button>
+      <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+        <div class="offcanvas-header">
+          <a class="navbar-brand" href="index.html">
+            <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+          </a>
+          <button class="btn btn-close d-flex align-items-center justify-content-center" type="button"
+            data-bs-dismiss="offcanvas" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21.917" height="21.919" viewBox="0 0 21.917 21.919">
+              <g transform="translate(-1832.044 -70.12)">
+                <path d="M4483-10121.92h28" transform="translate(5820.42 10418.219) rotate(-45)" fill="none"
+                  stroke="#fff" stroke-width="3" />
+                <path d="M0,0H28" transform="translate(1852.9 90.978) rotate(-135)" fill="none" stroke="#fff"
+                  stroke-width="3" />
+              </g>
+            </svg>
+          </button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="container-fluid">
+
+            <ul class="nav flex-column flex-sm-row">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/src/ueber-uns.html">
+                  <span class="title">Über uns</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/src/geschaeftsfelder.html">
+                  <span class="title">Geschäftsfelder</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span class="title">Referenzen</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span class="title">Kontakt</span>
+                </a>
+              </li>
+            </ul>
+
           </div>
         </div>
-      
+      </div>
+
+    </div>
+  </nav> -->
+
+  <header class="casago-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <!-- Logo/Brand -->
+        <a class="navbar-brand" href="index.html">
+          <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+          aria-controls="navbarMain" aria-expanded="false" aria-label="Navigation umschalten">
+          <!-- <span class="navbar-toggler-icon"></span> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+            <g transform="translate(-1836.087 -42.5)" style="isolation: isolate">
+              <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3" />
+              <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3" />
+            </g>
+          </svg>
+        </button>
+
+        <!-- Navigation Menu -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav mx-auto">
+            <!-- Geschäftsfelder Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="geschaeftsfelder.html" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Geschäftsfelder
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Bauträger</a></li>
+                <li><a class="dropdown-item" href="#">Baubetreuung Plus</a></li>
+                <li><a class="dropdown-item" href="#">gemeinsame
+                    Projektrealisierung</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Begrünung</a></li>
+              </ul>
+            </li>
+
+            <!-- Über uns -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Über uns</a>
+            </li>
+
+            <!-- Projekte (falls vorhanden) -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Referenzen</a>
+            </li>
+
+            <!-- Kontakt -->
+            <li class="nav-item">
+              <a class="nav-link" href="kontakt.html">Kontakt</a>
+            </li>
+          </ul>
+
+          <!-- CTA Button -->
+          <div class="d-flex mt-3 mt-lg-0">
+            <a href="mailto:info@casago.de" class="btn btn-casago-primary">Anfrage senden</a>
+          </div>
+        </div>
       </div>
     </nav>
-    <div class="container-wide">
-      <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-bs-interval="4200">
-            <img src="/src/assets/rott-luftbild-perspektive.png" class="d-block w-100 h-60" alt="...">
-          </div>
-          <div class="carousel-item" data-bs-interval="4200">
-            <img src="/src/assets/rott-luftbild-perspektive-detail.png" class="d-block w-100 h-60" alt="...">
-          </div>
-          <div class="carousel-item" data-bs-interval="4200">
-            <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="d-block w-100 h-60" alt="...">
-          </div>
-        </div>
+  </header>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+  <!-- 
+  <div class="container-wide">
+    <div id="carouselExampleIndicators" class="carousel carousel-fade" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+          aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+          aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+          aria-label="Slide 3"></button>
       </div>
-    </div>
-   
-
-    <!-- <div class="container pt-2">
-      <img class="fluid" src="/src/assets/rott-luftbild-perspektive.png"alt="Bauprojekt Rott Panorama" width="100%">
-    </div> -->
-<!-- 
-  <section class="stage">
-    <div class="container-wide">
-      <div class="row">
-        <div class="img-fluid" src="/src/assets/rott-luftbild-dachaufnahme.png">
-          
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="4200">
+          <img src="/src/assets/rott-luftbild-perspektive.png" class="d-block w-100 h-60" alt="...">
+        </div>
+        <div class="carousel-item" data-bs-interval="4200">
+          <img src="/src/assets/rott-luftbild-perspektive-detail.png" class="d-block w-100 h-60" alt="...">
+        </div>
+        <div class="carousel-item" data-bs-interval="4200">
+          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="d-block w-100 h-60" alt="...">
         </div>
       </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
-  </section> -->
+  </div> -->
 
+  <section class="hero-slider">
+    <div class="hero-slider__wrapper">
 
-  <section class="stage">
-    <div class="container-fluid pb-4">
-      <div class="row">
-        <div class="cta col-sm-12">
-          <h2 class="col-sm-12 col-xl-8 mx-auto">Unsere Geschäftsbereiche</h2>
-          <p class="text col-sm-12 col-xl-6 mx-auto">Ein paar konkrete Eckpunkte für ihr Vorhaben, helfen uns herauszufinden wie wir optimal zusammenarbeiten können.</p>
-          <a href="mailto:info@casago.de" type="button" class="btn btn-outline-light m-2">Projektanfrage</a>
-          <a class="m-2" href="mailto:info@casago.de">E-Mail senden</a>
-        
+      <!-- Slides -->
+      <div class="hero-slider__track">
 
-
-
-
-        <!-- <div class="newsletter col-12 mx-auto">
-          <form class="layout_form cr_form cr_font" action="https://seu2.cleverreach.com/f/408779-400164/wcs/" method="post" target="_blank">
-            <div class="cr_body cr_page cr_font formbox">
-              <div class="non_sortable">
-                
-              </div>
-              
-              <div class="editable_content col-sm-8 col-md-6 col-xl-4 mx-auto">
-              <div id="9099191" rel="email" class="cr_form-component cr_form-component--email cr_ipe_item ui-sortable musthave" >
-              <div class="cr_form-inputgroup cr_form-inputgroup--typeemail">
-                  <input class="form-control cr_form-input" type="email" id="text9099191" name="email" value="" placeholder="Ihre Mailadresse" >
-              </div>
-          </div><div id="9099195" rel="recaptcha" class="cr_ipe_item ui-sortable musthave">
-
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-            <br/>
-            <div id="recaptcha_v2_widget" class="g-recaptcha" data-theme="light" data-size="normal" data-sitekey="6Lfhcd0SAAAAAOBEHmAVEHJeRnrH8T7wPvvNzEPD"></div>
-            <br/>
-           </div>
-          <div id="9099193" rel="button" class="cr_form-component cr_form-component--submit cr_ipe_item ui-sortable  submit_container">
-              <button type="submit" class="btn btn-outline-light cr_form-block cr_button">Eintragen</button>
+        <!-- Slide 1 -->
+        <div class="hero-slide hero-slide--active">
+          <div class="hero-slide__image-wrapper">
+            <img src="assets/images/startseite/luftbild-kran.png" alt="luftbild-kran" class="hero-slide__image"
+              loading="eager">
+            <div class="hero-slide__overlay"></div>
           </div>
-          </div>
-                  
-            <noscript><a href="http://www.cleverreach.de">www.CleverReach.de</a></noscript>
+          <div class="hero-slide__content">
+            <div class="container">
+              <h2 class="hero-slide__title">Baubetreuung Plus</h2>
+              <p class="hero-slide__text">
+                Von der ersten Idee bis zur schlüsselfertigen Übergabe
+              </p>
+              <!-- <a href="#" class="hero-slide__button">
+                  Mehr erfahren
+                </a> -->
             </div>
-          </form>
-        </div>  -->
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="hero-slide">
+          <div class="hero-slide__image-wrapper">
+            <img src="assets/images/startseite/Handwerkerstolz.jpg" alt="Handwerker am Dach" class="hero-slide__image"
+              loading="lazy">
+            <div class="hero-slide__overlay"></div>
+          </div>
+          <div class="hero-slide__content">
+            <div class="container">
+              <h2 class="hero-slide__title">Partnerschaftliche Zusammenarbeit</h2>
+              <p class="hero-slide__text">
+                Ihr persönlicher Partner für komplexe Bauprojekte
+              </p>
+              <!-- <a href="#" class="hero-slide__button">
+                  Mehr erfahren
+                </a> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="hero-slide">
+          <div class="hero-slide__image-wrapper">
+            <img src="assets/images/startseite/ideen-manifestieren_cropped.jpg" alt="Gründach Projekt Rott"
+              class="hero-slide__image" loading="lazy">
+            <div class="hero-slide__overlay"></div>
+          </div>
+          <div class="hero-slide__content">
+            <div class="container">
+              <h2 class="hero-slide__title">Nachhaltige Gründächer</h2>
+              <p class="hero-slide__text">
+                Ökologisch wertvoll und architektonisch ansprechend
+              </p>
+              <!-- <a href="#" class="hero-slide__button">
+                  Mehr erfahren
+                </a> -->
+            </div>
+          </div>
+        </div>
 
       </div>
-    </div>
 
-  <div class="container-fluid bg-cas-primary">
- 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Bauträger</h5>
-            <p class="card-text text-body-secondary">Wir sind Bauträger für ihr Projekt.</p>
-            <a class="card-links" href="#">Mehr anzeigen</a>
-          </div>
+      <!-- Subtle Navigation Dots -->
+      <div class="hero-slider__dots">
+        <button class="hero-slider__dot hero-slider__dot--active" aria-label="Slide 1" data-slide="0"></button>
+        <button class="hero-slider__dot" aria-label="Slide 2" data-slide="1"></button>
+        <button class="hero-slider__dot" aria-label="Slide 3" data-slide="2"></button>
+      </div>
+
+      <!-- Optional: Minimale Pfeile (nur sichtbar beim Hover) -->
+      <button class="hero-slider__arrow hero-slider__arrow--prev" aria-label="Vorheriges Bild">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button class="hero-slider__arrow hero-slider__arrow--next" aria-label="Nächstes Bild">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <!-- Progress Bar (optional) -->
+      <div class="hero-slider__progress">
+        <div class="hero-slider__progress-bar"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="casago-cards-section">
+    <div class="container">
+      <!-- Optional: Section Header -->
+      <div class="row mb-5">
+        <div class="col-12 text-center">
+          <h2 class="section-title">Unsere Geschäftsfelder</h2>
+          <p class="section-subtitle">Mit Partnerschaften auf Augenhöhe
+            zum gemeinsamen Projekt</p>
         </div>
       </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Baubetreuung</h5>
-            <p class="card-text text-body-secondary">Wir sind Baubetreuer für ihr Projekt.</p>
-            <a class="card-links" href="#">Mehr anzeigen</a>
+
+      <!-- Cards Grid -->
+      <div class="row g-4">
+        <!-- Card 1: Bauträger -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="casago-card">
+            <div class="card-image-wrapper">
+              <img
+                src="assets/images/referenzen/Aschau-im-Chiemgau/20250821_1745_Modern German House_remix_01k36mqvq1eqsr2q64dvnyzsq4.png"
+                alt="Bauträger" class="card-image">
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Bauträger</h3>
+              <p class="card-text">
+                Realisierung von zukunftssicheren, werthaltigen Immobilien
+              </p>
+              <a href="bautraeger.html" class="card-link">
+                Zum Geschäftsfeld
+                <svg class="link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M1 8h14m0 0L8 1m7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Baubetreuung Plus</h5>
-            <p class="card-text text-body-secondary">Zum gemeinsamen Projekt</p>
-            <a class="card-links" href="#">Mehr anzeigen</a>
+
+        <!-- Card 2: Baubetreuung -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="casago-card">
+            <div class="card-image-wrapper">
+              <img
+                src="assets/images/referenzen/Aschau-im-Chiemgau/20250821_1745_Modern German House_remix_01k36mqvq1eqsr2q64dvnyzsq4.png"
+                alt="Baubetreuung" class="card-image">
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Baubetreuung Plus</h3>
+              <p class="card-text">
+                Die Alternative für Bauherrn
+              </p>
+              <a href="#" class="card-link">
+                Zum Geschäftsfeld
+                <svg class="link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M1 8h14m0 0L8 1m7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Gründach</h5>
-            <p class="card-text text-body-secondary">Ihr Partner für smarte Gründachanlagen</p>
-            <a class="card-links" href="#">Mehr anzeigen</a>
+
+        <!-- Card 3: Baubetreuung Plus -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="casago-card">
+            <div class="card-image-wrapper">
+              <img
+                src="assets/images/referenzen/Aschau-im-Chiemgau/20250821_1745_Modern German House_remix_01k36mqvq1eqsr2q64dvnyzsq4.png"
+                alt="Baubetreuung Plus" class="card-image">
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Gemeinsame Projektrealisierung</h3>
+              <p class="card-text">
+                Mehr Wert für Immobilienbesitzer
+              </p>
+              <a href="#" class="card-link">
+                Zum Geschäftsfeld
+                <svg class="link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M1 8h14m0 0L8 1m7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional: Card 4: Gründach -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="casago-card">
+            <div class="card-image-wrapper">
+              <img
+                src="assets/images/referenzen/Aschau-im-Chiemgau/20250821_1745_Modern German House_remix_01k36mqvq1eqsr2q64dvnyzsq4.png"
+                alt="Gründach" class="card-image">
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">Dachbegrünung & Schwammstadtkonzepte</h3>
+              <p class="card-text">
+                Wir denken Begrünung mehrdimensional!
+              </p>
+              <a href="#" class="card-link">
+                Zum Geschäftsfeld
+                <svg class="link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M1 8h14m0 0L8 1m7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <section class="casago-stories-section">
+    <div class="container">
+      <!-- Section Header -->
+      <div class="stories-header">
+        <h2 class="stories-title">Pressestimmen</h2>
+        <!-- <a href="referenzen.html" class="stories-link">
+          Alle ansehen
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M1 8h14m0 0L8 1m7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a> -->
+      </div>
+
+      <!-- Stories Grid -->
+      <div class="row g-4">
+        <!-- Story Card 1 -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <a href="https://www.ingenieur.de/fachmedien/bauingenieur/produkte-bauingenieur/aus-lehm-roggen-holzfasern/"
+            class="story-card">
+            <div class="story-icon">
+              <!-- <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <rect width="40" height="40" rx="10" fill="#fff" />
+                <path d="M20 10v20M10 20h20" stroke="#000" stroke-width="2.5" stroke-linecap="round" />
+              </svg> -->
+              <img src="assets/images/pressestimmen/ingenieur-de-logo.svg" alt="">
+            </div>
+            <div class="story-content">
+              <div class="story-company">Der Bauingenieur</div>
+              <h3 class="story-headline">Die Panels der Secalflor Gründachaufbauten sorgen für optimales
+                Pflanzenwachstum.
+              </h3>
+            </div>
+          </a>
+        </div>
+
+        <!-- Story Card 2 -->
+        <!-- <div class="col-12 col-sm-6 col-lg-3">
+          <a href="#" class="story-card">
+            <div class="story-icon" style="background: #E8FF59;">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <rect width="40" height="40" rx="10" fill="#E8FF59" />
+                <path d="M15 25L20 15L25 25" stroke="#000" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M17 22h6" stroke="#000" stroke-width="2.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="story-content">
+              <div class="story-company">Stadtentwicklung Nord</div>
+              <h3 class="story-headline">Effiziente Quartiersentwicklung durch kompetente Baubetreuung</h3>
+            </div>
+          </a>
+        </div> -->
+
+        <!-- Story Card 3 -->
+        <!-- <div class="col-12 col-sm-6 col-lg-3">
+          <a href="#" class="story-card">
+            <div class="story-icon" style="background: #FF6B35;">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <rect width="40" height="40" rx="10" fill="#FF6B35" />
+                <path d="M12 20h16M20 12v16" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="20" cy="20" r="6" stroke="#fff" stroke-width="2.5" />
+              </svg>
+            </div>
+            <div class="story-content">
+              <div class="story-company">Wohnbau Süd AG</div>
+              <h3 class="story-headline">Moderne Sanierung mit Gründach-Integration</h3>
+            </div>
+          </a>
+        </div> -->
+
+        <!-- Story Card 4 -->
+        <!-- <div class="col-12 col-sm-6 col-lg-3">
+          <a href="#" class="story-card">
+            <div class="story-icon" style="background: #4ECDC4;">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <rect width="40" height="40" rx="10" fill="#4ECDC4" />
+                <path d="M25 15L20 20L15 15M15 25L20 20L25 25" stroke="#000" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="story-content">
+              <div class="story-company">CASAGO Bauträger</div>
+              <h3 class="story-headline">Nachhaltiger Geschosswohnungsbau mit Zukunft</h3>
+            </div>
+          </a>
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <section class="casago-slider-section">
+    <div class="container-fluid">
+      <!-- Section Header -->
+      <div class="slider-header">
+        <h3 class="slider-title">Unsere aktuellen Projekte</h3>
+        <a href="referenzen.html" class="slider-link">
+          weitere Projekte
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M1 8h14m0 0L8 1m7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Slider Container -->
+      <div class="casago-slider">
+        <div class="slider-wrapper">
+          <div class="slider-track">
+
+            <!-- Slide 1 -->
+            <div class="slider-item">
+              <a href="#" class="slider-tile">
+                <div class="slider-tile__image-wrapper">
+                  <img
+                    src="assets/images/referenzen/Aschau-im-Chiemgau/20250821_1706_Modern German House Visualization_remix_01k36jgzbzejfa6e25xsn9bkam.png"
+                    alt="Moderner Wohnkomplex Hamburg" class="slider-tile__image">
+                  <div class="slider-tile__overlay"></div>
+                </div>
+                <div class="slider-tile__content">
+                  <h3 class="slider-tile__title">Aufstockung und Sanierung eines Einfamilienhauses</h3>
+                  <p class="slider-tile__subtitle">Baubetreuung • Aschau im Chiemgau</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slider-item">
+              <a href="#" class="slider-tile">
+                <div class="slider-tile__image-wrapper">
+                  <img src="assets/images/referenzen/Edling/ED-AG13_Bild_2025-09-30_Visu03.jpg"
+                    alt="Altstadt Revitalisierung Amsterdam" class="slider-tile__image">
+                  <div class="slider-tile__overlay"></div>
+                </div>
+                <div class="slider-tile__content">
+                  <h3 class="slider-tile__title">Mehrfamilienhaus mit Ferienwohnungen</h3>
+                  <p class="slider-tile__subtitle">Bauträger & Begrünung • Edlingen</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slider-item">
+              <a href="#" class="slider-tile">
+                <div class="slider-tile__image-wrapper">
+                  <img src="assets/images/referenzen/Rott-am-Inn/rott-luftbild-Isometrie.jpg" Historisches Stadthaus"
+                    class="slider-tile__image">
+                  <div class="slider-tile__overlay"></div>
+                </div>
+                <div class="slider-tile__content">
+                  <h3 class="slider-tile__title">Neubau eines modernen Firmengebäudes</h3>
+                  <p class="slider-tile__subtitle">Baubetreuung • Rott am Inn</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slider-item">
+              <a href="#" class="slider-tile">
+                <div class="slider-tile__image-wrapper">
+                  <img src="assets/images/referenzen/Coburg/coburg-eingang.png" alt="Fachwerkhaus Coburg"
+                    class="slider-tile__image">
+                  <div class="slider-tile__overlay"></div>
+                </div>
+                <div class="slider-tile__content">
+                  <h3 class="slider-tile__title">Sanierung eines historischen Fachwerkhauses</h3>
+                  <p class="slider-tile__subtitle">Baubetreuung • Coburg</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Weitere Slides nach Bedarf -->
+
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <button class="slider-nav slider-nav--prev" aria-label="Vorheriges Projekt">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button class="slider-nav slider-nav--next" aria-label="Nächstes Projekt">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
   </section>
 
 
-<!-- <section class="cards">
-  <div class="container-wide bg-cas-primary">
- 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+  <footer class="casago-footer">
+    <div class="container">
+      <!-- Footer Top -->
+      <div class="footer-top">
+        <div class="row align-items-start">
+          <!-- Brand & Address -->
+          <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <a class="footer-brand" href="index.html">
+              <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+            </a>
+            <address class="footer-address">
+              <a href="https://maps.google.com/?q=Am+Queracker+6,+83134+Prutting" target="_blank"
+                rel="noopener noreferrer" class="address-link">
+                Am Queracker 6<br>
+                83134 Prutting
+              </a>
+            </address>
+          </div>
+
+          <!-- Spacer for alignment -->
+          <div class="col-lg-4 d-none d-lg-block"></div>
+
+          <!-- Contact Info -->
+          <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <div class="footer-contact">
+              <a href="mailto:info@casago.de" class="contact-link">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M18 5l-8 5.5L2 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                info@casago.de
+              </a>
+              <a href="tel:+4980369086986" class="contact-link">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M18 13.5v2.25a1.5 1.5 0 01-1.636 1.493 14.85 14.85 0 01-6.485-2.307A14.625 14.625 0 014.8 9.858a14.85 14.85 0 01-2.307-6.507A1.5 1.5 0 013.98 1.5h2.25a1.5 1.5 0 011.5 1.29c.095.722.271 1.432.526 2.118a1.5 1.5 0 01-.338 1.583l-.952.953a12 12 0 005.063 5.063l.953-.953a1.5 1.5 0 011.583-.337c.686.255 1.396.43 2.118.526a1.5 1.5 0 011.29 1.522z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                +49 80 36 - 908 69 86
+              </a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a short card.</p>
+
+      <!-- Footer Divider -->
+      <div class="footer-divider"></div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="row align-items-center">
+          <!-- Copyright -->
+          <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <p class="footer-copyright">
+              © 2025 Casago GmbH. Alle Rechte vorbehalten.
+            </p>
           </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="/src/assets/rott-luftbild-dachaufnahme.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+
+          <!-- Legal Links -->
+          <div class="col-12 col-md-6">
+            <nav class="footer-legal">
+              <a href="impressum.html" class="legal-link">Impressum</a>
+              <a href="datenschutz.html" class="legal-link">Datenschutz</a>
+            </nav>
           </div>
         </div>
       </div>
     </div>
+  </footer>
+
 
   </div>
-</section> -->
 
-
-<section class="footer">
-  <div class="container">
-    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5">
-      <div class="col mb-3">
-        <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-          <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg">
-        </a>
-        <hr>
-        
-        <p class="text-body-secondary pt-2">Am Queracker 6 <br>
-          83134 Prutting</p>
-
-        <p class="text-body-white pt-4">© 2024 CASAGO GmbH. Alle Rechte vorbehalten.</p>
-      </div>
-
-      <div class="col mb-3">
-  
-      </div>
-  
-      <div class="col mb-3">
-
-      </div>
-  
-      <div class="col mb-3">
-     
-      </div>
-  
-      <div class="col mb-3">
-        <h5>Kontakt</h5>
-        <a href="mailto:info@casago.de">info@casago.de</a>
-        <br>
-        <a href="tel:+4980369086986">+49 803 690869-86</a>        
-        <p class="pt-4"></p>
-        <a href="/src/impressum.html">Impressum</a>
-        <a href="/src/datenschutz.html">Datenschutz</a>
-      </div>
-    </footer>
-  </div>
-</section>
-
-  
- 
-    </div>
-
-    <!-- <div class="container py-4 px-3 mx-auto">
+  <!-- <div class="container py-4 px-3 mx-auto">
       <h1>Hello, Bootstrap and Parcel!</h1>
       <button class="btn btn-outline">Primary button</button>
     </div> -->
-  </body>
+</body>
+
 </html>
