@@ -1,279 +1,434 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CASAGO | Über uns</title>
-  <link rel="stylesheet" href="scss/styles.scss" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Über uns – CASAGO</title>
+  <link rel="stylesheet" href="scss/styles.scss">
   <script type="module" src="js/main.js"></script>
+  <script src="js/faq-accordion.js"></script>
 </head>
 
 <body>
-  <nav class="navbar sticky-top bg-cas-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">
-        <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortbildmarke" />
-      </a>
-      <button class="btn menu-open d-flex align-items-center justify-content-center" type="button"
-        data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
-          <g transform="translate(-1836.087 -42.5)" style="isolation: isolate">
-            <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3" />
-            <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3" />
-          </g>
-        </svg>
-      </button>
-      <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
-        <div class="offcanvas-header">
-          <a class="navbar-brand" href="index.html">
-            <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortbildmarke" />
-          </a>
-          <!-- <h5 class="offcanvas-title" id="offcanvasTopLabel">Menu</h5> -->
-          <button class="btn btn-close d-flex align-items-center justify-content-center" type="button"
-            data-bs-dismiss="offcanvas" aria-label="Close">
-            <svg xmlns="http://www.w3.org/2000/svg" width="21.917" height="21.919" viewBox="0 0 21.917 21.919">
-              <g transform="translate(-1832.044 -70.12)">
-                <path d="M4483-10121.92h28" transform="translate(5820.42 10418.219) rotate(-45)" fill="none"
-                  stroke="#fff" stroke-width="3" />
-                <path d="M0,0H28" transform="translate(1852.9 90.978) rotate(-135)" fill="none" stroke="#fff"
-                  stroke-width="3" />
-              </g>
-            </svg>
-          </button>
-        </div>
-        <div class="offcanvas-body">
-          <div class="container-fluid">
-            <ul class="nav flex-column flex-sm-row">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/src/ueber-uns.html">
-                  <span class="title">Über uns</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/src/geschaeftsfelder.html">
-                  <span class="title">Geschäftsfelder</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span class="title">Referenzen</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span class="title">Kontakt</span>
-                </a>
-              </li>
-            </ul>
+
+  <header class="casago-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <!-- Logo/Brand -->
+        <a class="navbar-brand" href="index.html">
+          <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+          aria-controls="navbarMain" aria-expanded="false" aria-label="Navigation umschalten">
+          <!-- <span class="navbar-toggler-icon"></span> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+            <g transform="translate(-1836.087 -42.5)" style="isolation: isolate">
+              <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3" />
+              <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3" />
+            </g>
+          </svg>
+        </button>
+
+        <!-- Navigation Menu -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav mx-auto">
+            <!-- Geschäftsfelder Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="geschaeftsfelder.html" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Geschäftsfelder
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Bauträger</a></li>
+                <li><a class="dropdown-item" href="#">Baubetreuung Plus</a></li>
+                <li><a class="dropdown-item" href="#">gemeinsame
+                    Projektrealisierung</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Begrünung</a></li>
+              </ul>
+            </li>
+
+            <!-- Über uns -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Über uns</a>
+            </li>
+
+            <!-- Projekte (falls vorhanden) -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Referenzen</a>
+            </li>
+
+            <!-- Kontakt -->
+            <li class="nav-item">
+              <a class="nav-link" href="kontakt.html">Kontakt</a>
+            </li>
+          </ul>
+
+          <!-- CTA Button -->
+          <div class="d-flex mt-3 mt-lg-0">
+            <a href="mailto:info@casago.de" class="btn btn-casago-primary">Anfrage senden</a>
           </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
-  <section class="stage">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="statement col-8-xl">
-          <h5 class="h6 text-cas-accent">Über uns</h5>
-          <h1 class="h1">Schaffen wir <br>etwas Besonderes <br>Zusammen.</h1>
+  <section class="about-hero">
+    <div class="about-hero__container">
+      <!-- Label -->
+      <div class="about-hero__label">Über uns</div>
+
+      <!-- Main Headline -->
+      <h1 class="about-hero__title">
+        Schaffen wir<br>
+        etwas Besonderes<br>
+        Zusammen.
+      </h1>
+
+      <!-- Author/Quote Attribution -->
+      <div class="about-hero__author">
+        <div class="about-hero__author-avatar">
+          <img src="assets/images/panorama-pic.png" alt="Fred Fröhlich" class="about-hero__author-image">
         </div>
-      </div>
-      <div class="row">
-        <div class="quote-picture col">
-          <div class="profile-picture" style="background-image:url('/src/assets/profile-pic.png')"
-            alt="Portrait von Fred Fröhlich"></div>
-          <p class="h6 m-0">Fred Fröhlich, <span class="text-cas-light-gray">Geschäftsführer Casago GmbH</span></p>
+        <div class="about-hero__author-info">
+          <p class="about-hero__author-name">Fred Fröhlich</p>
+          <p class="about-hero__author-title">Geschäftsführer Casago GmbH</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="">
+  <section class="mixed-section">
+
+    <!-- Bild in weitem Container -->
     <div class="container-wide">
-      <div class="row">
-        <!-- <img class="img-wide img-fluid" src="/src/assets/panorama-pic.png" alt=""> -->
-        <div class="img-wide img-fluid col-12" style="background-image:url('/src/assets/panorama-pic.png')">
-          <!-- <a class="btn btn-outline-light arrow-btn" href="">Mehr Projekte ansehen</a> -->
-        </div>
+      <div class="panorama-image">
+        <img src="assets/images/startseite/ideen-manifestieren_cropped.jpg" alt="panorama">
       </div>
+    </div>
+
+
+    <div class="sc-container">
+      <article class="sc-article">
+        <!-- Opening Paragraph -->
+        <div class="sc-content">
+          <p class="sc-text">
+            Wie sich aus einer ersten Idee ein Konzept entwickelt und sich zunehmend manifestiert. Dabei im
+            wertschätzenden Miteinander die bestmöglichen Lösungen gefunden werden. Und ein besonderes Projekt für lange
+            Zeit positiver Mittelpunkt für Leben und
+            Arbeiten für deren Nutzer wird. Das ist das, wofür wir mit Herz und Begeisterung arbeiten.
+          </p>
+
+          <p class="sc-text">
+            Gerade weil wir mit Herzblut Projekte realisieren und durch eigene Projekte alle damit verbundenen
+            Herausforderungen
+            selbst kennen und erleben, unterscheiden wir nicht nach „unserem“ und „Ihrem“ Projekt.
+          </p>
+        </div>
+        <p class="sc-text">
+          Bereits bei der Konzeption und Planung bilden wir ein interdisziplinäres Team aus erfahrenen
+          Projektentwicklern,
+          Finanzierungs- und Vermarktungsprofis, Architekten, Ingenieuren und erfahrenen Bauleitern. Mit dem in
+          Jahrzehnten
+          gewachsenem Wissen dieses Teams sowie unserem 360-Grad-Blick werden bereits vom ersten Moment der
+          Projektentwicklung
+          Fördermittel und Vermarktungspotentiale genauso berücksichtigt wie langfristige Entwicklungen der Gesellschaft
+          und der
+          Umwelt, die das Wertsteigerungspotential und die Zukunftsfähigkeit einer Immobilie beeinflussen. Neben
+          „harten“ Faktoren
+          wie Flächeneffizienz, zusätzliche Nutzungsoptionen durch funktionale Möblierung, Energieverbrauch und
+          Unterhaltungskosten fließen „weiche“ Faktoren wie die Wahrnehmung der Immobilie durch die künftigen Nutzer mit
+          ein.
+        </p>
+        <p class="sc-text">
+          Dabei gilt: egal ob große oder kleine Immobilie, ob für gewerbliche oder private Nutzung – es muss etwas
+          Besonderes
+          entstehen. Individuell und „nicht von der Stange“.
+        </p>
+        <p class="sc-text">
+          Diesen Anspruch kombinieren wir mit einem strengen Blick auf die Wirtschaftlichkeit eines Projektes. Durch die
+          Kompetenzen und praktischen Erfahrungen unseres Teams achten wir bereits bei der Projektentwicklung und
+          Planung auf eine
+          effiziente und kostengünstige Realisierung und sichern durch die Projektsteuerung, Auswahl der ausführenden
+          Firmen sowie
+          der Bauleitung vor Ort den Projekterfolg. Durch die Projektsteuerung und Bündelung aller wesentlichen Bereiche
+          wie
+          Projektentwicklung, Planung, Vergabe und Überwachung der Bauausführung in einem Casago-Team werden viele
+          mögliche
+          Konflikte, Bruchstellen, Informationsdefizite und fehlende Abstimmungen von vornherein ausgeschlossen. Durch
+          unsere
+          stets lösungsorientierte und wertschätzende Kommunikation übertragen wir diesen Team-Gedanken auf alle
+          weiteren
+          Projektbeteiligten. So entstehen nicht nur besondere Projekte, sondern qualitativ hochwertige und mängelfreie
+          Immobilien.
+        </p>
+        <p class="sc-text">
+          Wir decken dabei Neubauten im Bereich Wohnen und Gewerbe bis hin zur besonders anspruchsvollen Sanierung
+          historischer
+          und denkmalgeschützter Gebäude ab.
+        </p>
+        <p class="sc-text">
+          Durch unsere Referenzen in den einzelnen Geschäftsfeldern können Sie am besten die Bandbreite unserer
+          Arbeitsweise und
+          unseres „Könnens“ beurteilen.
+        </p>
+    </div>
+    </article>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="row">
-        <div class="editable_content col-xl-6 col-md-8 col-sm-12 mx-auto">
-          <h2 class="h2">Mit Partnerschaften auf Augenhöhe zum gemeinsamen Projekt</h2>
-          <p>Wir möchten mit unseren Partnern bestmögliche Lösungen und Ausführungen zusammen entwickeln. Durch die
-            Frühestmögliche Einbindung der Gewerke in die Planung, können wir Kompetenzen unserer Partner zur
-            Optimierung bündeln und aus dem Projekt wird im Idealfall damit ein gemeinsames Projekt.</p>
+  <!-- <section class="wide-content-section">
+    <div class="container-wide">
+      <div class="wide-grid">
+        <div class="wide-grid__item">
+          <img
+            src="assets/images/referenzen/Aschau-im-Chiemgau/20250821_1706_Modern German House Visualization_remix_01k36jgzbzejfa6e25xsn9bkam.png"
+            alt="Projekt 1">
+        </div>
+        <div class="wide-grid__item">
+          <img src="assets/images/referenzen/Edling/ED-AG13_Bild_2025-09-30_Visu01.jpg" alt="Projekt 2">
+        </div>
+        <div class="wide-grid__item">
+          <img src="assets/images/referenzen/Rott-am-Inn/rott-luftbild-Isometrie.jpg" alt="Projekt 3">
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
-  <section class="section">
-    <div class="container text-left">
-
-      <div class="row align-items-center justify-content-around">
-        <div class="portrait col-sm-12 col-md-6">
-          <img class="img-fluid" src="/src/assets/portrait-quote.png" alt="Portrait von Fred Fröhlich">
-        </div>
-        <div class="text-quote col-sm-12 col-md-6">
-          <h2 class="h2 mb-5">„Wir betrachten Projekte nicht nur in einer Dimension. Sondern ganzheitlich.“ </h2>
-          <h3 class="h3 text-cas-light-gray mt-2 mb-2">Fred Fröhlich</h3>
-          <h6 class="h6 text-cas-accent mt-1">Geschäftsführender Inhaber</h6>
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-around">
-        <div class="text-quote col-sm-12 col-md-6">
-          <h2 class="h2 mb-5">„Wir betrachten Projekte nicht nur in einer Dimension. Sondern ganzheitlich.“ </h2>
-          <h3 class="h3 text-cas-light-gray mt-2 mb-2">Marco Riede</h3>
-          <h6 class="h6 text-cas-accent mt-1">Bautechniker Hochbau, <br>Head of Planning/Construction</h6>
-        </div>
-        <div class="portrait col-sm-12 col-md-6">
-          <img class="img-fluid" src="/src/assets/portrait-quote.png" alt="Portrait von Fred Fröhlich">
-        </div>
+  <section class="faq-section">
+    <div class="sc-container">
+      <!-- Optional: Section Header -->
+      <div class="faq-header">
+        <h2 class="faq-title">Häufig gestellte Fragen</h2>
+        <p class="faq-subtitle">
+          Hier finden Sie Antworten auf die wichtigsten Fragen zu unseren Leistungen
+        </p>
       </div>
 
-    </div>
-  </section>
+      <!-- Accordion -->
+      <div class="faq-accordion">
 
-  <section class="section">
-    <div class="container-fluid">
-      <div class="row bg-cas-secondary">
-        <div class="cta col-sm-12 col-md-7 mx-auto">
-          <h2 class="h2">Lassen Sie uns über Ihr Projekt sprechen</h2>
-          <p class="text">Ein paar konkrete Eckpunkte für ihr Vorhaben, helfen uns herauszufinden wie wir optimal
-            zusammenarbeiten können.</p>
-          <a href="mailto:info@casago.de" type="button" class="btn btn-outline-light m-2">Projektanfrage</a>
-          <a class="m-2" href="mailto:info@casago.de">E-Mail senden</a>
-        </div>
-      </div>
-      <div class="row bg-cas-secondary">
-        <div class="col-12">
-          <div class="partners">
-            <h3 class="h3 text-left pb-4">Unsere Partner</h3>
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-            <img class="partner-card" src="/src/assets/partner-card.svg" alt="...">
-          </div>
-        </div>
-        <a class="partners text-left pt-4 pb-4" href="#">Partner werden</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="accordion-faq">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <h3 class="h3 pb-3">Unsere Arbeitsweise</h3>
-        </div>
-
-        <div class="accordion col-sm-12 col-md-6" id="accordionPanelsStayOpenExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                aria-controls="panelsStayOpen-collapseOne">
-                Wir sind der Partner vom Bauherren
-              </button>
-            </h2>
-            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-              <div class="accordion-body">
-                <p>Wir möchten mit unseren Partnern bestmögliche Lösungen und Ausführungen zusammen entwickeln. Durch
-                  die Frühestmögliche Einbindung der Gewerke in die Planung, können wir Kompetenzen unserer Partner zur
-                  Optimierung bündeln und aus dem Projekt wird im Idealfall damit ein gemeinsames Projekt.</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                aria-controls="panelsStayOpen-collapseTwo">
-                In welchen Phasen läuft ein Projekt ab?
-              </button>
-            </h2>
-            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse
-                plugin adds the appropriate classes that we use to style each element. These classes control the overall
-                appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
-                custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
-                within the <code>.accordion-body</code>, though the transition does limit overflow.
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
-                aria-controls="panelsStayOpen-collapseThree">
-                Welche Parteien sind im Projektverlauf beteiligt?
-              </button>
-            </h2>
-            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse
-                plugin adds the appropriate classes that we use to style each element. These classes control the overall
-                appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
-                custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
-                within the <code>.accordion-body</code>, though the transition does limit overflow.
-              </div>
+        <!-- FAQ Item 1 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span class="faq-question-text">Wie läuft ein Bauträgerprojekt mit CASAGO ab?</span>
+            <span class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>
+                Ein Bauträgerprojekt mit CASAGO beginnt mit einer ausführlichen Beratung
+                und Standortanalyse. Anschließend kümmern wir uns um die Planung,
+                Genehmigung, Finanzierung und Bauausführung. Sie erhalten von uns eine
+                schlüsselfertige Immobilie – termingerecht und in höchster Qualität.
+              </p>
+              <p>
+                Während des gesamten Projekts sind Sie über alle wichtigen Schritte
+                informiert und haben einen festen Ansprechpartner.
+              </p>
             </div>
           </div>
         </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span class="faq-question-text">Welche Leistungen umfasst die Baubetreuung?</span>
+            <span class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>
+                Unsere Baubetreuung umfasst die komplette Koordination aller Gewerke,
+                Qualitätskontrollen, Terminüberwachung und die Kommunikation mit allen
+                beteiligten Partnern. Wir sind Ihr persönlicher Ansprechpartner während
+                der gesamten Bauphase.
+              </p>
+              <ul>
+                <li>Baustellenkoordination</li>
+                <li>Qualitätssicherung</li>
+                <li>Terminmanagement</li>
+                <li>Kostenkontrolle</li>
+                <li>Abnahmebegleitung</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span class="faq-question-text">Was kostet eine Baubetreuung durch CASAGO?</span>
+            <span class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>
+                Die Kosten für unsere Baubetreuung richten sich nach dem Umfang Ihres
+                Projekts und werden individuell kalkuliert. In einem kostenlosen
+                Erstgespräch analysieren wir Ihr Vorhaben und erstellen Ihnen ein
+                transparentes Angebot.
+              </p>
+              <p>
+                Kontaktieren Sie uns für ein unverbindliches Beratungsgespräch.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span class="faq-question-text">Wie lange dauert ein durchschnittliches Bauprojekt?</span>
+            <span class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>
+                Die Projektdauer hängt stark von der Größe und Komplexität des Vorhabens ab.
+                Ein Einfamilienhaus benötigt in der Regel 12-18 Monate von der Planung bis
+                zur Fertigstellung. Größere Projekte wie Mehrfamilienhäuser können 24-36
+                Monate in Anspruch nehmen.
+              </p>
+              <p>
+                Wir erstellen für jedes Projekt einen detaillierten Zeitplan und informieren
+                Sie regelmäßig über den Baufortschritt.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span class="faq-question-text">Bieten Sie auch Gründach-Lösungen an?</span>
+            <span class="faq-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              <p>
+                Ja, wir sind spezialisiert auf nachhaltige Gründach-Lösungen. Ein Gründach
+                bietet zahlreiche Vorteile: verbesserte Wärmedämmung, natürliche Kühlung im
+                Sommer, längere Lebensdauer der Dachabdichtung und einen wertvollen Beitrag
+                zum Umweltschutz.
+              </p>
+              <p>
+                Wir planen und realisieren sowohl extensive als auch intensive Gründächer
+                für Neubauten und Bestandsimmobilien.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Optional: CTA -->
+      <div class="faq-cta">
+        <p class="faq-cta-text">Haben Sie weitere Fragen?</p>
+        <a href="kontakt.html" class="faq-cta-button">Jetzt Kontakt aufnehmen</a>
       </div>
     </div>
   </section>
 
-  <section class="footer">
+
+
+  <footer class="casago-footer">
     <div class="container">
-      <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5">
-        <div class="col mb-3">
-          <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-            <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg">
-          </a>
-          <hr>
+      <!-- Footer Top -->
+      <div class="footer-top">
+        <div class="row align-items-start">
+          <!-- Brand & Address -->
+          <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <a class="footer-brand" href="index.html">
+              <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+            </a>
+            <address class="footer-address">
+              <a href="https://maps.google.com/?q=Am+Queracker+6,+83134+Prutting" target="_blank"
+                rel="noopener noreferrer" class="address-link">
+                Am Queracker 6<br>
+                83134 Prutting
+              </a>
+            </address>
+          </div>
 
-          <p class="text-body-secondary pt-2">Am Queracker 6 <br>
-            83134 Prutting</p>
+          <!-- Spacer for alignment -->
+          <div class="col-lg-4 d-none d-lg-block"></div>
 
-          <p class="text-body-white pt-4">© 2024 CASAGO GmbH. Alle Rechte vorbehalten.</p>
+          <!-- Contact Info -->
+          <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <div class="footer-contact">
+              <a href="mailto:info@casago.de" class="contact-link">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M18 5l-8 5.5L2 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                info@casago.de
+              </a>
+              <a href="tel:+4980369086986" class="contact-link">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M18 13.5v2.25a1.5 1.5 0 01-1.636 1.493 14.85 14.85 0 01-6.485-2.307A14.625 14.625 0 014.8 9.858a14.85 14.85 0 01-2.307-6.507A1.5 1.5 0 013.98 1.5h2.25a1.5 1.5 0 011.5 1.29c.095.722.271 1.432.526 2.118a1.5 1.5 0 01-.338 1.583l-.952.953a12 12 0 005.063 5.063l.953-.953a1.5 1.5 0 011.583-.337c.686.255 1.396.43 2.118.526a1.5 1.5 0 011.29 1.522z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                +49 80 36 - 908 69 86
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="col mb-3">
+      <!-- Footer Divider -->
+      <div class="footer-divider"></div>
 
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="row align-items-center">
+          <!-- Copyright -->
+          <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <p class="footer-copyright">
+              © 2025 Casago GmbH. Alle Rechte vorbehalten.
+            </p>
+          </div>
+
+          <!-- Legal Links -->
+          <div class="col-12 col-md-6">
+            <nav class="footer-legal">
+              <a href="impressum.html" class="legal-link">Impressum</a>
+              <a href="datenschutz.html" class="legal-link">Datenschutz</a>
+            </nav>
+          </div>
         </div>
-
-        <div class="col mb-3">
-
-        </div>
-
-        <div class="col mb-3">
-
-        </div>
-
-        <div class="col mb-3">
-          <h5>Kontakt</h5>
-          <a href="mailto:info@casago.de">info@casago.de</a>
-          <br>
-          <a href="tel:+4980369086986">+49 803 690869-86</a>
-          <p class="pt-4"></p>
-          <a href="/src/impressum.html">Impressum</a>
-          <a href="/src/datenschutz.html">Datenschutz</a>
-        </div>
-      </footer>
+      </div>
     </div>
-  </section>
+  </footer>
+
+
+  </div>
 
 </body>
 

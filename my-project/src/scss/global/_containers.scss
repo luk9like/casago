@@ -1,0 +1,68 @@
+// ============================================
+// Container System
+// Regular & Wide Container definitions
+// ============================================
+
+// Variables
+$container-max-width: 1200px;
+$container-wide-max-width: 1600px;
+$container-padding: 2rem;
+
+// Regular Container (bereits vorhanden)
+.container {
+  max-width: $container-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $container-padding;
+  padding-right: $container-padding;
+
+  @include media-breakpoint-down(md) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+// Wide Container (neu)
+.container-wide {
+  max-width: $container-wide-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $container-padding;
+  padding-right: $container-padding;
+
+  @include media-breakpoint-down(lg) {
+    max-width: 1400px;
+  }
+
+  @include media-breakpoint-down(md) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+// Full Width (kein max-width, nur padding)
+.container-fluid {
+  width: 100%;
+  padding-left: $container-padding;
+  padding-right: $container-padding;
+
+  @include media-breakpoint-down(md) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

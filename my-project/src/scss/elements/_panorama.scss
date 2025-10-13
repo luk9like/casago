@@ -1,0 +1,251 @@
+// ============================================
+// Panorama Image Component
+// Wide format images with optional overlays
+// ============================================
+
+.panorama-section {
+  padding: 4rem 0;
+  background: $primary;
+
+  @include media-breakpoint-down(md) {
+    padding: 3rem 0;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 2rem 0;
+  }
+
+  // Variant: With content overlay
+  &--with-content {
+    padding: 0;
+  }
+
+  // Variant: No vertical padding
+  &--flush {
+    padding: 0;
+  }
+}
+
+// Panorama Image Wrapper
+.panorama-image {
+  position: relative;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: $light;
+
+  @include media-breakpoint-down(md) {
+    border-radius: 0.75rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0.5rem;
+  }
+
+  // Aspect ratio variants
+  &--21-9 {
+    aspect-ratio: 21 / 9;
+  }
+
+  &--16-9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  &--3-1 {
+    aspect-ratio: 3 / 1;
+  }
+
+  // Default: Auto height based on image
+  // Or fixed aspect ratio:
+  aspect-ratio: 21 / 9;
+
+  @include media-breakpoint-down(lg) {
+    aspect-ratio: 16 / 9;
+  }
+
+  @include media-breakpoint-down(md) {
+    aspect-ratio: 3 / 2;
+  }
+
+  @include media-breakpoint-down(sm) {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.panorama-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s ease;
+
+  .panorama-image:hover & {
+    transform: scale(1.02);
+  }
+}
+
+// Optional Overlay
+.panorama-image__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+
+  .panorama-section--with-content & {
+    opacity: 0.7;
+  }
+
+  .panorama-image:hover & {
+    opacity: 0.4;
+  }
+}
+
+// Content Overlay
+.panorama-image__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4rem 0;
+  z-index: 2;
+
+  @include media-breakpoint-down(md) {
+    padding: 3rem 0;
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 2rem 0;
+  }
+}
+
+.panorama-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--bs-white);
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+
+  @include media-breakpoint-down(lg) {
+    font-size: 2.5rem;
+  }
+
+  @include media-breakpoint-down(md) {
+    font-size: 2rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    font-size: 1.5rem;
+  }
+}
+
+.panorama-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 2rem;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+
+  @include media-breakpoint-down(md) {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.panorama-cta {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--bs-white);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    color: var(--bs-white);
+  }
+
+  @include media-breakpoint-down(md) {
+    padding: 0.875rem 2rem;
+    font-size: 0.9375rem;
+  }
+}
+
+// Wide Grid (für mehrere Bilder/Items)
+.wide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @include media-breakpoint-down(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-breakpoint-down(md) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.wide-grid__item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #1a1a1a;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.video-section {
+  padding: 4rem 0;
+  background: #000;
+
+  @include media-breakpoint-down(md) {
+    padding: 3rem 0;
+  }
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #000;
+
+  @include media-breakpoint-down(md) {
+    border-radius: 0.75rem;
+  }
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
