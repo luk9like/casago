@@ -1,64 +1,269 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CASAGO</title>
-    <link rel="stylesheet" href="scss/styles.scss">
-    <script type="module" src="js/main.js"></script>
-  </head>
-  <body>
-    <nav class="navbar bg-body-dark">
-      <div class="container welcome">
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impressum – CASAGO</title>
+  <link rel="stylesheet" href="scss/styles.scss">
+  <script type="module" src="js/main.js"></script>
+</head>
+
+<body>
+
+  <header class="casago-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <!-- Logo/Brand -->
         <a class="navbar-brand" href="index.html">
-          <img src="/src/assets/2024_CAS_Logo_Wort-Bildmarke.svg" alt="CASAGO Wortbildmarke" width="45%">
+          <img class="navbar-logomark" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
         </a>
-        <div class="container pt-5">
-            <div class="row">
-                <div class="col-12">
-                    
-                <h2>Impressum</h2>
 
-                <p>Casago GmbH<br />
-                Am Queracker 6<br />
-                D-83134 Prutting</p>
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+          aria-controls="navbarMain" aria-expanded="false" aria-label="Navigation umschalten">
+          <!-- <span class="navbar-toggler-icon"></span> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+            <g transform="translate(-1836.087 -42.5)" style="isolation: isolate">
+              <line x1="28" transform="translate(1836.087 44)" fill="none" stroke="#fff" stroke-width="3" />
+              <line x1="28" transform="translate(1836.087 55)" fill="none" stroke="#fff" stroke-width="3" />
+            </g>
+          </svg>
+        </button>
 
-                <p>Handelsregister: HRB 29265<br />
-                Registergericht: Amtsgericht Traunstein</p>
+        <!-- Navigation Menu -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav mx-auto">
+            <!-- Geschäftsfelder Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="geschaeftsfelder.html" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Geschäftsfelder
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="bautraeger.html">Bauträger</a></li>
+                <li><a class="dropdown-item" href="#">Baubetreuung Plus</a></li>
+                <li><a class="dropdown-item" href="#">gemeinsame Projektrealisierung</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Begrünung</a></li>
+              </ul>
+            </li>
 
-                <p><strong>Vertreten durch:</strong><br />
-                Fred Fr&ouml;hlich</p>
+            <!-- Über uns -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Über uns</a>
+            </li>
 
-                <h4>Kontakt</h4>
-                <p>Telefon: +49 8036 - 908 69 86<br />
-                Telefax: +49 8036 - 908 65 29<br />
-                E-Mail: info@casago.de</p>
+            <!-- Projekte (falls vorhanden) -->
+            <li class="nav-item">
+              <a class="nav-link" href="referenzen.html">Referenzen</a>
+            </li>
 
-                <h4>Umsatzsteuer-ID</h4>
-                <p>Umsatzsteuer-Identifikationsnummer gem&auml;&szlig; &sect; 27 a Umsatzsteuergesetz:<br />
-                DE 34 29 43 719</p>
+            <!-- Kontakt -->
+            <li class="nav-item">
+              <a class="nav-link" href="kontakt.html">Kontakt</a>
+            </li>
+          </ul>
 
-                <h4>Redaktionell verantwortlich</h4>
-                <p>Fred Fr&ouml;hlich</p>
-
-                <h4>EU-Streitschlichtung</h4>
-                <p>Die Europ&auml;ische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>.<br /> Unsere E-Mail-Adresse finden Sie oben im Impressum.</p>
-
-                <h4>Verbraucher&shy;streit&shy;beilegung/Universal&shy;schlichtungs&shy;stelle</h4>
-                <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-
-                <h4>Zentrale Kontaktstelle nach dem Digital Services Act - DSA (Verordnung (EU) 2022/265)</h4>
-                <p>Unsere zentrale Kontaktstelle f&uuml;r Nutzer und Beh&ouml;rden nach Art. 11, 12 DSA erreichen Sie wie folgt:</p>
-                <p>E-Mail: info@casago.de<br />
-                Telefon: +49 8036 - 908 69 86
-                </p>
-                <p>Die für den Kontakt zur Verf&uuml;gung stehenden Sprachen sind: Deutsch, Englisch.</p>
-                <p>Erlaubnis nach § 34c Absatz 1 Satz 1 Nummer 3a Gewerbeordnung (Bauträger) <br>
-                    Erlaubnis nach § 34c Absatz 1 Satz 1 Nummer 3b Gewerbeordnung (Baubetreuer) <br>
-                    Aufsichtsbehörde: Industrie- und Handelskammer für München und Oberbayern, Max-Joseph-Str. 2, 80333 München</p>
-            </div>
+          <!-- CTA Button -->
+          <div class="d-flex mt-3 mt-lg-0">
+            <a href="mailto:info@casago.de" class="btn btn-casago-primary">Anfrage senden</a>
+          </div>
         </div>
       </div>
     </nav>
-  </body>
+  </header>
+
+
+  <!-- Main Content -->
+  <article class="sc-article bg-primary">
+    <div class="sc-container">
+
+      <!-- Section Heading -->
+      <h2 class="sc-heading" id="leistungen">
+        Impressum
+      </h2>
+      <!-- Opening Paragraph -->
+      <div class="sc-content">
+        <p class="sc-text">
+          Casago GmbH<br />
+          Am Queracker 6<br />
+          D-83134 Prutting
+        </p>
+
+        <p class="sc-text">
+          Handelsregister: HRB 29265<br />
+          Registergericht: Amtsgericht Traunstein
+        </p>
+        <p class="sc-text">
+          <strong>Vertreten durch:</strong><br />
+          Fred Fr&ouml;hlich
+        </p>
+      </div>
+
+
+      <!-- Sub-section -->
+      <h3 class="sc-subheading">
+        Kontakt
+      </h3>
+
+      <div class="sc-content">
+        <p class="sc-text">
+          Telefon: +49 8036 - 908 69 86<br />
+          Telefax: +49 8036 - 908 65 29<br />
+          E-Mail: info@casago.de
+        </p>
+        <h3 class="sc-subheading" id="Planung und Projektrealisierung">
+          Umsatzsteuer-ID
+        </h3>
+        <p class="sc-text">
+          Umsatzsteuer-Identifikationsnummer gem&auml;&szlig; &sect; 27 a Umsatzsteuergesetz:<br />
+          DE 34 29 43 719
+        </p>
+      </div>
+
+      <h3 class="sc-subheading">
+        Redaktionell verantwortlich
+      </h3>
+
+      <div class="sc-content">
+        <p class="sc-text">
+          Fred Fröhlich
+        </p>
+      </div>
+
+
+
+
+      <!-- Sub-section -->
+      <h3 class="sc-subheading">
+        EU-Streitschlichtung
+      </h3>
+
+      <div class="sc-content">
+        <p class="sc-text">
+          Die Europ&auml;ische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a
+            href="https://ec.europa.eu/consumers/odr/" target="_blank"
+            rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>.<br /> Unsere E-Mail-Adresse finden Sie
+          oben im
+          Impressum.
+        </p>
+      </div>
+
+      <h3 class="sc-subheading">
+        Verbraucher&shy;streit&shy;beilegung/Universal&shy;schlichtungs&shy;stelle
+      </h3>
+
+      <div class="sc-content">
+        <p class="sc-text">
+          Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+          teilzunehmen.
+        </p>
+      </div>
+
+      <h3 class="sc-subheading">
+        Zentrale Kontaktstelle nach dem Digital Services Act - DSA (Verordnung (EU) 2022/265)
+      </h3>
+
+      <div class="sc-content">
+        <p class="sc-text">
+          Unsere zentrale Kontaktstelle f&uuml;r Nutzer und Beh&ouml;rden nach Art. 11, 12 DSA erreichen Sie wie folgt:
+        </p>
+        <p class="sc-text">
+          E-Mail: info@casago.de<br />
+          Telefon: +49 8036 - 908 69 86
+        </p>
+        <p class="sc-text">
+          Die für den Kontakt zur Verf&uuml;gung stehenden Sprachen sind: Deutsch, Englisch.
+        </p>
+        <p class="sc-text">
+          Erlaubnis nach § 34c Absatz 1 Satz 1 Nummer 3a Gewerbeordnung (Bauträger) <br>
+          Erlaubnis nach § 34c Absatz 1 Satz 1 Nummer 3b Gewerbeordnung (Baubetreuer) <br>
+          Aufsichtsbehörde: Industrie- und Handelskammer für München und Oberbayern, Max-Joseph-Str. 2, 80333 München
+        </p>
+      </div>
+
+
+  </article>
+
+
+
+  </main>
+
+
+  <footer class="casago-footer">
+    <div class="container">
+      <!-- Footer Top -->
+      <div class="footer-top">
+        <div class="row align-items-start">
+          <!-- Brand & Address -->
+          <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <a class="footer-brand" href="index.html">
+              <img class="footer-logo" src="/src/assets/cas_wordmark-white.svg" alt="CASAGO Wortmarke">
+            </a>
+            <address class="footer-address">
+              <a href="https://maps.google.com/?q=Am+Queracker+6,+83134+Prutting" target="_blank"
+                rel="noopener noreferrer" class="address-link">
+                Am Queracker 6<br>
+                83134 Prutting
+              </a>
+            </address>
+          </div>
+
+          <!-- Spacer for alignment -->
+          <div class="col-lg-4 d-none d-lg-block"></div>
+
+          <!-- Contact Info -->
+          <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <div class="footer-contact">
+              <a href="mailto:info@casago.de" class="contact-link">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M18 5l-8 5.5L2 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                info@casago.de
+              </a>
+              <a href="tel:+4980369086986" class="contact-link">
+                <svg class="contact-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M18 13.5v2.25a1.5 1.5 0 01-1.636 1.493 14.85 14.85 0 01-6.485-2.307A14.625 14.625 0 014.8 9.858a14.85 14.85 0 01-2.307-6.507A1.5 1.5 0 013.98 1.5h2.25a1.5 1.5 0 011.5 1.29c.095.722.271 1.432.526 2.118a1.5 1.5 0 01-.338 1.583l-.952.953a12 12 0 005.063 5.063l.953-.953a1.5 1.5 0 011.583-.337c.686.255 1.396.43 2.118.526a1.5 1.5 0 011.29 1.522z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                +49 80 36 - 908 69 86
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Divider -->
+      <div class="footer-divider"></div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="row align-items-center">
+          <!-- Copyright -->
+          <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <p class="footer-copyright">
+              © 2025 Casago GmbH. Alle Rechte vorbehalten.
+            </p>
+          </div>
+
+          <!-- Legal Links -->
+          <div class="col-12 col-md-6">
+            <nav class="footer-legal">
+              <a href="impressum.html" class="legal-link">Impressum</a>
+              <a href="datenschutz.html" class="legal-link">Datenschutz</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </div>
+</body>
+
 </html>
